@@ -1,8 +1,8 @@
-Coolxue is a web app that has lessons from kindergarten to elementary 4th grade.
+Fantastic Voyage is a web app that has lessons from kindergarten to elementary 4th grade.
 
 Besides using the grade level, you can also focus on a specific topic that spans across multiple grades.
 
-Gain fluency and confidence in math! Coolxue helps students master essential skills at their own pace through fun and interactive questions, built in support, and motivating awards.
+Gain fluency and confidence in math! Fantastic Voyage helps students master essential skills at their own pace through fun and interactive questions, built in support, and motivating awards.
 
 All lessons are presented as games with multi-choice answers or text input for the correct answer.
 
@@ -18,7 +18,7 @@ If the lesson gets too hard, it will automatically lower the difficulty level so
 
 All lessons are matched to the most common curriculum textbooks. So the lessons can be used to help your child with their homework or to help them get ahead.
 
-As the child progresses through the lessons, CoolXue will automatically create suggested lessons based on the child's progress.
+As the child progresses through the lessons, Fantastic Voyage will automatically create suggested lessons based on the child's progress.
 
 We also have weekly plans for each grade that the parent and child can follow to help the child progress through the lessons.
 
@@ -26,6 +26,6 @@ As a parent you can monitor your child's progress and see how they are doing. Th
 
 All the web apps also works on mobile devices so your child can learn on the go.
 
-instead of CoolXue write: 酷學
+instead of Fantastic Voyage write: 酷學
 
 write an about us & about the product page in Traditional Chinese

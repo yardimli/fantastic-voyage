@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en_US">
 <head>
-	<title>{{__('default.Welcome to Coolxue!')}}</title>
+	<title>{{__('default.Welcome to Fantastic Voyage!')}}</title>
 
 	<!-- Meta Tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="fantastic-voyage.com">
-	<meta name="description" content="{{__('default.Welcome to Coolxue!')}}">
+	<meta name="description" content="{{__('default.Welcome to Fantastic Voyage!')}}">
 
 	<!-- Dark mode -->
 	<script>
@@ -100,7 +100,7 @@
     <div class="row justify-content-center text-center">
       <div class="col-12">
         <!-- Title -->
-          <h1 class="display-4 text-white mb-4 position-relative">{{__('default.Welcome to Coolxue!')}}</h1>
+          <h1 class="display-4 text-white mb-4 position-relative">{{__('default.Welcome to Fantastic Voyage!')}}</h1>
         @include('layouts.svg2-image')
       </div>
       <!-- Main content START -->
@@ -138,7 +138,7 @@
              <!-- Button -->
              <div class="d-grid"><button type="submit" class="btn btn-lg btn-primary">Reset password</button></div>
              <!-- Copyright -->
-             <p class="mb-0 mt-3">©2023 <a target="_blank" href="https://www.fantastic-voyage.com/">CoolXue.</a> All rights reserved</p>
+             <p class="mb-0 mt-3">©2024 <a target="_blank" href="https://www.fantastic-voyage.com/">Fantastic Voyage.</a> All rights reserved</p>
            </form>
           <!-- Form END -->
         </div>

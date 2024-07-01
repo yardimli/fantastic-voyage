@@ -1,6 +1,6 @@
 Write Main FAQ topics using the following information. We will later add questions and answers for each topic.
 
-Fiction Fusion is a site where people can sign up and then use GPT to write stories. the site sells three packages.
+Fantastic Voyage is a site where people can sign up and then use GPT to write stories. the site sells three packages.
 
 While writing a story, the user first needs to write the:
 title, protagonist, location, antagonist, love interest, confidant, comic relief, story_so_far, story_image (generated with AI based on users prompt), genre, writing style, narrative style, author style, is private, allow contributions,
@@ -65,7 +65,7 @@ The site has a chatbot that can answer questions.
 
 
 
-1. Getting Started with Fiction Fusion
+1. Getting Started with Fantastic Voyage
 2. Account Registration and Email Verification
 3. Understanding Story Elements and Options
 4. Writing and Editing with AI Assistance

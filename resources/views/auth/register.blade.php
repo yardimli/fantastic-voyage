@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en_US">
 <head>
-	<title>{{__('default.Aspirant') }} - {{$sub_title ?? 'Register'}}</title>
+	<title>{{__('default.Fantastic Voyage') }} - {{$sub_title ?? 'Register'}}</title>
 	
 	<!-- Meta Tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="{{__('site_domain')}}">
-	<meta name="description" content="{{__('default.Aspirant') }} - {{$sub_title ?? 'Home'}}">
+	<meta name="description" content="{{__('default.Fantastic Voyage') }} - {{$sub_title ?? 'Home'}}">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta name="app_url" content="{{env('APP_URL')}}">
 	
@@ -111,7 +111,7 @@
 					<div class="p-3 p-lg-5">
 						<!-- Title -->
 						<div class="text-center">
-							<h2 class="fw-bold">{{__('default.Welcome to Coolxue!')}}</h2>
+							<h2 class="fw-bold">{{__('default.Welcome to Fantastic Voyage!')}}</h2>
 							<p class="mb-0 h6 fw-light">{{__('default.Let\'s learn something new today!')}}</p>
 						</div>
 						<!-- SVG Image -->

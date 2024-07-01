@@ -27,7 +27,7 @@
 				$subject = 'Password Reset Request';
 				$email_view = 'emails.reset_password';
 
-			return $this->from(env('MAIL_FROM_ADDRESS','support@fantastic-voyage.com'), env('MAIL_FROM_NAME', 'CoolXue Support'))
+			return $this->from(env('MAIL_FROM_ADDRESS','support@fantastic-voyage.com'), env('MAIL_FROM_NAME', 'Fantastic Voyage Support'))
 			            ->subject($subject)
 			            ->view($email_view)
 			            ->with(['token' => $this->token, 'email' => $this->email]);

@@ -690,7 +690,7 @@ Footer START -->
 			<div class="container px-0">
 				<div class="d-lg-flex justify-content-between align-items-center py-3 text-center text-md-left">
 					<!-- copyright text -->
-					<div class="text-primary-hover"> Copyrights <a href="{{ route('template.show.home') }}" class="text-body">©2023 Eduport</a>. All rights reserved. </div>
+					<div class="text-primary-hover"> Copyrights <a href="{{ route('template.show.home') }}" class="text-body">©2024 Eduport</a>. All rights reserved. </div>
 					<!-- copyright links-->
 					<div class="justify-content-center mt-3 mt-lg-0">
 						<ul class="nav list-inline justify-content-center mb-0">

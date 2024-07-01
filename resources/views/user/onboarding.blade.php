@@ -15,9 +15,9 @@
 							<h1 class="h5 mb-0">Welcome Aboard</h1>
 						</div>
 						<div class="card-body p-3">
-							Start Your CoolXue Journey Today!
+							Start Your Fantastic Voyage Journey Today!
 							<br><br>
-							We appreciate your decision to join the CoolXue family.
+							We appreciate your decision to join the Fantastic Voyage family.
 							<br><br>
 							To fully immerse yourself in our creative world, please verify your email address. Once your account is verified, you can start crafting incredible stories by clicking on the "Compose" link provided above.
 							<br><br>
@@ -35,7 +35,7 @@
 							<br><br>
 							Happy Writing!
 							<br><br>
-							The CoolXue Team
+							The Fantastic Voyage Team
 							<br><br>
 							
 							<div style="text-align: center; ">

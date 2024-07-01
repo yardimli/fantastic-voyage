@@ -44,7 +44,7 @@
 				<div class="form-group">
 					<label for="audio-tts-input">{{ __('default.Text') }}</label>
 					<input type="text" class="form-control" id="audio-tts-input" placeholder="Enter Text"
-					       value="Welcome to CoolXue!">
+					       value="Welcome to Fantastic Voyage!">
 				</div>
 				<div class="form-group">
 					<label for="voice-input">{{ __('default.Voice') }}</label>

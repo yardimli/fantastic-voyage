@@ -73,7 +73,7 @@
 					<div class="container-large logo"><a href="/" aria-current="page"
 					                                     class="logo-nav w-inline-block w--current"><img
 								src="/assets/logos/new_logo.png"
-								alt="" class="logo-coolxue"></a>
+								alt="" class="logo-Fantastic Voyage"></a>
 					</div>
 					<div class="container-large nav-wrap">
 						<div class="container-medium-2 nav-item">
@@ -122,7 +122,7 @@
 				</div>
 				<div class="page-padding">
 					<div class="container-large hero"><h1 class="text-color-white break main-header">{{__('default.Learning can be seriously fun.')}}</h1>
-						<div class="container-large hero-content-wrap show-desktop"><h2 class="text-color-white break hero">{{__('default.CoolXue transforms education with engagement. Unlock your confidence to learn.')}}</h2>
+						<div class="container-large hero-content-wrap show-desktop"><h2 class="text-color-white break hero">{{__('default.Fantastic Voyage transforms education with engagement. Unlock your confidence to learn.')}}</h2>
 							<div class="container-large margin-top">
 								<div class="text-size-medium text-color-white hero">{{__('default.Create free account as a:')}}</div>
 								<div class="container-large button-wrap"><a href="/register"
@@ -179,13 +179,13 @@
 				<div class="page-padding">
 					<div data-w-id="b43cf433-332e-9441-4507-7f06db4bc58d" class="container-large video"><h3
 							class="heading-large text-color-white">Check out the game!</h3>
-						<p class="text-color-white margin-top">Students can access CoolXue on any internet-connected device at school
+						<p class="text-color-white margin-top">Students can access Fantastic Voyage on any internet-connected device at school
 							AND at home.</p>
 						<div data-w-id="b43cf433-332e-9441-4507-7f06db4bc590" class="video-placeholder">
 							<div style="padding-top:56.17021276595745%" class="video-quicklook w-video w-embed">
 								<iframe class="embedly-embed"
 								        src="//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FsCOoOB-Xbd0%3Ffeature%3Doembed&amp;display_name=YouTube&amp;url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DsCOoOB-Xbd0&amp;image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FsCOoOB-Xbd0%2Fhqdefault.jpg&amp;key=96f1f04c5f4143bcb0f2e68c87d65feb&amp;type=text%2Fhtml&amp;schema=youtube"
-								        scrolling="no" allowfullscreen="" title="A Quick Look at CoolXue Learning"></iframe>
+								        scrolling="no" allowfullscreen="" title="A Quick Look at Fantastic Voyage Learning"></iframe>
 							</div>
 							<a href="#" data-w-id="b43cf433-332e-9441-4507-7f06db4bc592"
 							   style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"
@@ -261,7 +261,7 @@
 								</div>
 							</div>
 							<div class="grid_1_1_1 container-large testimony-card premium">
-								<div class="container-large wrap"><p class="premium-testimony-text">“My students love using CoolXue. It
+								<div class="container-large wrap"><p class="premium-testimony-text">“My students love using Fantastic Voyage. It
 										is
 										exciting and I especially love that there are connected videos to go over the skills.”</p></div>
 								<div class="container-large testimony-wrap">
@@ -353,7 +353,7 @@
 						<div class="grid_1_1_1 container-large footer-links">
 							<div class="heading-small text-color-blue margin-bottom">General</div>
 							<a href="/" aria-current="page" class="footer-link-item w--current">Home</a><a href="/about"
-							                                                                               class="footer-link-item">about</a><a href="/premium" class="footer-link-item text-style-bold">CoolXue Premium</a></div>
+							                                                                               class="footer-link-item">about</a><a href="/premium" class="footer-link-item text-style-bold">Fantastic Voyage Premium</a></div>
 						<div class="grid_1_1_1 container-large footer-links">
 							<div class="heading-small text-color-blue margin-bottom">Resources</div>
 							<a href="/teachers-page" class="footer-link-item">Teacher page</a><a href="/parents-page"
@@ -374,12 +374,12 @@
 								notice</a></div>
 					</div>
 					<div class="line-2"></div>
-					<div class="copyright margin-top">Copyright 2023 © CoolXue Learning</div>
+					<div class="copyright margin-top">Copyright 2024 © Fantastic Voyage Learning</div>
 				</div>
 			</div>
 		</footer>
 		{{--	<div class="banner-bottom">--}}
-		{{--		<div class="text-color-white text-size-small">🛡️ CoolXue's got your back: Fully FERPA and COPPA compliant. <a--}}
+		{{--		<div class="text-color-white text-size-small">🛡️ Fantastic Voyage's got your back: Fully FERPA and COPPA compliant. <a--}}
 		{{--				target="_blank" href="/safety-privacy" class="text-style-link text-color-white">Explore More Here</a>.--}}
 		{{--		</div>--}}
 		{{--	</div>--}}

@@ -7,7 +7,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				We value your privacy and creative freedom! To unlock the exclusive "Private Mode" feature, we invite you to explore our FICTION•FUSION <span style="font-weight: bold; text-decoration: underline;">Novella Package</span> or FICTION•FUSION <span style="font-weight: bold; text-decoration: underline;">Novel Package</span>.
+				We value your privacy and creative freedom! To unlock the exclusive "Private Mode" feature, we invite you to explore our Fantastic Voyage <span style="font-weight: bold; text-decoration: underline;">Novella Package</span> or Fantastic Voyage <span style="font-weight: bold; text-decoration: underline;">Novel Package</span>.
 				<br>
 				<br>
 				These specially designed packages cater to your unique storytelling needs and ensure your work-in-progress remains visible only to you. Don't miss the chance to refine your writing in a secure environment.

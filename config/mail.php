@@ -102,7 +102,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'support@fantastic-voyage.com'),
-        'name' => env('MAIL_FROM_NAME', 'CoolXue Support'),
+        'name' => env('MAIL_FROM_NAME', 'Fantastic Voyage Support'),
     ],
 
     /*

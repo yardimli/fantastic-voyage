@@ -1,11 +1,3 @@
-/**
-* Social - Network, Community and Event Theme
-*
-* @author Webestica (https://www.webestica.com/)
-* @version 1.1.0
-**/
-
-
 /* ===================
 Table Of Content
 ======================
@@ -284,7 +276,7 @@ var e = {
 							var sliderHoverPause = slider1.getAttribute('data-hoverpause') === 'true'; //option: true or false
 							if (e.isVariableDefined(e.select('.custom-thumb'))) {
 								var sliderNavContainer = e.select('.custom-thumb');
-							} 
+							}
 							var sliderLoop = slider1.getAttribute('data-loop') !== 'false'; //option: true or false
 							var sliderRewind = slider1.getAttribute('data-rewind') === 'true'; //option: true or false
 							var sliderAutoHeight = slider1.getAttribute('data-autoheight') === 'true'; //option: true or false
@@ -350,7 +342,7 @@ var e = {
 											}
 									}
 							});
-					}); 
+					});
 				}
 		},
 		// END: Tiny Slider
@@ -423,8 +415,8 @@ var e = {
 				var mode = document.getElementsByTagName("BODY")[0];
 				sb.addEventListener("click", function(){
 						mode.classList.toggle("sidebar-start-enabled");
-				}); 
-		}        
+				});
+		}
 	},
 	// END: Sidebar Toggle
 
@@ -436,8 +428,8 @@ var e = {
 				var mode = document.getElementsByTagName("BODY")[0];
 				sb.addEventListener("click", function(){
 						mode.classList.toggle("sidebar-end-enabled");
-				}); 
-		}        
+				});
+		}
 	},
 	// END: Sidebar Toggle end
 
@@ -585,7 +577,7 @@ var e = {
 					const files = avtInput.files;
 					const reader = new FileReader();
 					reader.onloadend = function(){
-							avtPreview.src = reader.result; 
+							avtPreview.src = reader.result;
 					}
 		
 					if(file && files){
@@ -599,7 +591,7 @@ var e = {
 			avtReset.addEventListener("click", function(){
 				avtPreview.src = "/assets/images/avatar/placeholder.jpg";
 			});
-		}			
+		}
 	},
 	// END: Avatar Image
 
@@ -636,7 +628,7 @@ var e = {
 					}
 				});
 			});
-		}	
+		}
 	},
 	// END: Custom Scrollbar
 

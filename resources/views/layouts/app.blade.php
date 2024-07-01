@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>FICTION•FUSION - @yield('title', 'Home')</title>
+	<title>Fantastic Voyage - @yield('title', 'Home')</title>
 	
 	<!-- Meta Tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="author" content="fictionfusion.io">
+	<meta name="author" content="fantastic-voyage.com">
 	<meta name="description"
-	      content="Fiction Fusion - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge">
+	      content="Fantastic Voyage - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	
 	<!-- Quiz Builder -->
@@ -286,7 +286,7 @@ Header START -->
 								   href="{{route('my.profile')}}">View profile</a>
 							</li>
 							<a class="dropdown-item" href="{{route('my.settings')}}"><i
-									class="bi bi-person fa-fw me-2"></i>Edit Profile</a>
+									class="bi bi-person far fa-fw me-2"></i>Edit Profile</a>
 						@endif
 						<!-- Links -->
 						{{--						<li class="dropdown-divider"></li>--}}
@@ -368,8 +368,8 @@ Header START -->
 		<div class="container">
 			<!-- Logo START -->
 			<a class="navbar-brand" href="index.html">
-				<img class="light-mode-item navbar-brand-item" src="assets/images/logo.svg" alt="logo">
-				<img class="dark-mode-item navbar-brand-item" src="assets/images/logo.svg" alt="logo">
+				<img class="light-mode-item navbar-brand-item" src="assets/images/logo/logo.png" alt="logo">
+				<img class="dark-mode-item navbar-brand-item" src="assets/images/logo/logo.png" alt="logo">
 			</a>
 			<!-- Logo END -->
 			

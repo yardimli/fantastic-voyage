@@ -1,7 +1,7 @@
 /**
- * Fiction Fusion - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge
+ * Fantastic Voyage - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge
  *
- * @author FICTION•FUSION (https://www.fictionfusion.io/)
+ * @author Fantastic Voyage (https://www.fantastic-voyage.com/)
  * @version 1.1.0
  **/
 

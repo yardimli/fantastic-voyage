@@ -34,9 +34,9 @@
 			<div class="col-xl-6 text-center">
 				<!-- Badge title -->
 				<h6 class="mb-3 font-base bg-blue text-white py-2 px-4 rounded-2 d-inline-block"><i
-						class="fas fa-school me-2"></i>{{__('default.Aspirant')}}</h6>
+						class="fas fa-school me-2"></i>{{__('default.Fantastic Voyage')}}</h6>
 				<!-- Title -->
-				<h1>Discover the Joy of Learning with CoolXue</h1>
+				<h1>Discover the Joy of Learning with Fantastic Voyage</h1>
 				<p class="mb-5">Engaging Math Lessons Tailored for Kindergarten to 4th Grade – An Easy, Fun Way to Support Your Child's Progress.</p>
 				
 				<!-- Counter item -->

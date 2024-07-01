@@ -21,22 +21,44 @@
             <div class="mx-auto bg-mode shadow rounded p-4 mt-5">
               <!-- Form START -->
               <form class="row g-3 justify-content-center">
-                <div class="col-md-5">
+                <div class="col-md-12">
                   <!-- What -->
                   <div class="input-group">
-                    <input class="form-control form-control-lg me-1 pe-5" type="text" placeholder="What">
+                    <textarea class="form-control form-control-lg me-1 pe-5" type="text" placeholder="What is it about"></textarea>
                   </div>
                 </div>
-                <div class="col-md-5">
-                  <!-- Where -->
+                <div class="col-md-3">
                   <div class="input-group">
-                    <input class="form-control form-control-lg me-1 pe-5" type="text" placeholder="Where">
-                    <a class="position-absolute top-50 end-0 translate-middle-y text-secondary px-3 z-index-9" href="#"> <i class="fa-solid fa-crosshairs"></i> </a>
+                    <select class="form-select form-select-lg me-1 pe-5" aria-label="Default select example">
+                      <option selected>Mode</option>
+                      <option value="quiz">Quiz</option>
+                      <option value="story">Story</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <select class="form-select form-select-lg me-1 pe-5" aria-label="Default select example">
+                      <option selected>Languages</option>
+                      <option value="en">English</option>
+                      <option value="tr">Turkish</option>
+                      <option value="zh_TW">Chinese</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group">
+                    <select class="form-select form-select-lg me-1 pe-5" aria-label="Default select example">
+                      <option selected>Length</option>
+                      @for ($i = 1; $i <= 10; $i++)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                      @endfor
+                    </select>
                   </div>
                 </div>
                 <div class="col-md-2 d-grid">
                   <!-- Search -->
-                  <a class="btn btn-lg btn-primary" href="#">Search</a>
+                  <div style="cursor: pointer;" class="btn btn-lg btn-primary" href="#">Start</div>
                 </div>
               </form>
               <!-- Form END -->

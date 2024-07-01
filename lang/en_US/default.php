@@ -4,7 +4,7 @@
 		'Home' => 'Home',
 		'About' => 'About',
 		'Blog' => 'Blog',
-		'Aspirant Blog' => 'Blog',
+		'Fantastic Voyage Blog' => 'Blog',
 		'Pricing' => 'Pricing',
 		'Help' => 'Help',
 		'Contact' => 'Contact',
@@ -24,7 +24,7 @@
 		"Get Premium" => "Get Premium",
 		"Teacher/Parent" => "Teacher/Parent",
 		"Learning can be seriously fun." => "Learning can be seriously fun.",
-		"CoolXue transforms education with engagement. Unlock your confidence to learn." => "CoolXue transforms education with engagement. Unlock your confidence to learn.",
+		"Fantastic Voyage transforms education with engagement. Unlock your confidence to learn." => "Fantastic Voyage transforms education with engagement. Unlock your confidence to learn.",
 		"Create free account as a:" => "Create free account as a:",
 		"Email" => "Email",
 		"Community Lessons" => "Community Lessons",
@@ -38,7 +38,7 @@
 		"Real-Time<br>Reports" => "Real-Time<br>Reports",
 		"Stay in the loop on students' learning progress with real-time reports!" => "Stay in the loop on students' learning progress with real-time reports!",
 		"Check out the game!" => "Check out the game!",
-		"Students can access CoolXue on any internet-connected device at school AND at home." => "Students can access CoolXue on any internet-connected device at school AND at home.",
+		"Students can access Fantastic Voyage on any internet-connected device at school AND at home." => "Students can access Fantastic Voyage on any internet-connected device at school AND at home.",
 		"Log in to Play" => "Log in to Play",
 		"Let's Get Started!" => "Let's Get Started!",
 		"1. Sign Up for Free" => "1. Sign Up for Free",
@@ -50,7 +50,7 @@
 
 		"I enjoy that my students can practice the skills taught, or I can use the platform to introduce new skills. Great for independent learning and small groups." => "I enjoy that my students can practice the skills taught, or I can use the platform to introduce new skills. Great for independent learning and small groups.",
 
-		"My students love using CoolXue. It is exciting and I especially love that there are connected videos to go over the skills." => "My students love using CoolXue. It is exciting and I especially love that there are connected videos to go over the skills.",
+		"My students love using Fantastic Voyage. It is exciting and I especially love that there are connected videos to go over the skills." => "My students love using Fantastic Voyage. It is exciting and I especially love that there are connected videos to go over the skills.",
 
 		"Both of my kids love this game. It’s been especially great for the child who struggles to believe they are good at math." => "Both of my kids love this game. It’s been especially great for the child who struggles to believe they are good at math.",
 
@@ -66,10 +66,10 @@
 		"A proven learning tool to help kids stay engaged and improve performance." => "A proven learning tool to help kids stay engaged and improve performance.",
 		"Visit Blog" => "Visit Blog",
 
-"Download CoolXue, and fill up on learning" => "Download CoolXue, and fill up on learning",
+"Download Fantastic Voyage, and fill up on learning" => "Download Fantastic Voyage, and fill up on learning",
 		"Let's get social!" => "Let's get social!",
 		"General" => "General",
-		"CoolXue Premium" => "CoolXue Premium",
+		"Fantastic Voyage Premium" => "Fantastic Voyage Premium",
 		"Resources" => "Resources",
 		"Teacher Page" => "Teacher Page",
 		"Parent Page" => "Parent Page",
@@ -90,7 +90,7 @@
 		'<strong>Warning!</strong> Your email address is not verified. Please verify your email to access all features.' => '<strong>Warning!</strong> Your email address is not verified. Please verify your email to access all features.',
 		'If you have not received the verification email, please click the button below.' => 'If you have not received the verification email, please click the button below.',
 
-		'Welcome to Coolxue!' => 'Welcome to Coolxue!',
+		'Welcome to Fantastic Voyage!' => 'Welcome to Fantastic Voyage!',
 		'Let\'s learn something new today!' => 'Let\'s learn something new today!',
 		'Its your turn to join.' => 'Hundreds of Students have already joined us, now it\'s your turn.',
 		'signup_terms' => 'By signing up, you agree to the <a href="{{route(\'terms.page\')}}" target="_blank" class="">Terms and Conditions</a>',
@@ -101,7 +101,7 @@
 		'Dark' => 'Dark',
 		'Light' => 'Light',
 		'Auto' => 'Auto',
-		'Editor at Aspirant' => 'Editor at Coolxue',
+		'Editor at Fantastic Voyage' => 'Editor at Fantastic Voyage',
 		'Editor Name' => 'Lydian Chen',
 		'Editor Image' => '/assets/images/avatar/teacher.png',
 
@@ -111,7 +111,7 @@
 		'site_domain' => 'fantastic-voyage.com',
 		'site_url' => 'https://fantastic-voyage.com/',
 		'Login Script' => '首頁',
-		'© 2023 aspirant.tw. All rights reserved.' => '© 2023 fantastic-voyage.com 版權所有。',
+		'© 2024 fantastic-voyage.com. All rights reserved.' => '© 2024 fantastic-voyage.com 版權所有。',
 		'Progress' => '進度',
 		'View all lessons with a concise status overview, tracking achievements and growth in a snap.' => '查看所有課程的簡潔狀態概述，輕鬆跟蹤成就和成長。',
 		'Questions Log' => '  學習日誌',
@@ -148,7 +148,7 @@
 		'contact' => '聯繫我們',
 		'to get support contact us at the following email:' => '如需支持，請聯繫以下電子郵件：',
 		'contact_email' => 'support@fantastic-voyage.com',
-		'Coolxue - an interactive platform dedicated to enhancing your child\'s love for math. Taking the next step in their academic growth is now just a click away.' => '酷學 - 一個致力於提高您孩子對數學的熱愛的互動平台。 採取下一步的學術成長現在只是一個點擊。',
+		'Fantastic Voyage - an interactive platform dedicated to enhancing your child\'s love for math. Taking the next step in their academic growth is now just a click away.' => '酷學 - 一個致力於提高您孩子對數學的熱愛的互動平台。 採取下一步的學術成長現在只是一個點擊。',
 
 		"Preview" => "Preview",
 		"Full Screen" => "Full Screen",

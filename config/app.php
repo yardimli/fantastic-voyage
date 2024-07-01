@@ -16,7 +16,7 @@ return [
 	|
 	*/
 
-	'name' => env('APP_NAME', 'COOLXUE'),
+	'name' => env('APP_NAME', 'Fantastic Voyage'),
 
 	/*
 	|--------------------------------------------------------------------------

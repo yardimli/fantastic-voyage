@@ -4,7 +4,7 @@
 	=========================================================
 
 	* Product Page: https://fantastic-voyage.com/product
-	* Copyright 2018 CoolXue (https://fantastic-voyage.com)
+	* Copyright 2024 Fantastic Voyage (https://fantastic-voyage.com)
 
 	* Coded by fantastic-voyage.com
 

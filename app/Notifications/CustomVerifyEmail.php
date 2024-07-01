@@ -41,7 +41,7 @@
 			$logoPath = public_path('assets/logos/new_logo.png');
 			$logoData = base64_encode(file_get_contents($logoPath));
 
-				$subject = 'Please verify your CoolXue email address.';
+				$subject = 'Please verify your Fantastic Voyage email address.';
 				$email_view = 'emails.verify-email';
 
 

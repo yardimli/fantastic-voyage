@@ -24,10 +24,10 @@
 
 		public function build()
 		{
-				$subject = 'Welcome to Coolxue! Your exciting journey to fun learning begins here.';
+				$subject = 'Welcome to Fantastic Voyage! Your exciting journey to fun learning begins here.';
 				$email_view = 'emails.welcome';
 
-			return $this->from(env('MAIL_FROM_ADDRESS','support@fantastic-voyage.com'), env('MAIL_FROM_NAME', 'CoolXue Support'))
+			return $this->from(env('MAIL_FROM_ADDRESS','support@fantastic-voyage.com'), env('MAIL_FROM_NAME', 'Fantastic Voyage Support'))
 			            ->subject($subject)
 			            ->view($email_view)
 			            ->with(['name' => $this->name, 'email' => $this->email]);

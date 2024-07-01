@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en_US">
 <head>
-	<title>Fiction Fusion - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge</title>
+	<title>Fantastic Voyage - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge</title>
 
 	<!-- Meta Tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="Webestica.com">
-	<meta name="description" content="Fiction Fusion - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge">
+	<meta name="description" content="Fantastic Voyage - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge">
 
 	<!-- Dark mode -->
 	<script>
@@ -157,7 +157,7 @@
       <div class="row text-center position-relative z-index-1">
         <div class="col-lg-7 mx-auto">
           <!-- Heading -->
-          <h1 class="display-3">CoolXue</h1>
+          <h1 class="display-3">Fantastic Voyage</h1>
           <p class="lead">"Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge"</p>
           <div class="d-sm-flex justify-content-center">
             <!-- button -->
@@ -244,8 +244,8 @@
         <!-- Feature START -->
         <div class="col-md-4 text-center">
           <img class="h-200px mb-4" src="/assets/images/header1.jpg" alt="">
-          <h4>A Tale of Untethered Fancy: The Chronicles of CoolXue</h4>
-          <p class="mb-0">Embark on a splendid journey through the intricate domain that bridges the gaps twixt human ingenuity and artificial invention. CoolXue doth cast anew the grand tapestry of storytelling, creating visionary realms heretofore unimagined, and forever altering the quill of the bard.</p>
+          <h4>A Tale of Untethered Fancy: The Chronicles of Fantastic Voyage</h4>
+          <p class="mb-0">Embark on a splendid journey through the intricate domain that bridges the gaps twixt human ingenuity and artificial invention. Fantastic Voyage doth cast anew the grand tapestry of storytelling, creating visionary realms heretofore unimagined, and forever altering the quill of the bard.</p>
         </div>
         <!-- Feature END -->
 
@@ -253,7 +253,7 @@
         <div class="col-md-4 text-center">
           <img class="h-200px mb-4" src="/assets/images/header2.jpg" alt="">
           <h4>The Miraculous Machinations: An Ode to Boundless Narratives</h4>
-          <p class="mb-0">Venture yonder into the brave landscape of CoolXue, where the mind's fancies are woven with the wonders of mechanical creation. This union of human passion and artificial intellect doth conquer the limitations of the literary world and spark the flame of inspiration within each tale as it is crafted.</p>
+          <p class="mb-0">Venture yonder into the brave landscape of Fantastic Voyage, where the mind's fancies are woven with the wonders of mechanical creation. This union of human passion and artificial intellect doth conquer the limitations of the literary world and spark the flame of inspiration within each tale as it is crafted.</p>
         </div>
         <!-- Feature END -->
 
@@ -261,7 +261,7 @@
         <div class="col-md-4 text-center">
           <img class="h-200px mb-4" src="/assets/images/header3.jpg" alt="">
           <h4>The Great Collaboration: A Chronicle of Heralded Imagination</h4>
-          <p class="mb-0">Traverse through the interconnected tapestry of CoolXue, wherein human wit and the prodigious capacities of artificial contraptions symbiotically arise. Witness the dawning of an innovative epoch, as the age-old art of storytelling undergoes a glorious transformation, redefining what it means to put pen to paper.</p>
+          <p class="mb-0">Traverse through the interconnected tapestry of Fantastic Voyage, wherein human wit and the prodigious capacities of artificial contraptions symbiotically arise. Witness the dawning of an innovative epoch, as the age-old art of storytelling undergoes a glorious transformation, redefining what it means to put pen to paper.</p>
         </div>
         <!-- Feature END -->
       </div>
@@ -276,7 +276,7 @@
       <div class="row g-4 g-lg-5 align-items-top">
         <!-- Title -->
         <div class="col-lg-4">
-          <h2 class="h1">The Fathomless Expanse: A Glimpse into CoolXue's Multifarious Features</h2>
+          <h2 class="h1">The Fathomless Expanse: A Glimpse into Fantastic Voyage's Multifarious Features</h2>
           <p class="mb-4">Embark with us upon a journey through the myriad possibilities proffered by v's vast constellation of attributes. Be beguiled by the wonders of our technological and creative assemblage, where the limitless potential of human ingenuity and AI innovation coalesce to sculpt unfathomable narratives amongst the celestials of storytelling. </p>
           <a class="btn btn-dark" href="{{route('register')}}">Start now</a>
         </div>
@@ -312,7 +312,7 @@
             </div>
             <!-- Info -->
             <h4 class="mt-4">Cosmic Convergence: The Nexus of Human and AI Creation</h4>
-            <p class="mb-0">As we continue to explore the vast cosmic ocean of knowledge, CoolXue stands as a beacon bearing witness to the unification of human creativity and artificial intelligence. Dive into the remarkable world where the next generation of storytelling emerges, intrigued by the very essence of our cosmic identity.</p>
+            <p class="mb-0">As we continue to explore the vast cosmic ocean of knowledge, Fantastic Voyage stands as a beacon bearing witness to the unification of human creativity and artificial intelligence. Dive into the remarkable world where the next generation of storytelling emerges, intrigued by the very essence of our cosmic identity.</p>
           </div>
         </div>
         <!-- Feature item START -->
@@ -325,7 +325,7 @@
             </div>
             <!-- Info -->
             <h4 class="mt-4">The Pale Blue Dot of Storytelling: A New Frontier in Narrative Creation</h4>
-            <p class="mb-0">As pioneers in the grand expanse of possibility, CoolXue offers an extraordinary glimpse into the evolving world of storytelling. By merging the once-separated realms of human imagination and AI innovation, we embark on a new era, finding ourselves as cosmic citizens of a shared literary universe.</p>
+            <p class="mb-0">As pioneers in the grand expanse of possibility, Fantastic Voyage offers an extraordinary glimpse into the evolving world of storytelling. By merging the once-separated realms of human imagination and AI innovation, we embark on a new era, finding ourselves as cosmic citizens of a shared literary universe.</p>
           </div>
         </div>
         <div class="col-md-4">
@@ -336,7 +336,7 @@
             </div>
             <!-- Info -->
             <h4 class="mt-4">An AI Odyssey: Envisioning our Collective Future of Narratives</h4>
-            <p class="mb-0">CoolXue is a testament to the boundless potential of human progress and AI collaboration. As we weave our way through the vast cosmic dance of storytelling, remember that somewhere out there amidst the uncharted abyss of narrative possibility, our imaginations are enabled by the very technology we have fashioned, bringing forth stories that mirror the cosmos around us.</p>
+            <p class="mb-0">Fantastic Voyage is a testament to the boundless potential of human progress and AI collaboration. As we weave our way through the vast cosmic dance of storytelling, remember that somewhere out there amidst the uncharted abyss of narrative possibility, our imaginations are enabled by the very technology we have fashioned, bringing forth stories that mirror the cosmos around us.</p>
           </div>
         </div>
       </div>

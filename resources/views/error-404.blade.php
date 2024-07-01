@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en_US">
 <head>
-	<title>Fiction Fusion - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge</title>
+	<title>Fantastic Voyage - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge</title>
 
 	<!-- Meta Tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="fantastic-voyage.com">
-	<meta name="description" content="Fiction Fusion - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge">
+	<meta name="description" content="Fantastic Voyage - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge">
 
 	<!-- Dark mode -->
 	<script>
@@ -138,7 +138,7 @@ Header START -->
 							<li> <a class="dropdown-item" href="app-download.html">App download</a></li>
               <li class="dropdown-divider"></li>
 							<li>
-								<a class="dropdown-item" href="https://themes.getbootstrap.com/store/CoolXue/" target="_blank">
+								<a class="dropdown-item" href="https://themes.getbootstrap.com/store/Fantastic Voyage/" target="_blank">
 									<i class="text-success fa-fw bi bi-cloud-download-fill me-2"></i>Buy Social!
 								</a>
 							</li>

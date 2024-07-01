@@ -99,7 +99,7 @@
 					<div class="p-3 p-lg-5">
 						<!-- Title -->
 						<div class="text-center">
-							<h2 class="fw-bold">{{__('default.Welcome to Coolxue!')}}</h2>
+							<h2 class="fw-bold">{{__('default.Welcome to Fantastic Voyage!')}}</h2>
 							<p class="mb-0 h6 fw-light">{{__('default.Let\'s learn something new today!')}}</p>
 						</div>
 						<!-- SVG Image -->
