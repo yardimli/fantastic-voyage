@@ -1,23 +1,15 @@
 <?php
 
-//	use App\Http\Controllers\Auth\ForgotPasswordController;
-//	use App\Http\Controllers\Auth\ResetPasswordController;
-//	use App\Http\Controllers\GradesController;
+	use App\Http\Controllers\Auth\ForgotPasswordController;
+	use App\Http\Controllers\Auth\ResetPasswordController;
+	use App\Http\Controllers\GradesController;
 	use App\Http\Controllers\IndexController;
 	use App\Http\Controllers\QuizBuilderController;
 	use App\Http\Controllers\QuizContentBuilderController;
 	use App\Http\Controllers\QuizGameBuilderController;
-//	use App\Http\Controllers\TopicsController;
-//	use App\Http\Controllers\TopicController;
-//	use App\Http\Controllers\WeeklyPlanController;
-//	use App\Http\Controllers\TextbookController;
-//	use App\Http\Controllers\ChapterController;
-//	use App\Http\Controllers\RecommendController;
 	use App\Http\Controllers\DreamStudioController;
 	use App\Http\Controllers\LoginWithGoogleController;
-//	use App\Http\Controllers\NotificationController;
 	use App\Http\Controllers\StaticPagesController;
-//	use App\Http\Controllers\TemplateController;
 	use App\Http\Controllers\UserSettingsController;
 	use App\Http\Controllers\VerifyThankYouController;
 	use App\Http\Controllers\LessonController;
@@ -171,30 +163,5 @@
 
 
 
-// Authentication Routes
-	Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-	Route::post('login', [LoginController::class, 'login']);
-	Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-
-// Registration Routes
-	Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-	Route::post('register', [RegisterController::class, 'register']);
-
-// Password Reset Routes
-	Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-	Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-	Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-	Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-// Confirm Password (Optional)
-	Route::get('password/confirm', [ConfirmPasswordController::class, 'showConfirmForm'])->name('password.confirm');
-	Route::post('password/confirm', [ConfirmPasswordController::class, 'confirm']);
-
-// Email Verification (Optional)
-	Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
-	Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
-	Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
-
-
-//	Auth::routes();
-//	Auth::routes(['verify' => true]);
+	Auth::routes();
+	Auth::routes(['verify' => true]);
