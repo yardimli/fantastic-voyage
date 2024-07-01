@@ -1,0 +1,33 @@
+Quiz               - A series of multiple choice questions. Tap the correct answer to proceed.
+Match up           - Drag and drop each keyword next to its definition.
+Flash cards        - Test yourself using cards with prompts on the front and answers on the back.
+Find the match     - Tap the matching answer to eliminate it. Repeat until all answers are gone.
+Anagram            - Drag the letters into their correct positions to unscramble the word or phrase.
+Sentence shuffle   - Drag and drop words to rearrange each sentence into its correct order.
+Matching pairs     - Tap a pair of tiles at a time to reveal if they are a match.
+Open the box       - Tap each box in turn to open them up and reveal the item inside.
+Missing word       - A cloze activity where you drag and drop words into blank spaces within a text.
+Random cards       - Deal out cards at random from a shuffled deck.
+Random wheel       - Spin the wheel to see which item comes up next.
+Gameshow quiz      - A multiple choice quiz with time pressure, lifelines and a bonus round.
+Wordsearch         - Words are hidden in a letter grid. Find them as fast as you can.
+Hangman            - Try to complete the word by picking the correct letters.
+Whack-a-mole       - Moles appear one at a time, hit only the correct ones to win.
+Flip tiles         - Explore a series of two sided tiles by tapping to zoom and swiping to flip.
+Labelled diagram   - Drag and drop the pins to their correct place on the image.
+Group sort         - Drag and drop each item into its correct group.
+True or false      - Items fly by at speed. See how many you can get right before the time runs out.
+Image quiz         - An image is revealed slowly. Buzz in when you can answer the question.
+Maze chase         - Run to the correct answer zone, whilst avoiding the enemies.
+Balloon pop        - Pop the balloons to drop each keyword onto its matching definition.
+Crossword          - Use the clues to solve the crossword. Tap on a word and type in the answer.
+Airplane           - Use touch or keyboard to fly into the correct answers and avoid the wrong ones.
+Conveyor belt      - Remember the items. When the belt stops you have to tap the ones you saw.
+Win or lose quiz   - A quiz where you choose how many points each question is worth.
+Rank order         - Drag and drop the items into their correct order.
+Seating plan       - Drag to arrange seats, random pick a student or shuffle to mix up the seats.
+Categorize         - Drag and drop the items into the appropriate category column.
+Unscramble         - Drag and drop the keywords so that they are all next to the correct description.
+Word magnets       - Drag and drop the words or letters to arrange into sentences.
+Higher or lower    - Choose if the next tile is higher or lower. Get it right and you keep going.
+Maths generator    - Select a topic and the generator will create a batch of maths questions.

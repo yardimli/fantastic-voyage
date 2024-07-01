@@ -1,0 +1,98 @@
+@extends('layouts.app')
+
+@section('title', 'Maze Chase')
+
+@section('content')
+	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}" />
+	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}" />
+	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
+	<script src="{{ asset('assets/js/quiz-game.js') }}"></script>
+	<div class="container mt-5 mb-5 pb-5">
+
+		<div class="create-header ms-4 mt-4 pb-2 d-flex align-items-end  justify-content-between">
+
+			<div id="breadcrumbs" class="">
+				<span class="breadcrumb-separator fas fa-chevron-right"></span>
+				<a class="clickable-breadcrumb breadcrumb" href="/quiz-activities">{{__('default.My Activities')}}</a>
+				<span class="breadcrumb-separator fas fa-chevron-right"></span>
+				<span class="breadcrumb">{{__('default.Enter Content')}}</span>
+				<span class="breadcrumb-separator fas fa-chevron-right"></span>
+				<span class="breadcrumb selected-breadcrumb">{{__('default.Play')}}</span>
+			</div>
+		</div>
+
+		<?php
+			$data      = json_decode($json_data, true);
+//			print_r($questions);
+		?>
+		<audio id="audio-player" style="display: none;"></audio>
+		<input type="hidden" id="activity_id" value="{{$activity_id}}">
+		<div id="game-ui-in-page" class="prevent-select">
+			@include('game-layout.phaser-game-background', ['animation' => $current_theme, 'view_target' => 'game-ui-in-page']) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
+			<div id="preload-page">
+				<div style="margin: auto;">
+					<div class="quiz-title"></div>
+					<div class="start-btn">
+						<img src="{{ asset('assets/phaser/images/start.png') }}" style="width: 80px; margin: 5px;">
+						<div class="mb-2 start-btn-text" style="font-weight: bold; font-size: 20px;">START</div>
+					</div>
+					<div id="quiz-type-description" style="font-size: 28px;"></div>
+				</div>
+			</div>
+			<div id="main-div" style="overflow: hidden;" class="hide-main-div">
+				<div id="quiz-header" style="display:flex; justify-content: space-between;">
+					<div id="timer" style="display: none;">00:00</div>
+					<div id="score" style="display: none; margin-right: 20px;">0</div>
+				</div>
+				<div id="question-div"></div>
+				<div id="question-image-div"></div>
+				<div id="answers-div"></div>
+				<div id="quiz-footer" style="text-align: center;">
+					<div class="page-controller" style="display: none;">
+						<i class="fa fa-caret-left audio-control-btn" id="prev"></i>
+						<span id="page-counter"></span>
+						<i class="fa fa-caret-right audio-control-btn" id="next"></i>
+					</div>
+					<i class="fa fa-caret-right audio-control-btn" id="start-quiz"></i>
+
+				</div>
+			</div>
+			<div id="endgame-page">
+				<div id="finish-info">
+					<div class="title">{{ __('default.Game Finished') }}</div>
+					<div style="color: #3faa6f">{{ __('default.Time Spent') }}</div>
+					<div class="time-spent" style="font-size: 32px;"></div>
+					<div style="color: #3faa6f">{{ __('default.Score') }}</div>
+					<div class="total-score" style="font-size: 32px;"></div>
+{{--					<div id="restart">ReStart</div>--}}
+				</div>
+			</div>
+			<img id="show-article" src="{{ asset('assets/phaser/images/book.png') }}">
+			<img id="full-screen" src="{{ asset('assets/phaser/images/full_screen.png') }}">
+			<img id="mute-audio" src="{{ asset('assets/phaser/images/sound.png') }}">
+		</div>
+
+		<div id="themes_div">
+			@foreach ($themes as $theme)
+				<img src="{{ asset('assets/phaser/images/' . $theme . '.png') }}"
+				     class="{{ $current_theme == $theme ? 'selected-theme' : 'themes_img' }}"
+				     data-theme="{{ $theme }}">
+			@endforeach
+		</div>
+
+
+		@endsection
+
+		@push('scripts')
+			<script>
+				let json_data = {!! $json_data; !!};
+				let game_title = '{!! $title; !!}';
+				let type_description = '{!! $type_description; !!}';
+				let current_theme = '{!! $current_theme; !!}';
+				var previewQid = null;
+				window.translations = {
+					'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
+				};
+			</script>
+	@endpush
+

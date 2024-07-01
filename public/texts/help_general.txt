@@ -1,0 +1,81 @@
+Write Main FAQ topics using the following information. We will later add questions and answers for each topic.
+
+Fiction Fusion is a site where people can sign up and then use GPT to write stories. the site sells three packages.
+
+While writing a story, the user first needs to write the:
+title, protagonist, location, antagonist, love interest, confidant, comic relief, story_so_far, story_image (generated with AI based on users prompt), genre, writing style, narrative style, author style, is private, allow contributions,
+Only title and image are required, the other fields are optional.
+Only paid users of Novella and Novel can set their stories to private.
+If a story is set to allow contributions, any other member can continue writing, but they will be limited to editing/deleting only what they contributed. The owner of the story can also only change what they themselves wrote.
+
+There are over 100 authors to choose from, users can also enter any other they like that is not on the list.
+
+Genres are: Action, Adventure, Comedy, Crime, Drama, Fantasy, Historical, Horror, Mystery, Philosophical, Political, Romance, Saga, Satire, Science Fiction, Social, Thriller, Urban, Western, and many others.
+
+Writing Styles are: Descriptive, Expository, Narrative, Persuasive, Argumentative, Stream Of Consciousness, Epistolary, Satirical, Minimalist.
+
+narrative Styles are: First Person, Second Person, Third Person Omniscient, Third-person Limited, Third-person Objective, Alternating Person, Framed Narrative, Epistolary Narrative, Nonlinear Narrative, Unreliable Narrator.
+
+All input fields when setting up the story have a button that when pressed will either write the whole field with AI or resume on what the user already wrote.
+
+Generating an image costs 1000 Tokens, this is to prevent abuse of the system. The image is generated with AI based on the users prompt. An user can send an email to the site admin to request a refund of the tokens if they are not satisfied with the image.
+
+To write, a user has to verify their email. All user gets 100,000 GPT-3.5 Tokens for free to try out the system.
+
+When writing a story, the user can ask the AI for suggestions of how to continue writing, then choose one of the suggestions and also modify it if they desire. They can also write how they wish the story to continue. All AI generated outputs can be edited to refine the story. The user can also ask the AI to rewrite the last generated part by writing what they wish to change. The user can also change the temperature setting to control creativity of the AI.
+
+All stories that are public can be read in the library, writers also have their profile page where all the public stories they have written are displayed. They can customize the background and profile photo.
+
+Short Stories Pack:
+20,000 GPT-4 Tokens
+200,000 GPT-3.5 Tokens
+~70-140 Pages of GPT 3.5 Text*
+~7-14 Pages of GPT 4.0 Text*
+Use With GPT 3.5
+Use With GPT 4.0
+Tokens Expire After 3 Months
+
+Novella Pack:
+50,000 GTP-4 Tokens Credits
+500,000 GPT-3.5 Tokens
+~170-340 Pages of GPT 3.5 Text*
+~17-34 Pages of GPT 4.0 Text*
+Use With GPT 3.5
+Use With GPT 4.0
+Tokens Expire After 6 Months
+Control Initial Prompt**
+Private Stories
+
+Novel Pack
+240,000 GPT-4 Tokens
+2,400,000 GPT-3.5 Tokens
+~800-1600 Pages of GPT 3.5 Text*
+~80-160 Pages of GPT 4.0 Text*
+Use With GPT 3.5
+Use With GPT 4.0
+Tokens Expire After a Year
+Control Initial Prompt**
+Private Stories
+
+*One Pages is calculated as 300 words. Depending on the length of the context, each word can cost between 5–10 tokens. This is an estimate and may vary.
+**COMING SOON, Control Initial Prompt is a feature that allows you to control the initial prompt of the story. This is useful for directing the AI when writing a story.
+
+The site has a Feedback system for users to see the roadmap, changelog and also leave feedback and requests for improvements.
+The site has a chatbot that can answer questions.
+
+
+
+1. Getting Started with Fiction Fusion
+2. Account Registration and Email Verification
+3. Understanding Story Elements and Options
+4. Writing and Editing with AI Assistance
+5. AI Suggestions and Temperature Settings
+6. Reading Public Stories and Exploring the Library
+7. Customizing Writer Profile Pages
+8. Package Options: Short Stories, Novella, and Novel Packs
+9. Token Expiration and Usage Limits
+10. Upcoming Features: Controlling Initial Prompts
+11. The Feedback System: Roadmap, Changelog, and User Suggestions
+
+
+write  FAQ questions and answers for the topic: The Feedback System: Roadmap, Changelog, and User Suggestions
