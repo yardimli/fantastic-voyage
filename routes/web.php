@@ -1,37 +1,32 @@
 <?php
 
-	use App\Http\Controllers\Auth\ForgotPasswordController;
-	use App\Http\Controllers\Auth\ResetPasswordController;
-	use App\Http\Controllers\GradesController;
-	use App\Http\Controllers\CategoryController;
+//	use App\Http\Controllers\Auth\ForgotPasswordController;
+//	use App\Http\Controllers\Auth\ResetPasswordController;
+//	use App\Http\Controllers\GradesController;
 	use App\Http\Controllers\IndexController;
 	use App\Http\Controllers\QuizBuilderController;
 	use App\Http\Controllers\QuizContentBuilderController;
 	use App\Http\Controllers\QuizGameBuilderController;
-	use App\Http\Controllers\TopicsController;
-	use App\Http\Controllers\TopicController;
-	use App\Http\Controllers\WeeklyPlanController;
-	use App\Http\Controllers\TextbookController;
-	use App\Http\Controllers\ChapterController;
-	use App\Http\Controllers\RecommendController;
+//	use App\Http\Controllers\TopicsController;
+//	use App\Http\Controllers\TopicController;
+//	use App\Http\Controllers\WeeklyPlanController;
+//	use App\Http\Controllers\TextbookController;
+//	use App\Http\Controllers\ChapterController;
+//	use App\Http\Controllers\RecommendController;
 	use App\Http\Controllers\DreamStudioController;
 	use App\Http\Controllers\LoginWithGoogleController;
-	use App\Http\Controllers\NotificationController;
+//	use App\Http\Controllers\NotificationController;
 	use App\Http\Controllers\StaticPagesController;
-	use App\Http\Controllers\TemplateController;
+//	use App\Http\Controllers\TemplateController;
 	use App\Http\Controllers\UserSettingsController;
 	use App\Http\Controllers\VerifyThankYouController;
 	use App\Http\Controllers\LessonController;
-	use App\Http\LangController;
+//	use App\Http\LangController;
 	use App\Mail\ThankYouForYourOrder;
-	use GuzzleHttp\Client;
 	use Illuminate\Http\Request;
 	use Illuminate\Support\Facades\Auth;
 	use Illuminate\Support\Facades\Mail;
 	use Illuminate\Support\Facades\Route;
-	use Illuminate\Support\Facades\Storage;
-	use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-
 
 
 	/*
