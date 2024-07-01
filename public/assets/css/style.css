@@ -17621,3 +17621,77 @@ a.badge:hover {
 
 /*User CSS*/
 /*# sourceMappingURL=style.css.map */
+
+
+/*Guan add customized css*/
+
+.bg-highlight {
+  background-color: rgba(var(--bs-primary-rgb), 0.2); !important;
+  color: var(--bs-primary);
+  border-color: rgba(6, 106, 201, 0);
+}
+
+/*for dashboard > analyst page*/
+.dropdown-menu{
+  min-width: auto;
+}
+
+
+/*for my.student page*/
+.loginAsImg:hover{
+  border: 2px solid #fd8b36;
+}
+
+.loginAsDiv:hover{
+  color: #fd8b36;
+}
+
+
+/*for register page*/
+.characters img{
+  cursor: pointer;
+  width: 60px;
+}
+.characters img:hover{
+  border: #0a966c 2px solid;
+  border-radius: 10px;
+}
+
+.characters .active{
+  border: #0a966c 2px solid;
+  border-radius: 10px;
+}
+
+/*for banner*/
+.banner_web{
+
+}
+
+.banner_text{
+  text-align: center;
+}
+
+.banner_sub_text{
+  justify-content: center;
+}
+
+.banner_character{
+  width: 12%;
+  left: 20px;
+  bottom: 0;
+}
+
+@media (max-width: 767.98px) {
+  .banner_character{
+    width: 45%;
+    left: 5px;
+  }
+
+  .banner_text{
+    text-align: right;
+  }
+
+  .banner_sub_text{
+    justify-content: right;
+  }
+}
