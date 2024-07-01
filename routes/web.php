@@ -45,7 +45,6 @@
 	|
 	*/
 	Route::get('/', [IndexController::class, 'index'])->name('index');
-	Route::get('/index', [IndexController::class, 'index'])->name('index');
 
 	Route::get('quiz-builder/{activity_id?}', [QuizBuilderController::class, 'show_quizBuilder'])->name('quiz-builder');
 	Route::get('quiz-activities', [QuizBuilderController::class, 'quizActivities'])->name('quiz-activities');
