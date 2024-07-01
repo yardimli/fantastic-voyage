@@ -14,7 +14,7 @@
 		use ResetsPasswords;
 
 		// Set the redirectTo property
-		protected $redirectTo = route('quiz-activities');
+		protected $redirectTo;// = route('quiz-activities');
 
 
 		protected function resetPassword($user, $password)

@@ -121,10 +121,10 @@
 	Route::get('login/google', [LoginWithGoogleController::class, 'redirectToGoogle']);
 	Route::get('login/google/callback', [LoginWithGoogleController::class, 'handleGoogleCallback']);
 
-	Route::get('forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
-	Route::post('forgot-password', [ForgotPasswordController::class, 'sendPasswordResetEmail'])->name('password.email');
-	Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetPasswordForm'])->name('password.reset');
-	Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
+//	Route::get('forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
+//	Route::post('forgot-password', [ForgotPasswordController::class, 'sendPasswordResetEmail'])->name('password.email');
+//	Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetPasswordForm'])->name('password.reset');
+//	Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 
 	Route::get('/privacy', [StaticPagesController::class, 'privacy'])->name('privacy.page');
 
