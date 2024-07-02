@@ -1604,21 +1604,21 @@ var safeEvent = __webpack_require__(26);
  * @memberof module:domEvent
  * @example
  * var div = document.querySelector('div');
- * 
+ *
  * // Bind one event to an element.
  * on(div, 'click', toggle);
- * 
+ *
  * // Bind multiple events with a same handler to multiple elements at once.
  * // Use event names splitted by a space.
  * on(div, 'mouseenter mouseleave', changeColor);
- * 
+ *
  * // Bind multiple events with different handlers to an element at once.
  * // Use an object which of key is an event name and value is a handler function.
  * on(div, {
  *   keydown: highlight,
  *   keyup: dehighlight
  * });
- * 
+ *
  * // Set a context for handler method.
  * var name = 'global';
  * var repository = {name: 'CodeSnippet'};
@@ -1781,21 +1781,21 @@ var safeEvent = __webpack_require__(26);
  * @memberof module:domEvent
  * @example
  * // Following the example of domEvent#on
- * 
+ *
  * // Unbind one event from an element.
  * off(div, 'click', toggle);
- * 
+ *
  * // Unbind multiple events with a same handler from multiple elements at once.
  * // Use event names splitted by a space.
  * off(element, 'mouseenter mouseleave', changeColor);
- * 
+ *
  * // Unbind multiple events with different handlers from an element at once.
  * // Use an object which of key is an event name and value is a handler function.
  * off(div, {
  *   keydown: highlight,
  *   keyup: dehighlight
  * });
- * 
+ *
  * // Unbind events without handlers.
  * off(div, 'drag');
  */
@@ -4623,7 +4623,7 @@ module.exports = createObject;
 
 "use strict";
 /**
- * @fileoverview Palette view template
+ * @fileoverview Palette view quiz
  */
 
 
@@ -4775,7 +4775,7 @@ function extractElseif(ifExps, sourcesInsideBlock) {
 }
 
 /**
- * Helper function for "if". 
+ * Helper function for "if".
  * @param {Array.<string>} exps - array of expressions split by spaces
  * @param {Array.<string>} sourcesInsideBlock - array of sources inside the if block
  * @param {object} context - context
@@ -4986,9 +4986,9 @@ function compile(sources, context) {
  * @returns {string} - text that bind with its context
  * @memberof module:domUtil
  * @example
- * var template = require('tui-code-snippet/domUtil/template');
- * 
- * var source = 
+ * var quiz = require('tui-code-snippet/domUtil/quiz');
+ *
+ * var source =
  *     '<h1>'
  *   +   '{{if isValidNumber title}}'
  *   +     '{{title}}th'
@@ -5001,7 +5001,7 @@ function compile(sources, context) {
  *   +     '<p>{{idx}}: {{@this}}</p>'
  *   +   '{{/with}}'
  *   + '{{/each}}';
- * 
+ *
  * var context = {
  *   isValidDate: function(text) {
  *     return /^\d{4}-(0|1)\d-(0|1|2|3)\d$/.test(text);
@@ -5015,8 +5015,8 @@ function compile(sources, context) {
  *     return num + 1;
  *   }
  * };
- * 
- * var result = template(source, context);
+ *
+ * var result = quiz(source, context);
  * console.log(result); // <h1>Date: 2019-11-25</h1><p>1: Clean the room</p><p>2: Wash the dishes</p>
  */
 function template(text, context) {
@@ -5212,7 +5212,7 @@ module.exports = toArray;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {/**
- * @fileoverview Slider template
+ * @fileoverview Slider quiz
  */
 
 

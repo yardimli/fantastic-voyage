@@ -14486,7 +14486,7 @@ textarea.form-control-lg {
 
 .dropdown-toggle:after {
   content: "\f078";
-  font-family: "Font Awesome 6 Free";
+  font-family: "Font Awesome 5 Free";
   font-size: 0.5rem;
   margin-left: 0.35rem;
   font-weight: 900;
@@ -14496,7 +14496,7 @@ textarea.form-control-lg {
 
 .dropup .dropdown-toggle:after {
   content: "\f077";
-  font-family: "Font Awesome 6 Free";
+  font-family: "Font Awesome 5 Free";
   font-size: 0.7rem;
   margin-left: 0.35rem;
   font-weight: 900;
@@ -14893,7 +14893,7 @@ header {
 }
 .navbar .dropdown-menu .dropdown-submenu.dropend .dropdown-toggle:after {
   content: "\f00d";
-  font-family: "Font Awesome 6 Free";
+  font-family: "Font Awesome 5 Free";
   font-size: 10px;
   top: 10px;
   -webkit-transform: rotate(45deg);
@@ -14917,7 +14917,7 @@ header {
 
 .navbar .dropdown-menu .dropdown-submenu.dropstart .dropdown-toggle:before {
   content: "\f00d";
-  font-family: "Font Awesome 6 Free";
+  font-family: "Font Awesome 5 Free";
   font-size: 10px;
   top: 8px;
   -webkit-transform: rotate(45deg);
@@ -16448,7 +16448,7 @@ a.badge:hover {
 }
 .avatar-uploader .avatar-edit input + label:after {
   content: "\f303";
-  font-family: "Font Awesome 6 Free";
+  font-family: "Font Awesome 5 Free";
   color: #14191e;
   position: absolute;
   top: 50%;

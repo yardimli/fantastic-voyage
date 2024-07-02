@@ -182,7 +182,7 @@
 
 							<!-- Sign up link -->
 							<div class="mt-4 text-center">
-								<span>Already have an account?<a href="{{ route('template.show', 'sign-in') }}"> Sign in here</a></span>
+								<span>Already have an account?<a href="{{ route('quiz.show', 'sign-in') }}"> Sign in here</a></span>
 							</div>
 						</div>
 					</div>

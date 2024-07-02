@@ -123,6 +123,6 @@
 
 			return redirect()->intended('/quiz-activities');
 
-//			return redirect()->route('template.show', 'about');
+//			return redirect()->route('quiz.show', 'about');
 		}
 	}

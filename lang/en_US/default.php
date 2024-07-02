@@ -157,7 +157,6 @@
 		"Add a question" => "Add a question",
 		"itemCount" => "itemCount",
 		"Create Quiz" => "  Create Quiz",
-		"Create Article" => " Create Article",
 		"Activity" => "Activity",
 		"Activity Title" => "Activity Title",
 		"Quiz" => "Quiz",

@@ -21915,7 +21915,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
     gl.compileShader(vertexShader);
     if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
       throw new Error(
-        // eslint-disable-next-line prefer-template
+        // eslint-disable-next-line prefer-quiz
         'Vertex shader compile error for ' + this.type + ': ' +
         gl.getShaderInfoLog(vertexShader)
       );
@@ -21926,7 +21926,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
     gl.compileShader(fragmentShader);
     if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
       throw new Error(
-        // eslint-disable-next-line prefer-template
+        // eslint-disable-next-line prefer-quiz
         'Fragment shader compile error for ' + this.type + ': ' +
         gl.getShaderInfoLog(fragmentShader)
       );
@@ -21938,7 +21938,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       throw new Error(
-        // eslint-disable-next-line prefer-template
+        // eslint-disable-next-line prefer-quiz
         'Shader link error for "${this.type}" ' +
         gl.getProgramInfoLog(program)
       );
@@ -42553,7 +42553,7 @@ customEvents_default().mixin(Invoker);
 // EXTERNAL MODULE: ../../node_modules/@babel/runtime-corejs3/core-js-stable/parse-float.js
 var parse_float = __webpack_require__(5214);
 var parse_float_default = /*#__PURE__*/__webpack_require__.n(parse_float);
-;// CONCATENATED MODULE: ./src/js/ui/template/mainContainer.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/mainContainer.js
 
 /* harmony default export */ var mainContainer = (function (_ref) {
   var _context, _context2, _context3, _context4, _context5, _context6, _context7;
@@ -42569,7 +42569,7 @@ var parse_float_default = /*#__PURE__*/__webpack_require__.n(parse_float);
 
 		return concat_default()(_context = concat_default()(_context2 = concat_default()(_context3 = concat_default()(_context4 = concat_default()(_context5 = concat_default()(_context6 = concat_default()(_context7 = "\n    <div class=\"tui-image-editor-main-container\" style=\"".concat(commonStyle, "\">\n        <div class=\"tui-image-editor-header\" style=\"")).call(_context7, headerStyle, "\">\n")).call(_context6, "", "<div class=\"tui-image-editor-header-buttons\">\n                <div style=\"")).call(_context5, loadButtonStyle, "\">\n                    ")).call(_context4, locale.localize('Load'), "\n                    <input type=\"file\" class=\"tui-image-editor-load-btn\" />\n                </div>\n                <button class=\"tui-image-editor-download-btn\" style=\"")).call(_context3, downloadButtonStyle, "\">\n                    ")).call(_context2, locale.localize('Update'), "\n                </button>\n            <div class='btn btn-danger' id='clear-tui-editor'>Clear</div> <div class='btn btn-primary' id='close-tui-editor'>Close</div></div>\n        </div>\n        <div class=\"tui-image-editor-main\">\n            <div class=\"tui-image-editor-submenu\">\n                <div class=\"tui-image-editor-submenu-style\" style=\"")).call(_context, submenuStyle, "\"></div>\n            </div>\n            <div class=\"tui-image-editor-wrap\">\n                <div class=\"tui-image-editor-size-wrap\">\n                    <div class=\"tui-image-editor-align-wrap\">\n                        <div class=\"tui-image-editor\"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n");
 });
-;// CONCATENATED MODULE: ./src/js/ui/template/controls.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/controls.js
 
 
 /* harmony default export */ var controls = (function (_ref) {
@@ -42585,7 +42585,7 @@ var parse_float_default = /*#__PURE__*/__webpack_require__.n(parse_float);
 // EXTERNAL MODULE: ../../node_modules/@babel/runtime-corejs3/core-js-stable/instance/map.js
 var instance_map = __webpack_require__(899);
 var map_default = /*#__PURE__*/__webpack_require__.n(instance_map);
-;// CONCATENATED MODULE: ./src/js/ui/template/style.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/style.js
 
 /* harmony default export */ var style = (function (_ref) {
   var _context, _context2, _context3, _context4, _context5, _context6, _context7, _context8, _context9, _context10, _context11, _context12, _context13, _context14, _context15, _context16, _context17, _context18, _context19, _context20, _context21, _context22, _context23, _context24, _context25, _context26, _context27, _context28, _context29;
@@ -43954,8 +43954,8 @@ var Submenu = /*#__PURE__*/function () {
    * @param {string} name - name of sub menu
    * @param {Object} iconStyle - style of icon
    * @param {string} menuBarPosition - position of menu
-   * @param {*} templateHtml - template for SubMenuElement
-   * @param {boolean} [usageStatistics=false] - template for SubMenuElement
+   * @param {*} templateHtml - quiz for SubMenuElement
+   * @param {boolean} [usageStatistics=false] - quiz for SubMenuElement
    */
   function Submenu(subMenuElement, _ref) {
     var locale = _ref.locale,
@@ -44055,7 +44055,7 @@ var Submenu = /*#__PURE__*/function () {
      * @param {Locale} locale - translate text
      * @param {string} name - submenu name
      * @param {Object} iconStyle -  icon style
-     * @param {*} templateHtml - template for SubMenuElement
+     * @param {*} templateHtml - quiz for SubMenuElement
      * @private
      */
 
@@ -44093,11 +44093,11 @@ var Submenu = /*#__PURE__*/function () {
 
 customEvents_default().mixin(Submenu);
 /* harmony default export */ var submenuBase = (Submenu);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/shape.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/shape.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -44446,11 +44446,11 @@ var Shape = /*#__PURE__*/function (_Submenu) {
 }(submenuBase);
 
 /* harmony default export */ var ui_shape = (Shape);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/crop.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/crop.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -44663,11 +44663,11 @@ var Crop = /*#__PURE__*/function (_Submenu) {
 }(submenuBase);
 
 /* harmony default export */ var ui_crop = (Crop);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/resize.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/resize.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -44977,11 +44977,11 @@ var Resize = /*#__PURE__*/function (_Submenu) {
 }(submenuBase);
 
 /* harmony default export */ var ui_resize = (Resize);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/flip.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/flip.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -45125,11 +45125,11 @@ var Flip = /*#__PURE__*/function (_Submenu) {
 }(submenuBase);
 
 /* harmony default export */ var ui_flip = (Flip);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/rotate.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/rotate.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -45309,11 +45309,11 @@ var Rotate = /*#__PURE__*/function (_Submenu) {
 }(submenuBase);
 
 /* harmony default export */ var ui_rotate = (Rotate);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/text.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/text.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -45678,11 +45678,11 @@ var Text = /*#__PURE__*/function (_Submenu) {
 }(submenuBase);
 
 /* harmony default export */ var ui_text = (Text);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/mask.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/mask.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -45840,11 +45840,11 @@ var Mask = /*#__PURE__*/function (_Submenu) {
 }(submenuBase);
 
 /* harmony default export */ var ui_mask = (Mask);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/icon.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/icon.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -46099,11 +46099,11 @@ var Icon = /*#__PURE__*/function (_Submenu) {
 }(submenuBase);
 
 /* harmony default export */ var ui_icon = (Icon);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/draw.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/draw.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  * @returns {string}
@@ -46351,7 +46351,7 @@ var Draw = /*#__PURE__*/function (_Submenu) {
 // EXTERNAL MODULE: ./node_modules/tui-code-snippet/type/isExisty.js
 var isExisty = __webpack_require__(9886);
 var isExisty_default = /*#__PURE__*/__webpack_require__.n(isExisty);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/filter.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/filter.js
 
 
 /**
@@ -47092,11 +47092,11 @@ var Panel = /*#__PURE__*/function () {
 }();
 
 /* harmony default export */ var panelMenu = (Panel);
-;// CONCATENATED MODULE: ./src/js/ui/template/submenu/history.js
+;// CONCATENATED MODULE: ./src/js/ui/quiz/submenu/history.js
 
 
 /**
- * @param {Object} submenuInfo - submenu info for make template
+ * @param {Object} submenuInfo - submenu info for make quiz
  *   @param {Locale} locale - Translate text
  *   @param {Function} makeSvgIcon - svg icon generator
  *   @param {string} name - history name

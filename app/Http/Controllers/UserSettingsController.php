@@ -100,100 +100,10 @@
 		}
 
 
-		public function userScore(Request $request, $score_url, $grade)
-		{
-
-			// Get the authenticated user
-			$user      = $request->user();
-			$sub_title = __('default.score URL Link');
-			$language  = $this->get_language();
-			$grade_arr = ['K' => 'Kindergarten URL Link', '1' => 'First Grade URL Link', '2' => 'Second Grade URL Link', '3' => 'Third Grade URL Link', '4' => 'Fourth Grade URL Link'];
-
-			$category_lists = [];
-			foreach ($grade_arr as $key => $value) {
-				if ($grade == __('default.' . $value)) {
-					$category_lists['short_grade'] = $key;
-					$categories                    = $this->get_categories($key, $language);
-					$chart_info                    = $this->get_score_chart_data($key, $language);
-					$show_all_chart                = implode(',', $chart_info['show_all_chart']);
-					$show_started_chart            = implode(',', $chart_info['show_started_chart']);
-					$started_lesson_count          = count($chart_info['show_started_chart']);
-					foreach ($categories as &$category) {
-
-						$category_code           = $category['sort_category_code'];
-						$lessons_by_category     = $this->get_lessons_by_category_code($category_code, $language, $key);
-						$category['lessons']     = $lessons_by_category;
-						$category['collapse_id'] = $key . '_' . $category['sort_category_code'];
-					}
-					$category_lists['categories'] = $categories;
-				}
-			}
-
-			return view('user.score', compact('user', 'grade', 'category_lists', 'show_all_chart', 'show_started_chart', 'sub_title', 'started_lesson_count', 'score_url'));
-		}
-
-
-
-		//-------------------------------------------------------------------------
-		public function userCourses(Request $request, $courses_url, $grade)
-		{
-			// Get the authenticated user
-			$user       = $request->user();
-			$student_id = session('student_id') ?? -1;
-			$sub_title  = __('default.My Courses List');
-
-			$language  = $this->get_language();
-			$lists     = [];
-			$grade_arr = ['K' => 'Kindergarten URL Link', '1' => 'First Grade URL Link', '2' => 'Second Grade URL Link', '3' => 'Third Grade URL Link', '4' => 'Fourth Grade URL Link'];
-			foreach ($grade_arr as $key => $value) {
-				if ($grade == __('default.' . $value)) {
-					$lists['short_grade']     = $key;
-					$lists['started_lessons'] = $this->get_started_lessons($student_id, $language, $key, 1, null);
-				}
-			}
-
-			// Custom sort function
-
-
-			// Sorting the array based on scores
-			usort($lists['started_lessons'], function ($a, $b) {
-				return $a->display_progress - $b->display_progress;
-			});
-
-			return view('user.courses', compact('user', 'lists', 'sub_title', 'grade', 'courses_url'));
-		}
 
 
 		//-------------------------------------------------------------------------
 		// settings
-
-		public function userProgress(Request $request)
-		{
-			// Get the authenticated user
-			$user      = $request->user();
-			$sub_title = __('default.Progress');
-			$lang      = $this->get_language();
-			$grade_arr = ['K' => 'Kindergarten', '1' => 'First Grade', '2' => 'Second Grade', '3' => 'Third Grade', '4' => 'Fourth Grade'];
-
-			$lists = [];
-			foreach ($grade_arr as $key => $value) {
-				$each_list                = [];
-				$each_list['grade']       = __('default.' . $value);
-				$each_list['short_grade'] = $key;
-				$categories               = $this->get_categories($key, $lang);
-				foreach ($categories as &$category) {
-					$category_code           = $category['sort_category_code'];
-					$lessons_by_category     = $this->get_lessons_by_category_code($category_code, $lang, $key);
-					$category['lessons']     = $lessons_by_category;
-					$category['collapse_id'] = $key . '_' . $category['sort_category_code'];
-				}
-				$each_list['categories'] = $categories;
-
-				array_push($lists, $each_list);
-			}
-
-			return view('user.progress', compact('user', 'lists', 'sub_title'));
-		}
 
 		public function userSettings(Request $request)
 		{
@@ -202,47 +112,6 @@
 			$sub_title  = __('default.dashboard');
 
 			return view('user.settings', compact('user',  'sub_title'));
-		}
-
-
-		public function userRecommendations(Request $request)
-		{
-			// Get the authenticated user
-			$user      = $request->user();
-			$user_id   = session('student_id') ?? -1;
-			$lang      = $this->get_language();
-			$sub_title = __('default.Recommendations');
-
-			$lessons_over_50          = $this->get_started_lessons($user_id, $lang, null, 50, null);
-			$recommended_lesson_count = 0;
-			$recommended              = array();
-			if (count($lessons_over_50) > 0) {
-				foreach ($lessons_over_50 as $each_lesson) {
-					$lesson_ext_link          = $each_lesson->ext_link;
-					$recommended_lessons      = $this->get_harder_recommend_lesson($lesson_ext_link);
-					$recommended_lesson_count += count($recommended_lessons);
-					foreach ($recommended_lessons as $recommended_lesson) {
-						if (!in_array($recommended_lesson['lesson_id'], $recommended)) {
-							array_push($recommended, $recommended_lesson);
-						}
-					}
-				}
-			}
-
-			$message = 'success';
-			if ($recommended_lesson_count == 0) {
-				$message = __('default.Please try to do some lessons to get recommended lessons.');
-			}
-
-			$gradeOrder = ['K', '1', '2', '3', '4'];
-
-			usort($recommended, function ($a, $b) use ($gradeOrder) {
-				$gradeA = array_search($a['grade'], $gradeOrder);
-				$gradeB = array_search($b['grade'], $gradeOrder);
-				return $gradeA - $gradeB;
-			});
-
-			return view('user.recommendations', compact('user', 'user_id', 'recommended', 'message', 'sub_title'));
 		}
 
 		public function settings(Request $request)

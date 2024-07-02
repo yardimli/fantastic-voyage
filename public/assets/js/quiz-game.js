@@ -1,9 +1,5 @@
 var currentQuestion = null;
-var article = null;
 var title = '';
-let hasArticle = false;
-let articleImg = '';
-let articleAudio = '';
 let isMute = false;
 var userAnswered = [];
 var currentIndex = 0;
@@ -30,10 +26,6 @@ $(document).ready(function () {
 	var data = json_data;
 	title = game_title;
 	var questions = data['questions'];
-	article = data['article'];
-	articleImg = data['articleImg'] ?? '';
-	articleAudio = data['articleAudio'] ?? '';
-	hasArticle = article !== null && article !== '';
 	currentQuestion = questions[currentIndex];
 	$('#preload-page .quiz-title').text(title);
 	$('#quiz-type-description').text(type_description);
@@ -50,8 +42,8 @@ $(document).ready(function () {
 		$('.audio-image').addClass('audio-image-disabled');
 	}
 	
-	if(previewQid !== null){
-		previewQid = parseInt(previewQid-1) < questions.length ? previewQid-1 : 0;
+	if (previewQid !== null) {
+		previewQid = parseInt(previewQid - 1) < questions.length ? previewQid - 1 : 0;
 		$('#preload-page').hide();
 		currentQuestion = questions[previewQid];
 		currentIndex = parseInt(previewQid);
@@ -109,14 +101,11 @@ $(document).ready(function () {
 				}
 			}
 			
-			if (hasArticle) {
-				showArticle(article, articleImg, articleAudio, title)
-			} else {
-				showQuestion(currentQuestion, currentIndex, true);
-				updateButtonStates(currentIndex, questions);
-				$('.page-controller').css('display', 'block');
-				$('#start-quiz').css('display', 'none');
-			}
+			
+			showQuestion(currentQuestion, currentIndex, true);
+			updateButtonStates(currentIndex, questions);
+			$('.page-controller').css('display', 'block');
+			$('#start-quiz').css('display', 'none');
 		}
 	});
 	
@@ -173,21 +162,6 @@ $(document).ready(function () {
 		}
 		updateButtonStates(currentIndex, questions);
 		checkAnswered(userAnswered, currentIndex);
-		$('#show-article').css('display', 'block');
-		hasArticle = false;
-	});
-	
-	$('#show-article').on('click', function () {
-		$('.page-controller').css('display', 'none');
-		$('#start-quiz').css('display', 'block');
-		$('#show-article').css('display', 'none');
-		if (currentAudio) {
-			continueAudioPlayback = false;
-			currentAudio.pause();
-			currentAudio.currentTime = 0;
-		}
-		showArticle(article, articleImg, articleAudio, title)
-		hasArticle = true;
 	});
 	
 	$(document).on('click', '.answer-btn', function () {
@@ -227,12 +201,12 @@ $(document).ready(function () {
 			}, 10);
 			
 			setTimeout(function () {
-				if(currentIndex < questions.length-1){
+				if (currentIndex < questions.length - 1) {
 					goToNextQuestion(questions);
 					checkAnswered(userAnswered, currentIndex);
 				}
 				
-				if(questions.length === answeredCount){
+				if (questions.length === answeredCount) {
 					clearInterval(runningTimer);
 					endGameUi(totalQuestions);
 				}
@@ -269,12 +243,12 @@ $(document).ready(function () {
 			
 			// Wait for 2 seconds, then go to next question
 			setTimeout(function () {
-				if(currentIndex < questions.length-1){
+				if (currentIndex < questions.length - 1) {
 					goToNextQuestion(questions);
 					checkAnswered(userAnswered, currentIndex);
 				}
 				
-				if(questions.length === answeredCount){
+				if (questions.length === answeredCount) {
 					clearInterval(runningTimer);
 					endGameUi(totalQuestions);
 				}
@@ -396,39 +370,13 @@ window.addEventListener('resize', function () {
 		}
 		// console.log('start resize');
 		resizeIsGoingOn = true;
-		if (hasArticle) {
-			showArticle(article, articleImg, articleAudio, title)
-		} else {
-			showQuestion(currentQuestion, currentIndex, false);
-		}
+		showQuestion(currentQuestion, currentIndex, false);
+		
 		resizeIsGoingOn = false;
 		checkAnswered(userAnswered, currentIndex);
 		// console.log('end resize');
 	}, 50);
 });
-
-function showArticle(article, image, articleAudio, title) {
-	var titleDiv = document.getElementById('question-div');
-	var imageDiv = document.getElementById('question-image-div');
-	var articleDiv = document.getElementById('answers-div');
-	titleDiv.innerHTML = "";
-	imageDiv.innerHTML = "";
-	articleDiv.innerHTML = "";
-	resizeDivToWindowSize(title, image, articleAudio, article, 'article');
-	if (currentIndex === 0 && !fadeIn) {
-		var audioArr = [];
-		if (articleAudio !== null && articleAudio !== '') {
-			audioArr.push(articleAudio);
-			if (!isMute) {
-				playAudio(audioArr, 3000);
-			}
-		}
-		setTimeout(function () {
-			$('#main-div').addClass('fade-in');
-		}, 2000);
-		fadeIn = true;
-	}
-}
 
 function showQuestion(question, currentIndex, autoPlayAudio) {
 	// console.log(question);
@@ -538,7 +486,7 @@ function updateButtonStates(currentIndex, questions) {
 	$('#next').toggleClass('disabled', currentIndex === questions.length - 1);
 }
 
-function resizeDivToWindowSize(questionText, questionImage, questionAudio, answers, pageType) {
+function resizeDivToWindowSize(questionText, questionImage, questionAudio, answers) {
 	var windowWidth, windowHeight;
 	var promises = []; // this array will hold all the promises for the images
 	
@@ -609,15 +557,10 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	// Now calculate and set the height based on the new scrollHeight
 	// questionDiv.style.height = questionDivHeight + 'px';
 	questionDiv.style.top = '50px';
-	if (pageType === 'article') {
-		questionDiv.style.fontSize = '40px';
-		questionDiv.style.maxHeight = parseInt(mainDiv.style.height) / 6 + 'px';
-		questionDiv.style.textAlign = 'center';
-	} else {
-		Promise.all(promises).then(function () {
-			adjustFontSizeToFit([questionDiv], 40, 20, pageType);
-		});
-	}
+	Promise.all(promises).then(function () {
+		adjustFontSizeToFit([questionDiv], 40, 20);
+	});
+	
 	var questionDivHeight = questionDiv.clientHeight;
 	// console.log('questionDivHeight=>'+questionDivHeight);
 	
@@ -676,110 +619,97 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	answersDiv.innerHTML = '';
 	var questionTextFontSize = questionDiv.style.fontSize == '0px' || questionDiv.style.fontSize == '' ? '40' : questionDiv.style.fontSize.replace('px', '');
 	var buttonsArray = [];
-	if (pageType == 'article') {
-		var articleText = document.createElement('div');
-		articleText.style.width = (bottomDivsWidth) + 'px';
-		articleText.style.height = (bottomDivHeight) + 'px';
-		articleText.style.fontSize = '20px';
-		articleText.className = 'article-text';
-		answers = answers.replaceAll('\n', '<br>');
-		articleText.innerHTML = '<div class="article-text-scrollable-content"><div style="height: 20px;"></div>' + answers + '<div style="height: 20px;"></div></div>';
-		answersDiv.appendChild(articleText);
-		buttonsArray.push(articleText);
-	} else if (pageType == 'question') {
-		if (userAnswered[currentIndex] === undefined) {
-			shuffleArray(answers);
-		}
-		answers = answers.filter(answer => !(answer.text === null && answer.image === null));
-		// Create and append the buttons
-		var columns = answers.length > 4 ? 3 : 2;
-		for (var i = 0; i < answers.length; i++) {
-			var button = document.createElement('div');
-			button.style.width = (bottomDivsWidth / columns - 10) + 'px'; // Subtracting 10 for padding
-			buttonWidth = (bottomDivsWidth / columns - 10);
-			button.style.height = (answers.length == 2 ? bottomDivHeight : bottomDivHeight / 2 - 10) + 'px'; // Subtracting 10 for padding
-			buttonHeight = (answers.length == 2 ? bottomDivHeight : bottomDivHeight / 2 - 10);
-			button.style.top = (i < columns ? 0 : bottomDivHeight / 2) + 'px';
-			if (columns === 3) {
-				if (i % 3 === 0) {
-					button.style.left = 0;
-				} else {
-					button.style.left = (i % 3 === 1 ? bottomDivsWidth / 3 + 5 : (bottomDivsWidth / 3 + 5) * 2) + 'px';
-				}
+	
+	if (userAnswered[currentIndex] === undefined) {
+		shuffleArray(answers);
+	}
+	answers = answers.filter(answer => !(answer.text === null && answer.image === null));
+	// Create and append the buttons
+	var columns = answers.length > 4 ? 3 : 2;
+	for (var i = 0; i < answers.length; i++) {
+		var button = document.createElement('div');
+		button.style.width = (bottomDivsWidth / columns - 10) + 'px'; // Subtracting 10 for padding
+		buttonWidth = (bottomDivsWidth / columns - 10);
+		button.style.height = (answers.length == 2 ? bottomDivHeight : bottomDivHeight / 2 - 10) + 'px'; // Subtracting 10 for padding
+		buttonHeight = (answers.length == 2 ? bottomDivHeight : bottomDivHeight / 2 - 10);
+		button.style.top = (i < columns ? 0 : bottomDivHeight / 2) + 'px';
+		if (columns === 3) {
+			if (i % 3 === 0) {
+				button.style.left = 0;
 			} else {
-				button.style.left = (i % 2 === 0 ? 5 : bottomDivsWidth / 2 + 5) + 'px';
+				button.style.left = (i % 3 === 1 ? bottomDivsWidth / 3 + 5 : (bottomDivsWidth / 3 + 5) * 2) + 'px';
 			}
-			
-			button.className = 'answer-btn';
-			button.dataset.index = i;
-			var bg_img = document.createElement('img');
-			bg_img.className = 'answer-bg-img';
-			
-			if (buttonWidth === buttonHeight) {
-				bg_img.src = answer_button_square_img;
-			} else if (buttonWidth < buttonHeight) {
-				bg_img.src = answer_button_portrait_img;
-			} else if (buttonWidth > (buttonHeight * 2)) {
-				bg_img.src = answer_button_letterbox_img;
-			} else {
-				bg_img.src = answer_button_landscape_img;
-			}
-			button.appendChild(bg_img);
-			
-			if (answers[i]['audio'] !== null && answers[i]['audio'] !== '') {
-				var ansAudioImage = document.createElement('img');
-				ansAudioImage.src = '/assets/phaser/images/sound.png';
-				ansAudioImage.className = 'audio-image';
-				ansAudioImage.dataset.audio = answers[i]['audio'];
-				
-				var audioImgPromise = new Promise(function (resolve) {
-					ansAudioImage.onload = function () {
-						resolve(true);
-					};
-				});
-				promises.push(audioImgPromise);
-				button.appendChild(ansAudioImage);
-			}
-			
-			if (answers[i]['image'] !== null) {
-				// Create an img element
-				var img = document.createElement('img');
-				img.src = answers[i]['image']; // Replace with the actual path to your image
-				img.className = 'answer-img';
-				img.style.height = Math.round(buttonHeight / 2) + 'px';
-				img.style.maxWidth = '100%';
-				
-				var imgPromise = new Promise(function (resolve) {
-					img.onload = function () {
-						resolve(true);
-					};
-				});
-				promises.push(imgPromise);
-				
-				
-				button.setAttribute('data-isCorrect', answers[i]['isCorrect']);
-				button.appendChild(img);
-			}
-			// Create a span element for the text to keep it separate from the image
-			if (answers[i]['text'] !== null) {
-				var answerText = document.createElement('div');
-				answerText.className = 'answer-text';
-				answerText.textContent = answers[i]['text'];
-				button.setAttribute('data-isCorrect', answers[i]['isCorrect']);
-				button.appendChild(answerText);
-			}
-			
-			answersDiv.appendChild(button);
-			buttonsArray.push(button);
+		} else {
+			button.style.left = (i % 2 === 0 ? 5 : bottomDivsWidth / 2 + 5) + 'px';
 		}
+		
+		button.className = 'answer-btn';
+		button.dataset.index = i;
+		var bg_img = document.createElement('img');
+		bg_img.className = 'answer-bg-img';
+		
+		if (buttonWidth === buttonHeight) {
+			bg_img.src = answer_button_square_img;
+		} else if (buttonWidth < buttonHeight) {
+			bg_img.src = answer_button_portrait_img;
+		} else if (buttonWidth > (buttonHeight * 2)) {
+			bg_img.src = answer_button_letterbox_img;
+		} else {
+			bg_img.src = answer_button_landscape_img;
+		}
+		button.appendChild(bg_img);
+		
+		if (answers[i]['audio'] !== null && answers[i]['audio'] !== '') {
+			var ansAudioImage = document.createElement('img');
+			ansAudioImage.src = '/assets/phaser/images/sound.png';
+			ansAudioImage.className = 'audio-image';
+			ansAudioImage.dataset.audio = answers[i]['audio'];
+			
+			var audioImgPromise = new Promise(function (resolve) {
+				ansAudioImage.onload = function () {
+					resolve(true);
+				};
+			});
+			promises.push(audioImgPromise);
+			button.appendChild(ansAudioImage);
+		}
+		
+		if (answers[i]['image'] !== null) {
+			// Create an img element
+			var img = document.createElement('img');
+			img.src = answers[i]['image']; // Replace with the actual path to your image
+			img.className = 'answer-img';
+			img.style.height = Math.round(buttonHeight / 2) + 'px';
+			img.style.maxWidth = '100%';
+			
+			var imgPromise = new Promise(function (resolve) {
+				img.onload = function () {
+					resolve(true);
+				};
+			});
+			promises.push(imgPromise);
+			
+			
+			button.setAttribute('data-isCorrect', answers[i]['isCorrect']);
+			button.appendChild(img);
+		}
+		// Create a span element for the text to keep it separate from the image
+		if (answers[i]['text'] !== null) {
+			var answerText = document.createElement('div');
+			answerText.className = 'answer-text';
+			answerText.textContent = answers[i]['text'];
+			button.setAttribute('data-isCorrect', answers[i]['isCorrect']);
+			button.appendChild(answerText);
+		}
+		
+		answersDiv.appendChild(button);
+		buttonsArray.push(button);
 	}
 	
-	if (pageType === 'article') {
-	} else {
-		Promise.all(promises).then(function () {
-			adjustFontSizeToFit(buttonsArray, Math.round(questionTextFontSize * 1.25), Math.round(questionTextFontSize * 0.25), pageType);
-		});
-	}
+	
+	Promise.all(promises).then(function () {
+		adjustFontSizeToFit(buttonsArray, Math.round(questionTextFontSize * 1.25), Math.round(questionTextFontSize * 0.25));
+	});
 	if (isMute) {
 		//make all the audio images disabled
 		$('.audio-image').addClass('audio-image-disabled');
@@ -804,10 +734,10 @@ function insertQuestionImage(questionImage) {
 	}
 }
 
-function adjustFontSizeToFit(elements, maxFontSize, minFontSize, pageType) {
+function adjustFontSizeToFit(elements, maxFontSize, minFontSize) {
 	
 	let smallestFontSize = Infinity; // Start with a large number to get the minimum
-	var heightMargin = pageType == 'question' ? 10 : 20;
+	var heightMargin = 10;
 	// First pass: find the smallest font size that fits all buttons
 	for (let element of elements) {
 		// console.log(element.innerHTML);
@@ -868,12 +798,12 @@ function playSequence(audioSrcArray, index, waitTime = 0) {
 	clearTimeout(audioTimer1); // Clear the timeout if it hasn't executed yet
 	
 	
-		// Set a timeout to resume playback
-		audioTimer1 = setTimeout(() => {
-			currentAudio.play().catch(error => {
-				console.error("Error playing audio:", error);
-			});
-		}, waitTime); // Delay of 2 seconds
+	// Set a timeout to resume playback
+	audioTimer1 = setTimeout(() => {
+		currentAudio.play().catch(error => {
+			console.error("Error playing audio:", error);
+		});
+	}, waitTime); // Delay of 2 seconds
 	
 	
 	currentAudio.onplay = function () {
@@ -949,12 +879,12 @@ function closeFullscreen() {
 function getCookie(name) {
 	var cookieArr = document.cookie.split(';');
 	
-	for(var i = 0; i < cookieArr.length; i++) {
+	for (var i = 0; i < cookieArr.length; i++) {
 		var cookiePair = cookieArr[i].split('=');
 		
 		/* Removing whitespace at the beginning of the cookie name
 		and compare it with the given string */
-		if(name == cookiePair[0].trim()) {
+		if (name == cookiePair[0].trim()) {
 			// Decode the cookie value and return
 			return decodeURIComponent(cookiePair[1]);
 		}
@@ -979,11 +909,10 @@ function updateTimerDisplay() {
 	timerDisplay.textContent = `${minutesStr}:${secondsStr}`;
 }
 
-function endGameUi(totalQuestions){
+function endGameUi(totalQuestions) {
 	$('#endgame-page').css('display', 'flex');
 	$('.time-spent').text(timerDisplay.textContent);
 	$('.total-score').text(scoreDisplay.textContent + ' / ' + totalQuestions);
-	$('#show-article').hide();
 	$('#full-screen').hide();
 	$('#mute-audio').hide();
 	$('#main-div').hide();

@@ -96,7 +96,6 @@
 	Route::post('/set-theme', [QuizBuilderController::class, 'setTheme'])->name('set-theme');
 
 	Route::post('/quiz-content-builder-json', [QuizContentBuilderController::class, 'index'])->name('quiz-content-builder-json');
-	Route::post('/quiz-article-builder-json', [QuizContentBuilderController::class, 'quizArticleBuilder'])->name('quiz-article-builder-json');
 	Route::get('/fetch_progress', [QuizContentBuilderController::class, 'fetchProgress'])->name('fetch_progress');
 
 	Route::get('/load-game/{activity_id}/{question?}', [QuizGameBuilderController::class, 'index'])->name('load-game');

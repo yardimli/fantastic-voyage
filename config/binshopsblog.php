@@ -77,7 +77,7 @@ return [
             'basic_key' => "medium",// same as the main key, but WITHOUT 'image_'.
             'name' => "Medium",// description, used in the admin panel
             'enabled' => true, // see note above
-            'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'. If you use these images as part of your website template then you should probably have this to true.
+            'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'. If you use these images as part of your website quiz then you should probably have this to true.
         ],
         'image_thumbnail' => [ // this key must start with 'image_'. This is what the DB column must be named
             'w' => 150, // width in pixels

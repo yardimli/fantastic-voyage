@@ -232,7 +232,7 @@ Header START -->
 						</li>
 					@endif
 					<li class="nav-item">
-						<a class="nav-link" href="{{route('my.profile')}}">My Stories</a>
+						<a class="nav-link" href="{{route('activities.page')}}">My Voyages</a>
 					</li>
 				</ul>
 			</div>

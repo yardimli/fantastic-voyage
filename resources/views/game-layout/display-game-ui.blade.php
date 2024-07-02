@@ -95,7 +95,6 @@
         {{--        <div id="restart">ReStart</div>--}}
     </div>
 </div>
-<img id="show-article" src="{{ asset('assets/phaser/images/book.png') }}">
 <img id="mute-audio" src="{{ asset('assets/phaser/images/sound.png') }}">
 </body>
 

@@ -25,10 +25,6 @@
 	padding-left: 0px;
 	padding-right: 0px;
 	}
-	#show-article{
-	background-color: darkolivegreen;
-	border: 3px solid #fff;
-	}
 	`;
 	document.head.appendChild(style);
 

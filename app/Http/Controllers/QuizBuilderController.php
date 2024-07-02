@@ -232,26 +232,20 @@
 					->orderBy('id', 'desc')
 					->first();
 				$json_data = '[]';
-				$category = '';
-				$grade = '';
 				$language = '';
 				if ($find_json_data) {
 					$json_data = $find_json_data->json_data;
-					$category = $find_json_data->category;
-					$grade = $find_json_data->grade;
 					$language = $find_json_data->language;
 				}
 
 				$quiz_json = '{
 			"title": "' . $title . '",
 			"user_id": "' . $user_id . '",
-		  "category": "' . $category . '",
-		  "grade": "' . $grade . '",
 		  "language": "' . $language . '",
 		  "data_json": ' . $json_data . '
 				}';
 
-				return view('template.quiz-builder', compact('user_id', 'quiz_json', 'activity_id'));
+				return view('quiz.quiz-builder', compact('user_id', 'quiz_json', 'activity_id'));
 			}
 		}
 
@@ -267,32 +261,8 @@
 			$user_id = $user->id ?? -1;
 			$title = $request->input('title') ?? "";
 			$activity_id = $request->input('activity_id') ?? "";
-			$category = $request->input('category') ?? "";
-			$grade = $request->input('grade') ?? "";
 			$language = $request->input('language') ?? "";
 			$questions = $request->input('questions') ?? "";
-			$article = $request->input('article') ?? "";
-			$articleImg = $request->input('articleImg') ?? "";
-			$articleAudio = $request->input('articleAudio') ?? "";
-			$articleAudioText = $request->input('articleAudioText') ?? "";
-			$articleAudioVoice = $request->input('articleAudioVoice') ?? "";
-			$json_data['article'] = $article;
-			$json_data['articleAudio'] = $articleAudio;
-			$json_data['articleAudioText'] = $articleAudioText;
-			$json_data['articleAudioVoice'] = $articleAudioVoice;
-
-			$articleFilename = $this->createFileName() . '.png';
-			if (strpos($articleImg, 'https') !== false) {
-				$this->downloadImageFromUrl($articleImg, $articleFilename);
-				$json_data['articleImg'] = '/storage/quiz_images/' . $articleFilename;
-			} else if (strpos($articleImg, 'base64') !== false) {
-				// Remove "data:image/png;base64,"
-				$data = str_replace('data:image/png;base64,', '', $articleImg);
-				Storage::disk('public')->put('quiz_images/' . $articleFilename, base64_decode($data));
-				$json_data['articleImg'] = '/storage/quiz_images/' . $articleFilename;
-			} else {
-				$json_data['articleImg'] = $articleImg;
-			}
 
 			foreach ($questions as &$question) {
 				$qImg = $question['image'];
@@ -332,8 +302,6 @@
 				$quiz = ActivityData::create([
 					'user_id' => $user_id,
 					'activity_id' => (int)$activity_id,
-					'category' => $category,
-					'grade' => $grade,
 					'language' => $language,
 					'json_data' => json_encode($json_data),
 				]);
@@ -391,8 +359,6 @@
 			$user_id = $user->id ?? -1;
 			$title = $request->input('title') ?? "";
 			$activity_id = $request->input('activity_id') ?? "";
-			$category = $request->input('category') ?? "";
-			$grade = $request->input('grade') ?? "";
 			$language = $request->input('language') ?? "";
 			$data_json = $request->input('data_json') ?? "";
 
@@ -420,8 +386,6 @@
 				$quiz = ActivityData::create([
 					'user_id' => $user_id,
 					'activity_id' => (int)$activity_id,
-					'category' => $category,
-					'grade' => $grade,
 					'language' => $language,
 					'json_data' => json_encode($data_json),
 				]);
@@ -479,7 +443,7 @@
 			$activities = Activity::where('user_id', $user_id)
 				->where('is_deleted', 0)
 				->get();
-			return view('template.quiz-activities', compact('user_id', 'activities'));
+			return view('quiz.quiz-activities', compact('user_id', 'activities'));
 		}
 
 		public function quizActivitiesAction(Request $request, $action, $id)
@@ -529,7 +493,7 @@
 				],
 			];
 
-			return view('template.quiz-activities', compact('quizzes'));
+			return view('quiz.quiz-activities', compact('quizzes'));
 		}
 
 		public function setTheme(Request $request)

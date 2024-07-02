@@ -156,12 +156,6 @@ body {
 	cursor: pointer;
 }
 
-.article-image-container {
-	width: 38px;
-	min-width: 38px;
-	justify-content: center;
-}
-
 .vertical-ruler {
 	border-right: 1px solid #e0e0e0;
 	display: inline-flex;
@@ -530,7 +524,7 @@ h2 {
 	color: #04AAFF;
 }
 
-.create-content, .create-article{
+.create-content{
 	font-size: 14px;
 	padding: 0 2px 6px;
 	font-weight: 600;

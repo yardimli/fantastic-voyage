@@ -149,7 +149,7 @@
 										<label class="form-check-label" for="exampleCheck1">Remember me</label>
 									</div>
 									<div class="text-primary-hover">
-										<a href="{{ route('template.show', 'forgot-password') }}" class="text-secondary">
+										<a href="{{ route('quiz.show', 'forgot-password') }}" class="text-secondary">
 											<u>Forgot password?</u>
 										</a>
 									</div>
@@ -183,7 +183,7 @@
 
 							<!-- Sign up link -->
 							<div class="mt-4 text-center">
-								<span>Don't have an account? <a href="{{ route('template.show', 'sign-up') }}">Signup here</a></span>
+								<span>Don't have an account? <a href="{{ route('quiz.show', 'sign-up') }}">Signup here</a></span>
 							</div>
 						</div>
 					</div> <!-- Row END -->

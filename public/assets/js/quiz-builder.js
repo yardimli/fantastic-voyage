@@ -4,12 +4,8 @@ var currentAudioInEditorSourceID = null;
 
 var QuestionIdCounter = 0;
 var xhr; // Variable to hold the XMLHttpRequest object
-var article_xhr;
 var quiz_type = 'quiz';
 
-function attachListeners() {
-
-}
 
 $(document).ready(function () {
 	var isEdit = false;
@@ -18,10 +14,6 @@ $(document).ready(function () {
 	});
 
 	$('#add-content-modal').modal({
-		backdrop: 'static',
-		keyboard: false
-	});
-	$('#create-article-modal').modal({
 		backdrop: 'static',
 		keyboard: false
 	});
@@ -77,7 +69,7 @@ $(document).ready(function () {
 
 	});
 
-	$(document).on('click', '.question-image, .answer-image, .article-image', function () {
+	$(document).on('click', '.question-image, .answer-image', function () {
 		$('.input-container').removeClass('active-border');
 		currentImageInEditorSourceID = $(this).data('id');
 
@@ -237,9 +229,6 @@ $(document).ready(function () {
 				$('#audio-tts-input').val($("#question-text-" + currentAudioInEditorSourceID).text());  // clear the search-input
 			} else if($("#audio-src-" + currentAudioInEditorSourceID).data('block_type') === 'answer'){
 				$('#audio-tts-input').val($("#answer-text-" + currentAudioInEditorSourceID).text());  // clear the search-input
-			} else {
-				console.log('article get audio text');
-				$('#audio-tts-input').val($(".quiz-article").val());  // clear the search-input
 			}
 			$("#audio-tts-input").focus(); // focus on the search-input
 			$("#remove-audio-btn").addClass('disabled');
@@ -250,7 +239,7 @@ $(document).ready(function () {
 
 	});
 
-	$(document).on('click', '.question-audio, .answer-audio, .article-audio', function () {
+	$(document).on('click', '.question-audio, .answer-audio', function () {
 		// console.log('audio clicked');
 		currentAudioInEditorSourceID = $(this).data('id');
 
@@ -582,13 +571,7 @@ $(document).ready(function () {
 		var language = "English";
 		var activity_id = $('#activity_id').val();
 		var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-		var article = $('.quiz-article').val();
-		var articleImg = $('.article-image img').attr('src') ?? "";
-		var articleAudio = $('.article-audio i').data('src') ?? "";
-		var articleAudioText = $('.article-audio i').data('text') ?? "";
-		var articleAudioVoice = $('.article-audio i').data('voice') ?? "";
-
+		
 		var questions = [];
 		$('.questions-list').find('.question-container').each(function () {
 			var questionId = $(this).find('.question-image').data('id');
@@ -645,11 +628,6 @@ $(document).ready(function () {
 				language: language,
 				activity_id: activity_id,
 				questions: questions,
-				article: article,
-				articleImg: articleImg,
-				articleAudio: articleAudio,
-				articleAudioText: articleAudioText,
-				articleAudioVoice: articleAudioVoice
 			},
 			headers: {
 				'X-CSRF-TOKEN': csrfToken
@@ -685,11 +663,6 @@ $(document).ready(function () {
 		var language = "English";
 		var activity_id = $('#activity_id').val();
 		var csrfToken = $('meta[name="csrf-token"]').attr('content');
-		var article = $('.quiz-article').val();
-		var articleImg = $('.article-image img').attr('src') ?? "";
-		var articleAudio = $('.article-audio i').data('src') ?? "";
-		var articleAudioText = $('.article-audio i').data('text') ?? "";
-		var articleAudioVoice = $('.article-audio i').data('voice') ?? "";
 		var questions = [];
 		$('.questions-list').find('.question-container').each(function () {
 			var questionId = $(this).find('.question-image').data('id');
@@ -746,11 +719,6 @@ $(document).ready(function () {
 				language: language,
 				activity_id: activity_id,
 				questions: questions,
-				article: article,
-				articleImg: articleImg,
-				articleAudio: articleAudio,
-				articleAudioText: articleAudioText,
-				articleAudioVoice: articleAudioVoice
 			},
 			headers: {
 				'X-CSRF-TOKEN': csrfToken
@@ -840,75 +808,16 @@ $(document).ready(function () {
 		});
 	})
 
-	//-------------------------------------------------------------------------------
-
-	$(document).on('click', '.create-article', function () {
-		console.log('create article with AI.');
-		var quiz_type = $(this).data('type');
-
-		$('#generate-article').data('type', quiz_type);
-		$('.article-subject').val('');
-		$('#article-example').html(translations.forExample+' : Article about Taipei City');
-		$('#create-article-modal').modal('show');
-	});
-	$('#create-article-modal').on('shown.bs.modal', function () {
-		$('.article-subject').focus();
-	});
-
-	$('#generate-article').on('click', function () {
-		isEdit = true;
-		console.log('isEdit generate article');
-		console.log('Generate quiz article with AI.');
-		var quiz_type = $(this).data('type');
-		var activity_id = $('#activity_id').val();
-		var subject = $('.article-subject').val();
-		var language = $('#generate_article_language').val();
-
-		article_xhr = $.ajax({
-			type: "POST",
-			url: "/quiz-article-builder-json",
-			data: {
-				quiz_type: quiz_type,
-				activity_id: activity_id,
-				subject: subject,
-				language: language
-			},
-			headers: {
-				'X-CSRF-TOKEN': csrfToken
-			},
-			beforeSend: function () {
-				$('#spinIcon2').addClass('fa-spin');
-				$('#spinIcon2').css('display', 'inline-block');
-			},
-			success: function (data) {
-				$('.quiz-article').text(data);
-				$('.create-content').prop('disabled', false);
-				$('.create-content').css('color', '#222');
-				$('.enableCreateText').hide();
-				setTimeout(function () {
-					$('#create-article-modal').modal('hide');
-				}, 1000);
-
-			},
-			complete: function () {
-				$('#spinIcon2').removeClass('fa-spin');
-				$('#spinIcon2').css('display', 'none');
-			}
-		});
-	});
-
 //-------------------------------------------------------------------------------
 
 	$(document).on('click', '.create-content', function () {
 		console.log('create content with AI.');
 		var quiz_type = $(this).data('type');
 		$('#generate-content').data('type', quiz_type);
-		if(quiz_type == 'quiz'){
-			$('.subject1').hide();
-		}else{
-			$('.user-content').val('');
-			$('#generate_example1').html(translations.forExample+' : Birds');
-		}
+
+		$('.user-content').val('');
+		$('#generate_example1').html(translations.forExample+' : Birds');
+
 		$('#add-content-modal').modal('show');
 	});
 
@@ -922,7 +831,7 @@ $(document).ready(function () {
 		console.log('Generate content with AI.');
 		var quiz_type = $(this).data('type');
 		var activity_id = $('#activity_id').val();
-		var user_content = quiz_type == 'quiz' ? $('.quiz-article').val() : $('.user-content').val();
+		var user_content = $('.user-content').val();
 		var language = $('#generate_language').val();
 		var quantity = $('#generate_quantity').val();
 		// find the biggest question number
@@ -996,38 +905,5 @@ $(document).ready(function () {
 		}
 	});
 //-------------------------------------------------------------------------------
-	function checkQuizArticle() {
-		if ($('.quiz-article').val() === '' || typeof $('.quiz-article').val() === 'undefined') {
-			$('.create-content').prop('disabled', true);
-			$('.create-content').css('color', 'gray');
-			$('.enableCreateText').show();
-		} else {
-			$('.create-content').prop('disabled', false);
-			$('.create-content').css('color', '#222');
-			$('.enableCreateText').hide();
-		}
-	}
-
-	function checkArticleSubject() {
-		if ($('.article-subject').val() === '') {
-			$('#generate-article').prop('disabled', true);
-		} else {
-			$('#generate-article').prop('disabled', false);
-		}
-	}
-
-	if(quiz_type == 'quiz'){
-		checkQuizArticle();
-		checkArticleSubject();
-		// jQuery
-		$('.quiz-article').on('input', function () {
-			checkQuizArticle();
-		});
-
-		$('.article-subject').on('input', function () {
-			checkArticleSubject();
-		});
-	}
-
 
 });

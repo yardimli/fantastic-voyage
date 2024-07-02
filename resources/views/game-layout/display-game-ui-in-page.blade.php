@@ -67,7 +67,6 @@
 {{--					<div id="restart">ReStart</div>--}}
 				</div>
 			</div>
-			<img id="show-article" src="{{ asset('assets/phaser/images/book.png') }}">
 			<img id="full-screen" src="{{ asset('assets/phaser/images/full_screen.png') }}">
 			<img id="mute-audio" src="{{ asset('assets/phaser/images/sound.png') }}">
 		</div>

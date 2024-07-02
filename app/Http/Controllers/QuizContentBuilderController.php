@@ -26,8 +26,6 @@
 			$quantity     = $request->input('quantity') ?? 1;
 			$new_num      = $request->input('next_num') ?? 1;
 			$new_id       = $request->input('next_id') ?? 1;
-			$groupAndItem = $request->input('groupAndItem') ?? [];
-//			$skipQuestion = $request->input('skipQuestion') ?? '';
 
 			$html = '';
 			$rst = $this->buildQuizContent($user_content, $language, $new_num, $new_id,  $quantity);
@@ -118,7 +116,7 @@
 						$answers['image']  = '';
 					}
 
-					$returnHtml .= view('template.quiz-question-set')->with([
+					$returnHtml .= view('quiz.quiz-question-set')->with([
 						                                                        'question_number' => $num,
 						                                                        'question' => ['id' => 'Q' . $id, 'image' => '', 'audio' => '', 'text' => $question],
 						                                                        'answers' => $quiz['answers']
@@ -127,61 +125,6 @@
 //					array_push($skipQuestion, $question['text']);
 				$rst = array('html' => $returnHtml, 'returnText' => $question);
 
-			}
-
-			return $rst;
-		}
-
-		//		-------------------------------------------------------------------------------------------
-		public function quizArticleBuilder(Request $request)
-		{
-
-			$user     = $request->user();
-			$user_id  = $user->id ?? -1;
-			$subject  = $request->input('subject') ?? "";
-			$language = $request->input('language') ?? "en_US";
-
-
-			$prompt = "create an article about : " . $subject . ". Written in " . $language . ".";
-			// Define the JSON Schema by creating a schema array
-			$schema = array(
-				"type" => "object",
-				"properties" => array(
-					"article" => array(
-						"type" => "string",
-						"description" => "The article has at least 3 paragraphs. Each paragraph has 5 sentences."
-					)
-				)
-			);
-
-			$functions = [
-				[
-					"name" => "get_content",
-					"parameters" => $schema
-				]
-			];
-
-			$chat_messages   = [];
-			$chat_messages[] = [
-				'role' => 'system',
-				'content' => 'You are an expert storyteller.'
-			];
-			$chat_messages[] = [
-				'role' => 'user',
-				'content' => $prompt
-			];
-
-
-			$complete_json = $this->openAI_question($chat_messages, $functions, 1, 3680, 'gpt-3.5-turbo');
-			$complete_rst  = json_decode($complete_json['complete'], true);
-			$content       = $complete_rst['choices'][0]['message']['function_call']['arguments'];
-
-			$rst = array('html' => 'Failed', 'returnText' => 'Nothing is created.');
-			if ($content !== null) {
-				$toArray = json_decode($content, true);
-				Log::info('---------------Log Article--------------------------');
-				Log::info($toArray['article']);
-				$rst = $toArray['article'];
 			}
 
 			return $rst;

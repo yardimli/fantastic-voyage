@@ -38,7 +38,7 @@
 								@if (isset($active_menu) && $active_menu==='students')
 									<div class="btn btn-sm btn-primary mb-0" id="newStudentButton">{{__('default.Add New Student')}}</div>
 									{{--								<a href="#" class="btn btn-sm btn-primary mb-0" data-bs-toggle="modal" data-bs-target="#studentModal">{{__('default.Add New Student')}}</a>--}}
-									{{--								<a href="{{ route('template.show', 'student-course-list') }}" class="btn btn-outline-primary mb-0">View--}}
+									{{--								<a href="{{ route('quiz.show', 'student-course-list') }}" class="btn btn-outline-primary mb-0">View--}}
 									{{--									my courses</a>--}}
 								@endif
 							</div>

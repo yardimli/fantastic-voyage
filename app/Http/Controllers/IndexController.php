@@ -14,7 +14,7 @@
 		public function index(Request $request)
 		{
 
-			return view('template.index-new');
+			return view('quiz.index-new');
 		}
 
 	}

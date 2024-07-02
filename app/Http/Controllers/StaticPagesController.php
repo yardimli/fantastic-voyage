@@ -31,7 +31,7 @@
 
 		public function quizLayoutTest(Request $request)
 		{
-			return view('template.quiz-layout-test');
+			return view('quiz.quiz-layout-test');
 		}
 
 
