@@ -27,6 +27,8 @@ $(document).ready(function () {
 	title = game_title;
 	var questions = data['questions'];
 	currentQuestion = questions[currentIndex];
+	$('#loading-page').hide();
+	
 	$('#preload-page .quiz-title').text(title);
 	$('#quiz-type-description').text(type_description);
 	const elementForFullscreen = document.getElementById('game-ui-in-page');
@@ -384,38 +386,70 @@ function showQuestion(question, currentIndex, autoPlayAudio) {
 	var questionImage = question['image'];
 	var questionAudio = question['audio'];
 	var answers = question['answers'];
-	var questionDiv = document.getElementById('question-div');
-	var questionImageDiv = document.getElementById('question-image-div');
-	var answersDiv = document.getElementById('answers-div');
-	questionDiv.innerHTML = "";
-	questionImageDiv.innerHTML = "";
-	answersDiv.innerHTML = "";
-	var audioArr = [];
-	resizeDivToWindowSize(questionText, questionImage, questionAudio, answers, 'question');
-	if (currentIndex === 0 && !fadeIn && previewQid === null) {
-		if (questionAudio !== null && questionAudio !== '') {
-			audioArr.push(questionAudio);
+	
+	let ajaxPromises = [];
+	
+	$('#loading-page').show();
+	
+	
+	if (question['voice_id'] !== null && question['audio'] === null) {
+		ajaxPromises.push(
+			$.ajax({
+				url: '/convert-text-to-speech',
+				type: 'POST',
+				data: {
+					voice_id: question['voice_id'],
+					text: question['text'],
+					question_id: question['id'],
+					answer_id: null,
+					activity_id: $('#activity_id').val(),
+					update_field: 'question'
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			}).then(function (response) {
+				question['audio'] = response.audio_path;
+				questionAudio = response.audio_path;
+			})
+		);
+	}
+	
+	answers.forEach((answer, index) => {
+		if (question['voice_id'] !== null && answer['audio'] === null) {
+			ajaxPromises.push(
+				$.ajax({
+					url: '/convert-text-to-speech',
+					type: 'POST',
+					data: {
+						voice_id: question['voice_id'],
+						text: answer['text'],
+						question_id: question['id'],
+						answer_id: answer['id'],
+						activity_id: $('#activity_id').val(),
+						update_field: 'answer',
+					},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					}
+				}).then(function (response) {
+					answer['audio'] = response.audio_path;
+				})
+			);
 		}
-		//for each answer, if there is audio, add it to the audio array
-		answers.forEach(function (answer) {
-			if (answer['audio'] !== null && answer['audio'] !== '') {
-				audioArr.push(answer['audio']);
-			}
-		})
-		if (autoPlayAudio && !isMute) {
-			playAudio(audioArr, 2000);
-		}
-		setTimeout(function () {
-			$('#main-div').addClass('fade-in');
-			if (!runningTimer) {
-				$('#timer').css('display', 'inline-block');
-				$('#score').css('display', 'inline-block');
-				runningTimer = setInterval(updateTimerDisplay, 1000); // Update every second
-			}
-		}, 2000);
-		fadeIn = true;
-	} else {
-		if (autoPlayAudio && !isMute) {
+	});
+	
+	Promise.all(ajaxPromises).then(() => {
+		$('#loading-page').hide();
+		var questionDiv = document.getElementById('question-div');
+		var questionImageDiv = document.getElementById('question-image-div');
+		var answersDiv = document.getElementById('answers-div');
+		questionDiv.innerHTML = "";
+		questionImageDiv.innerHTML = "";
+		answersDiv.innerHTML = "";
+		var audioArr = [];
+		resizeDivToWindowSize(questionText, questionImage, questionAudio, answers, 'question');
+		if (currentIndex === 0 && !fadeIn && previewQid === null) {
 			if (questionAudio !== null && questionAudio !== '') {
 				audioArr.push(questionAudio);
 			}
@@ -425,9 +459,35 @@ function showQuestion(question, currentIndex, autoPlayAudio) {
 					audioArr.push(answer['audio']);
 				}
 			})
-			playAudio(audioArr, 1000);
+			if (autoPlayAudio && !isMute) {
+				playAudio(audioArr, 2000);
+			}
+			setTimeout(function () {
+				$('#main-div').addClass('fade-in');
+				if (!runningTimer) {
+					$('#timer').css('display', 'inline-block');
+					$('#score').css('display', 'inline-block');
+					runningTimer = setInterval(updateTimerDisplay, 1000); // Update every second
+				}
+			}, 2000);
+			fadeIn = true;
+		} else {
+			if (autoPlayAudio && !isMute) {
+				if (questionAudio !== null && questionAudio !== '') {
+					audioArr.push(questionAudio);
+				}
+				//for each answer, if there is audio, add it to the audio array
+				answers.forEach(function (answer) {
+					if (answer['audio'] !== null && answer['audio'] !== '') {
+						audioArr.push(answer['audio']);
+					}
+				})
+				playAudio(audioArr, 1000);
+			}
 		}
-	}
+	}).catch(error => {
+		console.error('Error in AJAX calls:', error);
+	});
 }
 
 function checkAnswered(userAnswered, currentIndex) {

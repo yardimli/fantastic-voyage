@@ -1,5 +1,6 @@
 <?php
 
+	use App\Helpers\MyHelper;
 	use App\Http\Controllers\Auth\ForgotPasswordController;
 	use App\Http\Controllers\Auth\ResetPasswordController;
 	use App\Http\Controllers\GradesController;
@@ -88,7 +89,7 @@
 
 	Route::post('/quiz-image-search', [QuizBuilderController::class, 'quizImageSearch'])->name('quiz-image-search');
 
-	Route::get('/fetch-voices', [QuizBuilderController::class, 'fetchVoices'])->name('fetch-voices');
+	Route::get('/fetch-voices', [MyHelper::class, 'fetchVoices'])->name('fetch-voices');
 	Route::post('/convert-text-to-speech', [QuizBuilderController::class, 'convertTextToSpeech'])->name('convert-text-to-speech');
 	Route::post('/quiz-build-json', [QuizBuilderController::class, 'quizBuildJson'])->name('quiz-build-json');
 	Route::post('/quiz-item-build-json', [QuizBuilderController::class, 'quizItemBuildJson'])->name('quiz-item-build-json');

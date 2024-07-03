@@ -18,62 +18,24 @@
 	class QuizBuilderController extends Controller
 	{
 
-		public function fetchVoices(Request $request)
-		{
-			if (!Auth::user()) {
-				return response()->json([
-					'error' => 'You must be logged in to access this resource.',
-				]);
-			}
-
-			$url = 'https://api.elevenlabs.io/v1/voices';
-
-			$response = ApiRequest::where('url', $url)->get();
-
-			if ($response->count() === 0) {
-				$ch = curl_init();
-
-				curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'accept: application/json',
-					'xi-api-key: ' . env('ELEVENLABS_API_KEY'),
-				));
-
-				$response = curl_exec($ch);
-
-				if (curl_errno($ch)) {
-					echo 'Fetch error: ' . curl_error($ch);
-				}
-
-				curl_close($ch);
-
-				// Save the response to the database
-				$insert = ApiRequest::create([
-					'url' => $url,
-					'results' => $response,
-				]);
-
-				return $response;
-
-
-			} else {
-				return $response->first()->results;
-			}
-		}
 
 		public function convertTextToSpeech(Request $request)
 		{
-			if (!Auth::user()) {
-				return response()->json([
-					'error' => 'You must be logged in to access this resource.',
-				]);
-			}
+//			if (!Auth::user()) {
+//				return response()->json([
+//					'error' => 'You must be logged in to access this resource.',
+//				]);
+//			}
 
-			$voiceId = $request->voice_id;
+			$voice_id = $request->voice_id;
 			$text = $request->text;
+			$question_id = $request->question_id ?? 0;
+			$answer_id = $request->answer_id ?? 0;
+			$activity_id = $request->activity_id ?? 0;
+			$update_field = $request->update_field ?? '';
 
-			$url = 'https://api.elevenlabs.io/v1/text-to-speech/' . $voiceId;
+
+			$url = 'https://api.elevenlabs.io/v1/text-to-speech/' . $voice_id;
 
 			$postFields = json_encode([
 				'text' => $text,
@@ -86,8 +48,6 @@
 			$response = ApiRequest::where('url', $url)->where('post_data', $postFields)->get();
 
 			if ($response->count() === 0) {
-
-
 				$headers = [
 					'Content-Type: application/json',
 					'accept: audio/mpeg',
@@ -109,7 +69,7 @@
 				curl_close($ch);
 
 				// Save the file into local storage. Replace 'file.mp3' with your desired file name
-				$filename = Str::random(10) . '-' . $voiceId . '.mp3';
+				$filename = Str::random(10) . '-' . $voice_id . '.mp3';
 				$audioPath = 'public/question_audio/' . $filename;
 				Storage::put($audioPath, $result);
 
@@ -125,6 +85,40 @@
 					'file_name' => $filename,
 				]);
 
+				if ($activity_id !== 0) {
+					$activity_update = ActivityData::where('activity_id', $activity_id)
+						->where('user_id', Auth::user()->id)
+						->orderBy('id', 'desc')
+						->first();
+
+					if ($activity_update) {
+						$json_data = json_decode($activity_update->json_data, true);
+
+						if ($json_data && isset($json_data['questions'])) {
+							foreach ($json_data['questions'] as &$question) {
+								if ($question['id'] === $question_id) {
+									if ($update_field === 'question') {
+										$question['audio'] = '/storage/question_audio/' . $filename;
+										$question['audio_tts'] = $text;
+									} elseif ($update_field === 'answer' && $answer_id) {
+										foreach ($question['answers'] as &$answer) {
+											if ($answer['id'] === $answer_id) {
+												$answer['audio'] = '/storage/question_audio/' . $filename;
+												$answer['audio_tts'] = $text;
+												break;
+											}
+										}
+									}
+									break;
+								}
+							}
+
+							$activity_update->json_data = json_encode($json_data);
+							$activity_update->save();
+						}
+					}
+				}
+
 				return response()->json([
 					'url' => $url,
 					'file_path' => $filePath,
@@ -137,6 +131,40 @@
 //				$filename = basename($fileSaveTo);
 				$filePath = Storage::disk('public')->path('question_audio/' . $filename);
 				$fileUrl = Storage::disk('public')->url('question_audio/' . $filename);
+
+				if ($activity_id !== 0) {
+					$activity_update = ActivityData::where('activity_id', $activity_id)
+						->where('user_id', Auth::user()->id)
+						->orderBy('id', 'desc')
+						->first();
+
+					if ($activity_update) {
+						$json_data = json_decode($activity_update->json_data, true);
+
+						if ($json_data && isset($json_data['questions'])) {
+							foreach ($json_data['questions'] as &$question) {
+								if ($question['id'] === $question_id) {
+									if ($update_field === 'question') {
+										$question['audio'] = '/storage/question_audio/' . $filename;
+										$question['audio_tts'] = $text;
+									} elseif ($update_field === 'answer' && $answer_id) {
+										foreach ($question['answers'] as &$answer) {
+											if ($answer['id'] === $answer_id) {
+												$answer['audio'] = '/storage/question_audio/' . $filename;
+												$answer['audio_tts'] = $text;
+												break;
+											}
+										}
+									}
+									break;
+								}
+							}
+
+							$activity_update->json_data = json_encode($json_data);
+							$activity_update->save();
+						}
+					}
+				}
 
 				return response()->json([
 					'url' => $url,
@@ -226,6 +254,7 @@
 			} else {
 				$activity = Activity::find($activity_id);
 				$title = $activity->title ?? "";
+				$prompt = $activity->prompt ?? "";
 
 				$find_json_data = ActivityData::where('user_id', $user_id)
 					->where('activity_id', $activity_id)
@@ -240,6 +269,7 @@
 
 				$quiz_json = '{
 			"title": "' . $title . '",
+			"prompt": "' . $prompt . '",
 			"user_id": "' . $user_id . '",
 		  "language": "' . $language . '",
 		  "data_json": ' . $json_data . '
@@ -434,12 +464,12 @@
 
 		public function quizActivities(Request $request)
 		{
-			if (!Auth::user()) {
-				return redirect()->route('login');
-			}
+//			if (!Auth::user()) {
+//				return redirect()->route('login');
+//			}
 
 			$user = $request->user();
-			$user_id = $user->id ?? -1;
+			$user_id = $user->id ?? 0;
 			$activities = Activity::where('user_id', $user_id)
 				->where('is_deleted', 0)
 				->get();

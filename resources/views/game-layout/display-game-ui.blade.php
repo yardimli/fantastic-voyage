@@ -57,6 +57,11 @@
 <audio id="audio-player" style="display: none;"></audio>
 @include('game-layout.phaser-game-background', ['animation' => $current_theme]) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
 @if($question === null)
+    <div id="loading-page">
+        <div style="margin: auto;">
+            <div style="font-size: 64px; font-weight: bold;">{{ __('default.Loading...') }}</div>
+        </div>
+    </div>
     <div id="preload-page">
         <div style="margin: auto;">
             <div class="quiz-title"></div>

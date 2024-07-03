@@ -566,8 +566,6 @@ $(document).ready(function () {
 
 	$(".editor-done").on('click', function () {
 		var title = $('#activity-title-input').val();
-		var category = "Science";
-		var grade = "3";
 		var language = "English";
 		var activity_id = $('#activity_id').val();
 		var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -597,7 +595,7 @@ $(document).ready(function () {
 					"letter": ansLetter.replace(/\s/g, ''),
 					"audio": ansAudio,
 					"audio_tts": ansAudioText,
-					"audio_voice": ansAudioVoice,
+					"voice_id": ansAudioVoice,
 					"image": ansImg,
 					"text": ansText,
 					"isCorrect": ansCorrect
@@ -610,7 +608,7 @@ $(document).ready(function () {
 				"id": questionId,
 				"audio": qAudio,
 				"audio_tts": qAudioText,
-				"audio_voice": qAudioVoice,
+				"voice_id": qAudioVoice,
 				"image": qImg,
 				"text": qText,
 				"answers": answers
@@ -623,8 +621,6 @@ $(document).ready(function () {
 			url: "/quiz-build-json",
 			data: {
 				title: title,
-				category: category,
-				grade: grade,
 				language: language,
 				activity_id: activity_id,
 				questions: questions,
@@ -641,7 +637,7 @@ $(document).ready(function () {
 	});
 
 	//-------------------------------------------------------------------------------
-	$(".preview-quiz").on('click', function () {
+	$(".preview-quiz, .preview-breadcrumb").on('click', function () {
 		var activity_id = $('#activity_id').val();
 		var preview = $(this).data('preview');
 		$('#save-preview').data('preview', preview);
@@ -654,12 +650,10 @@ $(document).ready(function () {
 		}
 
 	});
-
+	
 	$("#save-preview").on('click', function () {
 		var preview = $(this).data('preview');
 		var title = $('#activity-title-input').val();
-		var category = "Science";
-		var grade = "3";
 		var language = "English";
 		var activity_id = $('#activity_id').val();
 		var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -688,7 +682,7 @@ $(document).ready(function () {
 					"letter": ansLetter.replace(/\s/g, ''),
 					"audio": ansAudio,
 					"audio_tts": ansAudioText,
-					"audio_voice": ansAudioVoice,
+					"voice_id": ansAudioVoice,
 					"image": ansImg,
 					"text": ansText,
 					"isCorrect": ansCorrect
@@ -701,7 +695,7 @@ $(document).ready(function () {
 				"id": questionId,
 				"audio": qAudio,
 				"audio_tts": qAudioText,
-				"audio_voice": qAudioVoice,
+				"voice_id": qAudioVoice,
 				"image": qImg,
 				"text": qText,
 				"answers": answers
@@ -714,8 +708,6 @@ $(document).ready(function () {
 			url: "/quiz-build-json",
 			data: {
 				title: title,
-				category: category,
-				grade: grade,
 				language: language,
 				activity_id: activity_id,
 				questions: questions,
@@ -815,7 +807,7 @@ $(document).ready(function () {
 		var quiz_type = $(this).data('type');
 		$('#generate-content').data('type', quiz_type);
 
-		$('.user-content').val('');
+		$('.user-content').val(quiz_prompt);
 		$('#generate_example1').html(translations.forExample+' : Birds');
 
 		$('#add-content-modal').modal('show');

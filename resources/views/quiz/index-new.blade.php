@@ -8,7 +8,8 @@
 	<main>
 		
 		<!-- Hero event START -->
-		<section class="pt-5 pb-0 position-relative" style="background-image: url(assets/images/bg/07.jpg); background-repeat: no-repeat; background-size: cover; background-position: top center;">
+		<section class="pt-5 pb-0 position-relative"
+		         style="background-image: url(assets/images/bg/07.jpg); background-repeat: no-repeat; background-size: cover; background-position: top center;">
 			<div class="bg-overlay bg-dark opacity-8"></div>
 			<!-- Container START -->
 			<div class="container">
@@ -20,36 +21,65 @@
 							<p class="text-white">Fill in a few details to start your Journey</p>
 							<div class="mx-auto bg-mode shadow rounded p-4 mt-5">
 								<!-- Form START -->
-								<form class="row g-3 justify-content-center">
+								<div class="row g-3 justify-content-center">
 									<div class="col-md-12">
 										<!-- What -->
 										<div class="input-group">
-											<textarea class="form-control form-control-lg me-1 pe-5" id="whats_it_about" type="text" placeholder="What is it about"></textarea>
+											<textarea class="form-control me-1 pe-5" id="whats_it_about" type="text"
+											          placeholder="What is it about"></textarea>
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<div class="input-group">
-											<select class="form-select form-select-lg me-1 pe-5" id="content_mode" aria-label="Default select example">
-												<option selected>Mode</option>
+											<select class="form-select me-1 pe-5" id="content_mode"
+											        aria-label="Default select example">
+												<option value="" selected>Mode</option>
 												<option value="quiz">Quiz</option>
 												<option value="story">Story</option>
 											</select>
 										</div>
 									</div>
-									<div class="col-md-4">
+									<div class="col-md-3">
 										<div class="input-group">
-											<select class="form-select form-select-lg me-1 pe-5" aria-label="Default select example" id="content_language">
-												<option selected>Languages</option>
-												<option value="en">English</option>
-												<option value="tr">Turkish</option>
-												<option value="zh_TW">Chinese</option>
+											<select class="form-select me-1 pe-5" aria-label="Default select example"
+											        id="content_language">
+												<option value="" selected>Languages</option>
+												<option value="English">English</option>
+												<option value="Turkish">Turkish</option>
+												<option value="Traditional Chinese">Chinese</option>
 											</select>
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="input-group">
-											<select class="form-select form-select-lg me-1 pe-5" aria-label="Default select example" id="content_length">
-												<option selected>Length</option>
+											@foreach($voices['voices'] as $voice)
+													<?php
+//													var_dump($voice);
+													?>
+											@endforeach
+											<select class="form-select me-1 pe-5" aria-label="Default select example"
+											        id="voice_id">
+												<option selected for="voice_id">Silent</option>
+												@foreach($voices['voices'] as $voice)
+														<?php
+//														var_dump($voice);
+														?>
+													@if (isset($voice['labels']['gender']))
+														<option value="{{ $voice['voice_id'] }}"
+														        data-voice-name="{{$voice['name']}}">{{ $voice['name'] }}
+															({{$voice['labels']['gender'] ??''}} {{$voice['labels']['age'] ??''}} {{$voice['labels']['accent'] ??''}} {{$voice['labels']['description'] ??''}}
+															)
+														</option>
+													@endif
+												@endforeach
+											</select>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="input-group">
+											<select class="form-select me-1 pe-5" aria-label="Default select example"
+											        id="content_length">
+												<option value="" selected>Length</option>
 												@for ($i = 1; $i <= 10; $i++)
 													<option value="{{ $i }}">{{ $i }}</option>
 												@endfor
@@ -58,9 +88,17 @@
 									</div>
 									<div class="col-md-2 d-grid">
 										<!-- Search -->
-										<div style="cursor: pointer;" class="btn btn-lg btn-primary" href="#">Start</div>
+										<button style="cursor: pointer;" class="btn btn-primary" id="build_voyage">
+											Start
+											<div id="build_voyage_spinner" class="typing align-items-center ms-2"
+											     style="min-height: 20px; display: none;">
+												<div class="dot"></div>
+												<div class="dot"></div>
+												<div class="dot"></div>
+											</div>
+										</button>
 									</div>
-								</form>
+								</div>
 								<!-- Form END -->
 							</div>
 						</div>
@@ -237,6 +275,8 @@
 			</div>
 		</section>
 		<!-- Explore Groups END -->
+		
+		<audio id="audio-preview" controls style="max-width: 200px; max-height: 34px; display: none;"></audio>
 	
 	</main>
 	<!-- **************** MAIN CONTENT END **************** -->
@@ -251,12 +291,45 @@
 		var current_page = 'index';
 		$(document).ready(function () {
 			
-			function BuildQuiz() {
+			$("#voice_id").change(function () {
+				var voice_id = $(this).val();
+				var voice_name = $(this).find(':selected').data('voice-name');
+				
+				$.ajax({
+					url: '/convert-text-to-speech',
+					type: 'POST',
+					data: {
+						voice_id: voice_id,
+						text: 'hi there, I\'m ' + voice_name + ' how are you? Do you like my voice?'
+					},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+						$('#audio-preview').attr('src', response.audio_path);
+						$('#audio-preview')[0].play();
+					},
+					error: function (err) {
+						console.error(err);
+					}
+				});
+			});
+			
+			$('#build_voyage').click(function () {
+				//disable the button to prevent multiple clicks
+				$("#build_voyage").prop('disabled', true);
+				$("#build_voyage_spinner").css('display', 'inline-flex');
+				
+				
 				var quiz_type = 'quiz';
 				var next_num = 0;
 				var next_id = 0;
 				var jobId = Date.now(); // create unique job ID based on timestamp
 				var activity_id = 0;
+				var language = $('#content_language').val() || 'English';
+				var content_length = $('#content_length').val() || 1;
+				var user_content = $('#whats_it_about').val() || 'Kittens';
+				var voice_id = $('#voice_id').val();
 				
 				xhr = $.ajax({
 					type: "POST",
@@ -264,41 +337,39 @@
 					data: {
 						quiz_type: quiz_type,
 						activity_id: activity_id,
-						user_content: $('whats_it_about').val(),
-						language: $('#content_language').val(),
-						quantity: $('#content_length').val(),
+						user_content: user_content,
+						language: language,
+						voice_id: voice_id,
+						quantity: content_length,
 						next_num: next_num,
 						next_id: next_id,
-						jobId: jobId
+						jobId: jobId,
+						return_json: true
 					},
 					headers: {
-						'X-CSRF-TOKEN': csrfToken
+						'X-CSRF-TOKEN': '{{ csrf_token() }}'
 					},
 					beforeSend: function () {
-						$('#spinIcon').addClass('fa-spin');
-						$('#spinIcon').css('display', 'inline-block');
+						// $('#spinIcon').addClass('fa-spin');
+						// $('#spinIcon').css('display', 'inline-block');
 					},
 					success: function (data) {
+						$("#build_voyage").prop('disabled', false);
+						$("#build_voyage_spinner").css('display', 'none');
+						console.log(data);
 						if (data == '') {
 							showMessage('Something went wrong with the AI. Please try again.');
 						} else {
-							//go to the activity editor http://localhost:8004/quiz-builder/1 where 1 is the activity id
+							//go to /load-game-in-page/23 where 23 is the activity_id in the data
+							window.location.href = '/load-game-in-page/' + data.activity_id;
 						}
-						
-						setTimeout(function () {
-							$('#add-content-modal').modal('hide');
-							disableDeleteItemButton();
-						}, 1000);
-						
 					},
 					complete: function () {
-						$('#spinIcon').removeClass('fa-spin');
-						$('#spinIcon').css('display', 'none');
+						// $('#spinIcon').removeClass('fa-spin');
+						// $('#spinIcon').css('display', 'none');
 					}
 				});
-			}
-			
-			
+			});
 		});
 	</script>
 

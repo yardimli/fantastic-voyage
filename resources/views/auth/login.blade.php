@@ -150,7 +150,7 @@
 										       id="psw-input" name="password"
 										       placeholder="{{ __('default.Password') }}" value="" required>
 										<span class="input-group-text p-0">
-                    <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
+                    <i class="fakepasswordicon fas fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
 							</span>
 										<span class="form-group {{ $errors->has('password') ? ' has-danger' : '' }}">
                   </span>

@@ -15,7 +15,7 @@
 				<span class="breadcrumb-separator fas fa-chevron-right"></span>
 				<a class="clickable-breadcrumb breadcrumb" href="/quiz-activities">{{__('default.My Activities')}}</a>
 				<span class="breadcrumb-separator fas fa-chevron-right"></span>
-				<span class="breadcrumb">{{__('default.Enter Content')}}</span>
+				<a href="{{ route('quiz-builder',[ $activity_id]) }}"><span class="breadcrumb ">{{__('default.Enter Content')}}</span></a>
 				<span class="breadcrumb-separator fas fa-chevron-right"></span>
 				<span class="breadcrumb selected-breadcrumb">{{__('default.Play')}}</span>
 			</div>
@@ -29,6 +29,11 @@
 		<input type="hidden" id="activity_id" value="{{$activity_id}}">
 		<div id="game-ui-in-page" class="prevent-select">
 			@include('game-layout.phaser-game-background', ['animation' => $current_theme, 'view_target' => 'game-ui-in-page']) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
+			<div id="loading-page">
+				<div style="margin: auto;">
+					<div style="font-size: 64px; font-weight: bold;">{{ __('default.Loading...') }}</div>
+				</div>
+			</div>
 			<div id="preload-page">
 				<div style="margin: auto;">
 					<div class="quiz-title"></div>

@@ -2,6 +2,7 @@
 
 	namespace App\Http\Controllers;
 
+	use App\Helpers\MyHelper;
 	use Illuminate\Http\Request;
 	use App\Traits\SharedFunction;
 	use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,10 @@
 		public function index(Request $request)
 		{
 
-			return view('quiz.index-new');
+			$voices = MyHelper::fetchVoices($request);
+			$voices = json_decode($voices, true);
+
+			return view('quiz.index-new', compact('voices'));
 		}
 
 	}

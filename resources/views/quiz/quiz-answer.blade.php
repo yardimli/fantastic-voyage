@@ -1,6 +1,8 @@
 <div class="input-container">
 	<div class="answer-letter">{{ $answer['letter'] ?? '!' }}</div>
-	<div class="checkbox-container"><?php if ($answer['text'] == '' && $answer['image'] == '' && $answer['audio'] == '') {?>
+	<div class="checkbox-container"><?php
+	                                $answer_text = $answer['answer_text'] ?? $answer['text'];
+	                                if ($answer_text == '' && $answer['image'] == '' && $answer['audio'] == '') {?>
 		<i class="fas fa-times fa-lg m-1 checkbox-disabled"></i>
 			<?php } else { if ($answer['isCorrect'] === true || $answer['isCorrect'] === "true") { ?>
 		<i class="fas fa-check fa-lg m-1 checkbox-enabled" style="color:green;"></i><?php } else { ?>
@@ -31,7 +33,7 @@
 		     data-block_type="answer">
 			<i class="fas fa-volume-up" id="audio-src-{{ $answer['id'] }}" data-id="{{ $answer['id'] }}"
 			   data-text="{{$answer['audio_tts']}}"
-			   data-src="{{ $answer['audio'] }}" data-voice="{{ $answer['audio_voice'] }}"
+			   data-src="{{ $answer['audio'] }}" data-voice="{{ $answer['voice_id'] ?? '' }}"
 			   data-block_type="answer" style="color:green;"></i>
 		</div>
 	@else
@@ -45,6 +47,6 @@
 	<div class="vertical-ruler"></div>
 	<div class="item-input-wrapper">
 		<div contenteditable="true" draggable="false" spellcheck="false" class="item-input"
-		     id="answer-text-{{ $answer['id'] }}">{{$answer['text']}}</div>
+		     id="answer-text-{{ $answer['id'] }}">{{$answer_text}}</div>
 	</div>
 </div>

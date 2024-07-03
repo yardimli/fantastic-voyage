@@ -122,6 +122,7 @@
 							<p class="mb-0 h6 fw-light ms-0 ms-sm-3">{{__('default.Its your turn to join.')}}</p>
 						</div>
 						<ul class="mt-4 text-center">
+							<a class="fw-bold ps-0 pe-2" href="{{route('index')}}">{{__('default.Home')}}</a>
 							<a class="fw-bold ps-0 pe-2" href="">{{__('default.TERMS OF SERVICE')}}</a>
 							<a class="fw-bold px-2" href="">{{__('default.PRIVACY POLICY')}}</a>
 
@@ -203,7 +204,7 @@
 									<input class="form-check-input" type="checkbox" name="policy" id="policy"
 									       value="1" {{ old('policy', 0) ? 'checked' : '' }}>
 									<label class="form-check-label" for="policy">
-										terms url
+										I Agree to the <a href="">{{__('default.Terms of Service')}}</a> and <a href="">{{__('default.Privacy Policy')}}</a>
 									</label>
 								</div>
 								@if ($errors->has('policy'))

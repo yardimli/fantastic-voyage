@@ -28,7 +28,7 @@
 		<div class="audio-container question-audio mini-side-button" data-id="{{ $question['id'] }}"
 		     data-block_type="question">
 			<i class="fas fa-volume-up" id="audio-src-{{ $question['id'] }}" data-id="{{ $question['id'] }}" data-text="{{$question['audio_tts']}}"
-			   data-src="{{ $question['audio'] }}" data-voice="{{ $question['audio_voice'] }}"
+			   data-src="{{ $question['audio'] }}" data-voice="{{ $question['voice_id'] }}"
 			   data-block_type="question" style="color:green;"></i>
 		</div>
 	@else

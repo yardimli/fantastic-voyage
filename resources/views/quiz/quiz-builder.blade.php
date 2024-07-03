@@ -16,7 +16,7 @@
 					<span class="breadcrumb-separator fas fa-chevron-right"></span>
 					<span class="breadcrumb selected-breadcrumb">{{__('default.Enter Content')}}</span>
 					<span class="breadcrumb-separator fas fa-chevron-right"></span>
-					<span class="breadcrumb">{{__('default.Play')}}</span>
+					<span class="breadcrumb preview-breadcrumb"   data-preview="in-page">{{__('default.Play')}}</span>
 				</div>
 			</div>
 
@@ -28,6 +28,7 @@
 					$quiz = json_decode($quiz_json, true);
 					$question_number = 0;
 					$quiz_title = $quiz['title'] ?? '';
+					$quiz_prompt = $quiz['prompt'] ?? '';
 					$questions = $quiz['data_json']['questions'] ?? [];
 				}
 			?>
@@ -91,7 +92,7 @@
 			</div>
 			<div class="card-footer">
 				<div class="text-end me-5">
-					<button type="button" class="preview-quiz btn btn-secondary btn-lg"
+					<button type="button" class="preview-quiz btn btn-info btn-lg"
 					        data-preview="in-page">{{__('default.Preview')}}</button>
 					<button type="button" class="preview-quiz btn btn-info btn-lg"
 					        data-preview="full-screen">{{__('default.Full Screen Preview')}}</button>
@@ -122,6 +123,7 @@
 	<script src="/assets/js/quiz-builder.js"></script>
 	<script>
 		QuestionIdCounter = {{$question_number}};
+		var quiz_prompt = '<?php echo $quiz_prompt; ?>';
 		var translations = {
 			pause: '<?php
 				        echo __("default.Pause"); ?>',

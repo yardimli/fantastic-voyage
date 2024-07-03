@@ -12,6 +12,10 @@
 		protected $fillable = [
 			'user_id',
 			'title',
+			'prompt',
+			'language',
+			'voice_id',
+			'question_count',
 			'theme',
 			'is_deleted'
 		];

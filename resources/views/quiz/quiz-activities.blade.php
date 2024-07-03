@@ -22,20 +22,29 @@
 					<div class="card-body">
 						<div class="ms-2 mt-2 pb-2 ps-5">
 							@foreach($activities as $activity)
-								<div class="btn btn-primary">
-									<div><a href="{{ route('quiz-builder',[ $activity['id']]) }}"
-									        class="no_decoration">{{ $activity['title'] }}</a></div>
-									<div>
-										<a href="{{ route('quiz-activities-action',['clone',$activity['id']]) }}" class="no_decoration"><i
-												class="fas fa-copy mx-3"></i></a>
-										<span class="no_decoration delete_activity" data-id="{{ $activity['id'] }}"
-										      style="cursor: pointer;"><i
-												class="fas fa-trash mx-3"></i></span>
+								<div class="btn btn-primary  m-2 w-25 p-2" style="height: 120px">
+									<div class="d-flex flex-column justify-content-between align-items-center" style="height: 100px;">
+										<div class="w-100 d-flex justify-content-center">
+											<a href="{{ route('load-game-in-page',[ $activity['id']]) }}"
+											   class="no_decoration">{{ $activity['title'] }}</a>
+										</div>
+										<div class="w-100 d-flex align-items-end">
+											<div class="w-100 d-flex justify-content-center align-items-end">
+												<a href="{{ route('quiz-builder',[ $activity['id']]) }}"
+												   class="no_decoration btn btn-info me-2"><i
+														class="fas fa-edit"></i></a>
+												<a href="{{ route('quiz-activities-action',['clone',$activity['id']]) }}"
+												   class="no_decoration btn btn-info me-2"><i
+														class="fas fa-copy"></i></a>
+												<span class="no_decoration btn btn-info delete_activity" data-id="{{ $activity['id'] }}"
+												      style="cursor: pointer;"><i class="fas fa-trash"></i></span>
+											</div>
+										</div>
 									</div>
 								</div>
 							@endforeach
 							<div class="mt-4">
-								<a href="{{ route('quiz-builder') }}" class="btn btn-primary">{{__('default.Create New Activity')}}</a>
+								<a href="{{ route('quiz-builder') }}" class="btn btn-info">{{__('default.Create New Quiz')}}</a>
 							</div>
 						</div>
 					</div>
