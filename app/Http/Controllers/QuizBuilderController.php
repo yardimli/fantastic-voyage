@@ -27,6 +27,8 @@
 //				]);
 //			}
 
+			$user_id = Auth::user()->id ?? 0;
+
 			$voice_id = $request->voice_id;
 			$text = $request->text;
 			$question_id = $request->question_id ?? 0;
@@ -87,7 +89,7 @@
 
 				if ($activity_id !== 0) {
 					$activity_update = ActivityData::where('activity_id', $activity_id)
-						->where('user_id', Auth::user()->id)
+						->where('user_id', $user_id)
 						->orderBy('id', 'desc')
 						->first();
 
@@ -134,7 +136,7 @@
 
 				if ($activity_id !== 0) {
 					$activity_update = ActivityData::where('activity_id', $activity_id)
-						->where('user_id', Auth::user()->id)
+						->where('user_id', $user_id)
 						->orderBy('id', 'desc')
 						->first();
 
