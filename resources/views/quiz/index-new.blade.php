@@ -22,14 +22,26 @@
 							<div class="mx-auto bg-mode shadow rounded p-4 mt-5">
 								<!-- Form START -->
 								<div class="row g-3 justify-content-center">
-									<div class="col-md-12">
+									<div class="col-md-9">
 										<!-- What -->
 										<div class="input-group">
 											<textarea class="form-control me-1 pe-5" id="whats_it_about" type="text"
 											          placeholder="What is it about"></textarea>
 										</div>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-3 d-grid">
+										<!-- Search -->
+										<button style="cursor: pointer;" class="btn btn-primary" id="build_voyage">
+											Start
+											<div id="build_voyage_spinner" class="typing align-items-center ms-2"
+											     style="min-height: 20px; display: none;">
+												<div class="dot"></div>
+												<div class="dot"></div>
+												<div class="dot"></div>
+											</div>
+										</button>
+									</div>
+									<div class="col-md-3">
 										<div class="input-group">
 											<select class="form-select me-1 pe-5" id="content_mode"
 											        aria-label="Default select example">
@@ -75,7 +87,7 @@
 											</select>
 										</div>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-3">
 										<div class="input-group">
 											<select class="form-select me-1 pe-5" aria-label="Default select example"
 											        id="content_length">
@@ -86,20 +98,11 @@
 											</select>
 										</div>
 									</div>
-									<div class="col-md-2 d-grid">
-										<!-- Search -->
-										<button style="cursor: pointer;" class="btn btn-primary" id="build_voyage">
-											Start
-											<div id="build_voyage_spinner" class="typing align-items-center ms-2"
-											     style="min-height: 20px; display: none;">
-												<div class="dot"></div>
-												<div class="dot"></div>
-												<div class="dot"></div>
-											</div>
-										</button>
-									</div>
 								</div>
 								<!-- Form END -->
+								<div class="progress mt-4" style="height: 5px; display: none;">
+									<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" id="progress-bar"></div>
+								</div>
 							</div>
 						</div>
 						<div class="mb-n5 mt-3 mt-lg-5" style="height: 50px;">
@@ -289,6 +292,29 @@
 	<!-- Inline JavaScript code -->
 	<script>
 		var current_page = 'index';
+		var progress_interval = null;
+		
+		function updateProgressBar(duration) {
+			var $progressBar = $('#progress-bar');
+			var $progressContainer = $progressBar.closest('.progress');
+			$progressContainer.show(); // Show the progress bar container
+			
+			var start = 0;
+			var intervalDuration = 100; // Update interval in ms
+			var increment = (intervalDuration / duration) * 100; // percentage to increase at each interval
+			
+			clearInterval(progress_interval);
+			progress_interval = setInterval(function() {
+				start += increment;
+				$progressBar.css('width', start + '%');
+				
+				if (start >= 100) {
+					clearInterval(progress_interval);
+					$progressContainer.hide(); // Optionally hide the progress bar when complete
+				}
+			}, intervalDuration);
+		}
+		
 		$(document).ready(function () {
 			
 			$("#voice_id").change(function () {
@@ -331,6 +357,8 @@
 				var user_content = $('#whats_it_about').val() || 'Kittens';
 				var voice_id = $('#voice_id').val();
 				
+				var totalDuration = 15 * 1000 + (content_length - 1) * 10 * 1000;
+				
 				xhr = $.ajax({
 					type: "POST",
 					url: "/quiz-content-builder-json",
@@ -350,6 +378,7 @@
 						'X-CSRF-TOKEN': '{{ csrf_token() }}'
 					},
 					beforeSend: function () {
+						updateProgressBar(totalDuration); // start the progress bar
 						// $('#spinIcon').addClass('fa-spin');
 						// $('#spinIcon').css('display', 'inline-block');
 					},

@@ -180,59 +180,20 @@ Header START -->
 					{{--					</li>--}}
 					
 					<!-- Nav item 4 Mega menu -->
-					@if (Auth::check())
-						<li class="nav-item dropdown">
-							<a class="nav-link active dropdown-toggle" href="#" id="libraryMenu" data-bs-toggle="dropdown"
-							   aria-haspopup="true" aria-expanded="false">The Library</a>
-							<ul class="dropdown-menu" aria-labelledby="libraryMenu">
-								<li><a class="dropdown-item active" href="{{route('quiz-activities')}}">Boundless Bookshelf</a></li>
-								<li class="dropdown-divider"></li>
-									<li><a class="dropdown-item" href="{{route('quiz-activities')}}">Desire's Domain (erotic,
-											adult)</a>
-									</li>
-							</ul>
-						</li>
-					@else
 						<li class="nav-item">
-							<a class="nav-link active" href="{{route('activities.page')}}">The Library</a>
+							<a class="nav-link active" href="{{route('activities.page')}}">The Quizzes</a>
 						</li>
-					@endif
 					
-					@if (Auth::check())
-						<li class="nav-item dropdown">
-							<a class="nav-link  dropdown-toggle" href="#" id="FactoryMenu" data-bs-toggle="dropdown"
-							   aria-haspopup="true" aria-expanded="false">Compose</a>
-							<ul class="dropdown-menu" aria-labelledby="FactoryMenu">
-								<li><a class="dropdown-item " href="{{route('activities.page')}}">Compose</a></li>
-								<li class="dropdown-divider"></li>
-								<li><a class="dropdown-item" href="{{route('activities.page')}}">Evoke (erotic, adult)</a>
-								</li>
-							</ul>
-						</li>
-					@else
-						<li class="nav-item">
-							<a class="nav-link active" href="{{route('activities.page')}}">Compose</a>
-						</li>
-					@endif
-					
-					@if (Auth::check())
-						<li class="nav-item dropdown">
-							<a class="nav-link  dropdown-toggle" href="#" id="FactoryMenu" data-bs-toggle="dropdown"
-							   aria-haspopup="true" aria-expanded="false">Ignite</a>
-							<ul class="dropdown-menu" aria-labelledby="FactoryMenu">
-								<li><a class="dropdown-item " href="{{route('activities.page')}}">Epic Imprint</a></li>
-								<li class="dropdown-divider"></li>
-									<li><a class="dropdown-item" href="{{route('activities.page')}}">Passion Press (erotic, adult)</a>
-									</li>
-							</ul>
-						</li>
-					@else
-						<li class="nav-item">
-							<a class="nav-link active" href="{{route('activities.page')}}">Ignite</a>
-						</li>
-					@endif
 					<li class="nav-item">
-						<a class="nav-link" href="{{route('activities.page')}}">My Voyages</a>
+						<a class="nav-link active" href="{{route('activities.page')}}">Voyages</a>
+					</li>
+					
+					<li class="nav-item">
+							<a class="nav-link active" href="{{route('index')}}">Create</a>
+						</li>
+					
+					<li class="nav-item">
+						<a class="nav-link" href="{{route('activities.page')}}">{{__('default.My Activities')}}</a>
 					</li>
 				</ul>
 			</div>
