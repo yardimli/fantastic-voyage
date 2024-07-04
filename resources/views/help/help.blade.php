@@ -70,7 +70,7 @@
                     @foreach($questions as $question)
                     @php $i++; @endphp
                     @if($i > 5) @break @endif
-                    <li class="nav-item"><a class="nav-link d-flex" href="/help/{{$category}}"><i class="fa-solid fa-angle-right text-primary pt-1 fa-fw me-2"></i>{{$question['question']}}</a></li>
+                    <li class="nav-item"><a class="nav-link d-flex" href="/help/{{$category}}"><i class="fas fa-solid fa-angle-right text-primary pt-1 fa-fw me-2"></i>{{$question['question']}}</a></li>
                     @endforeach
                   </ul>
                 </div>
