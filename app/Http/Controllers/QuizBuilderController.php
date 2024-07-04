@@ -241,7 +241,7 @@
 			}
 
 			$user = $request->user();
-			$user_id = $user->id ?? -1;
+			$user_id = $user->id ?? 0;
 
 			if ($activity_id == null) {
 				$activity = new Activity();
@@ -290,7 +290,7 @@
 			}
 
 			$user = $request->user();
-			$user_id = $user->id ?? -1;
+			$user_id = $user->id ?? 0;
 			$title = $request->input('title') ?? "";
 			$activity_id = $request->input('activity_id') ?? "";
 			$language = $request->input('language') ?? "";
@@ -388,7 +388,7 @@
 			}
 
 			$user = $request->user();
-			$user_id = $user->id ?? -1;
+			$user_id = $user->id ?? 0;
 			$title = $request->input('title') ?? "";
 			$activity_id = $request->input('activity_id') ?? "";
 			$language = $request->input('language') ?? "";
@@ -485,7 +485,7 @@
 			}
 
 			$user = $request->user();
-			$user_id = $user->id ?? -1;
+			$user_id = $user->id ?? 0;
 			if ($action == 'clone') {
 				$activity = Activity::find($id);
 				$newActivity = $activity->replicate();
@@ -537,7 +537,7 @@
 			}
 
 			$user = $request->user();
-			$user_id = $user->id ?? -1;
+			$user_id = $user->id ?? 0;
 			$activity_id = $request->input('activity_id') ?? "";
 			$theme = $request->input('theme') ?? "beach";
 

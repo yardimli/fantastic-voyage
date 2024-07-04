@@ -20,7 +20,7 @@
 		{
 
 			$user        = $request->user();
-			$user_id     = $user->id ?? -1;
+			$user_id     = $user->id ?? 0;
 			$activity_id = $activity_id ?? -1;
 
 			$rst = $this->buildGameUI($user_id, $activity_id, 'game-layout.display-game-ui', $question);
@@ -31,7 +31,7 @@
 		{
 
 			$user        = $request->user();
-			$user_id     = $user->id ?? -1;
+			$user_id     = $user->id ?? 0;
 			$activity_id = $activity_id ?? -1;
 
 			$rst = $this->buildGameUI($user_id, $activity_id, 'game-layout.display-game-ui-in-page');
