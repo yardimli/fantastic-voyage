@@ -105,9 +105,9 @@
 
 <script>
 	let json_data = {!! $json_data; !!};
-  let game_title = '{{$title}}';
-  let type_description = '{{$type_description}}';
-  let current_theme = '{{$current_theme}}';
+	let game_title = '{!! str_replace("'","\'", $title); !!}';
+	let type_description = '{!! str_replace("'","\'", $type_description;); !!}';
+	let current_theme = '{!! str_replace("'","\'", $current_theme); !!}';
 	let previewQid = @json($question);
 	window.translations = {
 		'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
