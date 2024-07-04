@@ -40,6 +40,8 @@
 				$activity->user_id = $user_id;
 				$activity->type = 'quiz';
 				$activity->title = $rst['title'];
+				$activity->cover_image = $rst['coverImage'];
+				$activity->keywords = $rst['keywords'];
 				$activity->prompt = $user_content;
 				$activity->language = $language;
 				$activity->voice_id = $voice_id;
@@ -83,6 +85,14 @@
           "type": "string",
           "description": "A creative title for the Quiz using the topic in the prompt. Make it different than the prompt topic."
         },
+        "quizImageKeywords": {
+          "type": "string",
+          "description": "5 keywords for the given topic that will help choosing images for the questions. Include movie titles, character and place names, or any other relevant keywords."
+        },
+        "quizImagePrompt": {
+          "type": "string",
+          "description": "For the given topic create a cover image prompt that dalle can use to generate the image and abide to the following policy: // 1. The prompt must be in English. Translate to English if needed. // 3. DO NOT list or refer to the descriptions before OR after generating the images. // 4. Do not create more than 1 image."
+        },
         "quizSet": {
           "type": "array",
           "items": {
@@ -121,7 +131,9 @@
       },
       "required": [
         "quizSet",
-        "quizTitle"
+        "quizTitle",
+        "quizImagePrompt",
+        "quizImageKeywords"
       ]
     }
   }
@@ -161,13 +173,19 @@
 			$timestamp = time();
 			$returnJSON = [];
 			$quizTitle = $content_array['quizTitle'];
+			$quizImageKeywords = $content_array['quizImageKeywords'];
+			$quizImagePrompt = $content_array['quizImagePrompt'];
+
+			$quizCoverImageFilename = 'quiz_image_cover_' . $timestamp . '.png';
+			MyHelper::replicate_create_image_sdxl_lightning($quizCoverImageFilename, $quizImageKeywords . ', ' . $quizImagePrompt);
+
 			if ($content_array !== null) {
 				foreach ($content_array['quizSet'] as $index => &$quiz) {
 					$num = $next_num + $index;
 					$id = $next_id + $index;
 
 					$image_filename = 'quiz_image_' . $timestamp . '_Q' . $id . '.png';
-					MyHelper::replicate_create_image_sdxl_lightning($image_filename, $quiz['image_prompt']);
+					MyHelper::replicate_create_image_sdxl_lightning($image_filename, $quizImageKeywords . ', ' . $quiz['image_prompt']);
 
 					$question_array = [];
 					$question_array['id'] = 'Q' . $id;
@@ -209,7 +227,7 @@
 					])->render();
 				}
 //					array_push($skipQuestion, $question['text']);
-				$rst = array('html' => $returnHtml, 'returnText' => $question, 'title' => $quizTitle,  'returnJSON' => $returnJSON);
+				$rst = array('html' => $returnHtml, 'returnText' => $question, 'title' => $quizTitle, 'keywords' => $quizImageKeywords, 'coverImage' => '/storage/quiz_images/' . $quizCoverImageFilename, 'returnJSON' => $returnJSON);
 
 			}
 

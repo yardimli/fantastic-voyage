@@ -12,6 +12,8 @@
 		protected $fillable = [
 			'user_id',
 			'title',
+			'cover_image',
+			'keywords',
 			'prompt',
 			'language',
 			'voice_id',
