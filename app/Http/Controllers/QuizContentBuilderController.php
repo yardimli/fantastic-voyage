@@ -19,6 +19,11 @@
 	class QuizContentBuilderController extends Controller
 	{
 
+		public function index(Request $request)
+		{
+			return view('quiz.index-new');
+		}
+
 		public function addNewVoyage(Request $request)
 		{
 			$user = $request->user();
