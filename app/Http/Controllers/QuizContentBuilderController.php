@@ -4,6 +4,7 @@
 
 	use App\Helpers\MyHelper;
 	use App\Models\ApiRequest;
+	use App\Models\StoryData;
 	use Illuminate\Http\Request;
 	use Illuminate\Support\Facades\Http;
 
@@ -18,10 +19,12 @@
 	class QuizContentBuilderController extends Controller
 	{
 
-		public function index(Request $request)
+		public function addNewVoyage(Request $request)
 		{
 			$user = $request->user();
 			$user_id = $user->id ?? 0;
+
+			$content_type = $request->input('content_type') ?? "quiz";
 			$user_content = $request->input('user_content') ?? "";
 			$language = $request->input('language') ?? "English";
 			$voice_id = $request->input('voice_id') ?? "";
@@ -30,114 +33,96 @@
 			$new_id = $request->input('next_id') ?? 1;
 			$return_json = $request->input('return_json') ?? false;
 
-			$html = '';
-			$rst = $this->buildQuizContent($user_content, $language, $voice_id, $new_num, $new_id, $quantity);
+			if ($content_type === 'story') {
+				$rst = $this->buildStoryContent($user_content, '', '', $language, $voice_id);
 
-			$html .= $rst['html'];
-			if ($return_json) {
-				//create activity
 				$activity = new Activity();
 				$activity->user_id = $user_id;
-				$activity->type = 'quiz';
 				$activity->title = $rst['title'];
 				$activity->cover_image = $rst['coverImage'];
-				$activity->keywords = $rst['keywords'];
-				$activity->prompt = $user_content;
-				$activity->language = $language;
+				$activity->keywords = '';
+				$activity->question_count = $quantity;
 				$activity->voice_id = $voice_id;
+				$activity->language = $language;
+				$activity->prompt = $user_content;
+				$activity->type = 'story';
 				$activity->theme = 'space';
 				$activity->is_deleted = 0;
 				$activity->save();
 
 				$insertId = $activity->id;
 
-				$activtyData = new ActivityData();
-				$activtyData->user_id = $user_id;
-				$activtyData->activity_id = $insertId;
-				$activtyData->language = $language;
-				$activtyData->json_data = json_encode(array('questions' => $rst['returnJSON']));
-				$activtyData->save();
+
+				$tts_results_text = MyHelper::eleven_labs_text_to_speech($voice_id, $rst['chapterText']);
+
+				foreach ($rst['choices'] as $key => $choice) {
+					$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $choice['text']);
+					$rst['choices'][$key]['audio'] = $tts_results['audio_path'];
+				}
+
+
+				$story = new StoryData();
+				$story->user_id = $user_id;
+				$story->activity_id = $insertId;
+				$story->step = 1;
+				$story->title = $rst['title'];
+				$story->image = $rst['coverImage'];
+				$story->chapter_text = $rst['chapterText'];
+				$story->chapter_voice = $tts_results_text['audio_path'];
+				$story->choices = json_encode($rst['choices']);
+				$story->choice = '';
+				$story->language = $language;
+				$story->json_data = json_encode($rst['returnJSON']);
+				$story->save();
 
 				$rst['activity_id'] = $insertId;
 
 				return response()->json($rst);
-			} else {
-				return $html;
+			} else if ($content_type === 'quiz') {
+
+				$html = '';
+				$rst = $this->buildQuizContent($user_content, $language, $voice_id, $new_num, $new_id, $quantity);
+
+				$html .= $rst['html'];
+				if ($return_json) {
+					//create activity
+					$activity = new Activity();
+					$activity->user_id = $user_id;
+					$activity->type = 'quiz';
+					$activity->title = $rst['title'];
+					$activity->cover_image = $rst['coverImage'];
+					$activity->keywords = $rst['keywords'];
+					$activity->prompt = $user_content;
+					$activity->language = $language;
+					$activity->voice_id = $voice_id;
+					$activity->theme = 'space';
+					$activity->is_deleted = 0;
+					$activity->save();
+
+					$insertId = $activity->id;
+
+					$activityData = new ActivityData();
+					$activityData->user_id = $user_id;
+					$activityData->activity_id = $insertId;
+					$activityData->language = $language;
+					$activityData->json_data = json_encode(array('questions' => $rst['returnJSON']));
+					$activityData->save();
+
+					$rst['activity_id'] = $insertId;
+
+					return response()->json($rst);
+				} else {
+					return $html;
+				}
 			}
 		}
 
-		//		-------------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------
 		public function buildQuizContent($user_content, $language, $voice_id, $next_num, $next_id, $quantity)
 		{
 			$prompt = "Create a quiz with questions and answers set about the following topic: " . $user_content . " , only one answer is correct. Written in " . $language . ". Number of Questions:" . $quantity . "";
 
-
-			$schema_str = '
-{
-  "type": "function",
-  "function": {
-    "name": "create_quiz_questions",
-    "description": "Create a schema for a quiz that consists of questions with multiple answers. For each question there should be only one answer that is TRUE and the rest FALSE. There should be 4 answers for each question.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "quizTitle": {
-          "type": "string",
-          "description": "A creative title for the Quiz using the topic in the prompt. Make it different than the prompt topic."
-        },
-        "quizImageKeywords": {
-          "type": "string",
-          "description": "5 keywords for the given topic that will help choosing images for the questions. Include movie titles, character and place names, or any other relevant keywords."
-        },
-        "quizImagePrompt": {
-          "type": "string",
-          "description": "For the given topic create a cover image prompt that dalle can use to generate the image and abide to the following policy: // 1. The prompt must be in English. Translate to English if needed. // 3. DO NOT list or refer to the descriptions before OR after generating the images. // 4. Do not create more than 1 image."
-        },
-        "quizSet": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "question": {
-                "type": "string",
-                "description": "The question in the quiz about the given topic."
-              },
-              "image_prompt": {
-                "type": "string",
-                "description": "for the question text create a prompt that dalle can use to generate the image and abide to the following policy: // 1. The prompt must be in English. Translate to English if needed. // 3. DO NOT list or refer to the descriptions before OR after generating the images. // 4. Do not create more than 1 image."
-              },
-              "answers": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "answer_text": {
-                      "type": "string",
-                      "description": "The text of the answer."
-                    },
-                    "isCorrect": {
-                      "type": "boolean"                      
-                    }
-                  }
-                },
-                "required": [
-                  "text",
-                  "isCorrect"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "required": [
-        "quizSet",
-        "quizTitle",
-        "quizImagePrompt",
-        "quizImageKeywords"
-      ]
-    }
-  }
-}';
+			$schema_str = file_get_contents(public_path('texts/quiz.json'));
 
 			$chat_messages = [];
 			$chat_messages[] = [
@@ -234,8 +219,67 @@
 			return $rst;
 		}
 
-		//		-------------------------------------------------------------------------------------------
 
+		//-------------------------------------------------------------------------------------------
+		public function buildStoryContent($user_content, $story_title, $prev_chapter, $choice, $language)
+		{
+			$prompt = "Create an interactive story with the story text and four, 2-3 sentence choices of how the story might continue. Use the following topic: " . $user_content . ". The story can be fact or fiction.";
+
+			$schema_str = file_get_contents(public_path('texts/story-first-chapter.json'));
+			if ($prev_chapter!=='') {
+				$prompt .= "\n\nThe previous chapter was: " . $prev_chapter . ", the users choice of how to continue is: " . $choice . ".";
+
+				$schema_str = file_get_contents(public_path('texts/story-second-chapter.json'));
+			}
+
+			$prompt .= "\n\nThe story should be written in " . $language;
+
+
+			$chat_messages = [];
+			$chat_messages[] = [
+				'role' => 'system',
+				'content' => 'You are an expert story teller.'
+			];
+			$chat_messages[] = [
+				'role' => 'user',
+				'content' => $prompt
+			];
+
+			$schema = json_decode($schema_str, true);
+
+			$complete_json = $this->openAI_question($chat_messages, $schema, 1, 3680, 'gpt-4o'); // 'gpt-4o' 'gpt-3.5-turbo');
+			$complete_rst = json_decode($complete_json['complete'], true);
+			Log::info('---------------Log complete_rst--------------------------');
+			Log::info($chat_messages);
+			Log::info($schema);
+			Log::info($complete_rst);
+			$content = $complete_rst['choices'][0]['message']['tool_calls'][0]['function']['arguments'];
+			$content_array = json_decode($content, true);
+			Log::info($content_array);
+
+			if ($prev_chapter==='') {
+			$storyTitle = $content_array['storyTitle'];
+			} else {
+				$storyTitle = $story_title;
+			}
+
+			$chapterText = $content_array['chapterText'];
+			$chapterImagePrompt = $content_array['chapterImagePrompt'];
+
+			$chapterChoices = [];
+			for ($i = 0; $i < 4; $i++) {
+				$chapterChoices[] = array('text' => $content_array['chapterChoices'][$i]['choiceText'], 'audio' => '');
+			}
+
+			$timestamp = time();
+
+			$chapterCoverImageFilename = 'chapter_image_cover_' . $timestamp . '.png';
+			MyHelper::replicate_create_image_sdxl_lightning($chapterCoverImageFilename, $chapterImagePrompt);
+
+			return array('title' => $storyTitle, 'chapterText' => $chapterText, 'coverImage' => '/storage/quiz_images/' . $chapterCoverImageFilename, 'choices' => $chapterChoices, 'returnJSON' => $complete_json);
+		}
+
+		//-------------------------------------------------------------------------------------------
 		public static function openAI_question($messages, $functions, $temperature, $max_tokens, $gpt_engine)
 		{
 			set_time_limit(300);

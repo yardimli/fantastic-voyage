@@ -13,9 +13,15 @@
 	var style = document.createElement('style');
 	style.type = 'text/css';
 	style.innerHTML = `
-	#question-div, .answer-text, #timer, #score {
-	color: white;
-	text-shadow: 1px 1px 4px #000000;
+	#question-div {
+	color: black;
+	text-shadow: 1px 1px 2px #fff;
+	background-color: rgba(255, 255, 255, 0.8);
+	border-radius: 5px;
+	}
+	.answer-text, #timer, #score {
+	color: black;
+	text-shadow: 1px 1px 2px #fff;
 	}
 	.answer-btn-square-padding {
 	padding-top: 0px;

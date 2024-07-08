@@ -13,12 +13,15 @@
 	var style = document.createElement('style');
 	style.type = 'text/css';
 	style.innerHTML = `
-	#question-div{
-	font-weight: bold;
+	#question-div {
+	color: #fff;
+	text-shadow: 1px 1px 2px #000;
+	background-color: rgba(0, 0, 0, 0.8);
+	border-radius: 5px;
 	}
-	#start-quiz, #question-div, .page-controller, .answer-text, #timer, #score {
-	color: #ffffff;
-	text-shadow: 2px 2px 10px #000;
+	#start-quiz, .page-controller, .answer-text, #timer, #score {
+	color: #fff;
+	text-shadow: 1px 1px 2px #000;
 	}
 	.answer-btn-square-padding {
 	padding-top: 0px;

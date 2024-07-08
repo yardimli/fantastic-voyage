@@ -14,7 +14,14 @@
 	var style = document.createElement('style');
 	style.type = 'text/css';
 	style.innerHTML = `
-	#question-div, #timer, #score{
+	#question-div {
+	color: white;
+	text-shadow: 1px 1px 4px #000;
+	background-color: rgba(0, 0, 0, 0.8);
+	overflow: auto;
+	border-radius: 5px;
+	}
+	#timer, #score{
 	font-weight: bold;
 	color: beige;
 	text-shadow: 3px 3px 5px #000000;
@@ -24,7 +31,6 @@
 	text-shadow: 2px 2px 2px #fff;
 	}
 	.answer-text {
-	font-weight: bold;
 	color: beige;
 	text-shadow: 3px 3px 5px #000000;
 	}

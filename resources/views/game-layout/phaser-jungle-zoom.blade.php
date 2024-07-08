@@ -13,7 +13,13 @@
 	var style = document.createElement('style');
 	style.type = 'text/css';
 	style.innerHTML = `
-	#question-div, .page-controller, #start-quiz, #timer, #score {
+	#question-div {
+	color: black;
+	text-shadow: 1px 1px 2px #fff;
+	background-color: rgba(255, 255, 255, 0.8);
+	border-radius: 5px;
+	}
+	.page-controller, #start-quiz, #timer, #score {
 	color: #ffffff;
 	text-shadow: 2px 2px 4px #0C561D;
 	}

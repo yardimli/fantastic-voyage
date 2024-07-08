@@ -3,6 +3,7 @@
 	namespace App\Helpers;
 
 
+	use App\Models\ActivityData;
 	use App\Models\ApiRequest;
 	use Carbon\Carbon;
 	use Illuminate\Http\Request;
@@ -13,6 +14,7 @@
 	use Illuminate\Support\Facades\Session;
 	use Illuminate\Support\Facades\Storage;
 	use Illuminate\Support\Facades\Validator;
+	use Illuminate\Support\Str;
 
 	class MyHelper
 	{
@@ -301,5 +303,82 @@
 				}
 			}
 			Session::start();
+		}
+
+		public static function eleven_labs_text_to_speech($voice_id, $text)
+		{
+			$url = 'https://api.elevenlabs.io/v1/text-to-speech/' . $voice_id;
+
+			$postFields = json_encode([
+				'text' => $text,
+				'model_id' => 'eleven_multilingual_v2',
+				'voice_settings' => [
+					'stability' => 0.5,
+					'similarity_boost' => 0.5
+				]
+			]);
+//			Log::info('eleven_labs_text_to_speech url: ' . $url);
+//			Log::info('eleven_labs_text_to_speech postFields: ' . $postFields);
+			$response = ApiRequest::where('url', $url)->where('post_data', $postFields)->get();
+
+			if ($response->count() === 0) {
+				$headers = [
+					'Content-Type: application/json',
+					'accept: audio/mpeg',
+					'xi-api-key: ' . env('ELEVENLABS_API_KEY'), // Make sure you replace this with your actual key
+				];
+
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+				$result = curl_exec($ch);
+
+				if (curl_errno($ch)) {
+					echo 'Error:' . curl_error($ch);
+				}
+				curl_close($ch);
+
+				// Save the file into local storage. Replace 'file.mp3' with your desired file name
+				$filename = Str::random(10) . '-' . $voice_id . '.mp3';
+				$audioPath = 'public/question_audio/' . $filename;
+				Storage::put($audioPath, $result);
+
+				// Get the file path and url
+				$filePath = Storage::disk('public')->path('question_audio/' . $filename);
+				$fileUrl = Storage::disk('public')->url('question_audio/' . $filename);
+
+				// Save the response to the database
+				$insert = ApiRequest::create([
+					'url' => $url,
+					'post_data' => $postFields,
+					'results' => 'File saved to ' . $filePath,
+					'file_name' => $filename,
+				]);
+
+				return [
+					'url' => $url,
+					'file_path' => $filePath,
+					'file_url' => $fileUrl,
+					'audio_path' => '/storage/question_audio/' . $filename,
+					'filename' => $filename,
+				];
+			} else {
+				$filename = $response->first()->file_name;
+//				$filename = basename($fileSaveTo);
+				$filePath = Storage::disk('public')->path('question_audio/' . $filename);
+				$fileUrl = Storage::disk('public')->url('question_audio/' . $filename);
+
+				return [
+					'url' => $url,
+					'file_path' => $filePath,
+					'file_url' => $fileUrl,
+					'audio_path' => '/storage/question_audio/' . $filename,
+					'filename' => $filename,
+				];
+			}
 		}
 	}

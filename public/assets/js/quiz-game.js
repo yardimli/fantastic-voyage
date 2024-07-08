@@ -616,7 +616,7 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	questionDiv.style.width = mainDiv.style.width;
 	// Now calculate and set the height based on the new scrollHeight
 	// questionDiv.style.height = questionDivHeight + 'px';
-	questionDiv.style.top = '50px';
+	questionDiv.style.top = '42px';
 	Promise.all(promises).then(function () {
 		adjustFontSizeToFit([questionDiv], 40, 20);
 	});

@@ -43,9 +43,9 @@
 									</div>
 									<div class="col-md-3">
 										<div class="input-group">
-											<select class="form-select me-1 pe-5" id="content_mode"
+											<select class="form-select me-1 pe-5" id="content_type"
 											        aria-label="Default select example">
-												<option value="" selected>Mode</option>
+												<option value="" selected>Type</option>
 												<option value="quiz">Quiz</option>
 												<option value="story">Story</option>
 											</select>
@@ -347,23 +347,22 @@
 				$("#build_voyage_spinner").css('display', 'inline-flex');
 				
 				
-				var quiz_type = 'quiz';
+				var content_type = $('#content_type').val() || 'quiz';
 				var next_num = 0;
 				var next_id = 0;
-				var jobId = Date.now(); // create unique job ID based on timestamp
 				var activity_id = 0;
 				var language = $('#content_language').val() || 'English';
 				var content_length = $('#content_length').val() || 1;
 				var user_content = $('#whats_it_about').val() || 'Kittens';
 				var voice_id = $('#voice_id').val();
 				
-				var totalDuration = 15 * 1000 + (content_length - 1) * 10 * 1000;
+				var totalDuration = 20 * 1000 + (content_length - 1) * 10 * 1000;
 				
 				xhr = $.ajax({
 					type: "POST",
 					url: "/quiz-content-builder-json",
 					data: {
-						quiz_type: quiz_type,
+						content_type: content_type,
 						activity_id: activity_id,
 						user_content: user_content,
 						language: language,
@@ -371,7 +370,6 @@
 						quantity: content_length,
 						next_num: next_num,
 						next_id: next_id,
-						jobId: jobId,
 						return_json: true
 					},
 					headers: {
@@ -389,8 +387,12 @@
 						if (data == '') {
 							showMessage('Something went wrong with the AI. Please try again.');
 						} else {
-							//go to /load-game-in-page/23 where 23 is the activity_id in the data
-							window.location.href = '/load-game-in-page/' + data.activity_id;
+							if (content_type==='quiz') {
+								window.location.href = '/load-game-in-page/' + data.activity_id;
+							} else
+							{
+								window.location.href = '/load-story-in-page/' + data.activity_id;
+							}
 						}
 					},
 					complete: function () {

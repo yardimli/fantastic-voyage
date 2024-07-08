@@ -2,6 +2,7 @@
 
 	namespace App\Http\Controllers;
 
+	use App\Helpers\MyHelper;
 	use App\Models\ApiRequest;
 	use Illuminate\Http\Request;
 	use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,7 @@
 
 	use App\Models\ImageSearchCache;
 	use App\Models\Activity;
+	use Illuminate\Support\Facades\Log;
 	use Illuminate\Support\Facades\Storage;
 	use Illuminate\Support\Facades\File;
 	use Illuminate\Support\Str;
@@ -36,145 +38,46 @@
 			$activity_id = $request->activity_id ?? 0;
 			$update_field = $request->update_field ?? '';
 
+			Log::info('convertTextToSpeech: ' . $voice_id . ' -- ' . $text . ' -- ' . $question_id . ' -- ' . $answer_id . ' -- ' . $activity_id . ' -- ' . $update_field);
 
-			$url = 'https://api.elevenlabs.io/v1/text-to-speech/' . $voice_id;
+			$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $text);
 
-			$postFields = json_encode([
-				'text' => $text,
-				'model_id' => 'eleven_multilingual_v2',
-				'voice_settings' => [
-					'stability' => 0.5,
-					'similarity_boost' => 0.5
-				]
-			]);
-			$response = ApiRequest::where('url', $url)->where('post_data', $postFields)->get();
+			if ($activity_id !== 0) {
+				$activity_update = ActivityData::where('activity_id', $activity_id)
+					->where('user_id', $user_id)
+					->orderBy('id', 'desc')
+					->first();
 
-			if ($response->count() === 0) {
-				$headers = [
-					'Content-Type: application/json',
-					'accept: audio/mpeg',
-					'xi-api-key: ' . env('ELEVENLABS_API_KEY'), // Make sure you replace this with your actual key
-				];
+				if ($activity_update) {
+					$json_data = json_decode($activity_update->json_data, true);
 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_POST, 1);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-				$result = curl_exec($ch);
-
-				if (curl_errno($ch)) {
-					echo 'Error:' . curl_error($ch);
-				}
-				curl_close($ch);
-
-				// Save the file into local storage. Replace 'file.mp3' with your desired file name
-				$filename = Str::random(10) . '-' . $voice_id . '.mp3';
-				$audioPath = 'public/question_audio/' . $filename;
-				Storage::put($audioPath, $result);
-
-				// Get the file path and url
-				$filePath = Storage::disk('public')->path('question_audio/' . $filename);
-				$fileUrl = Storage::disk('public')->url('question_audio/' . $filename);
-
-				// Save the response to the database
-				$insert = ApiRequest::create([
-					'url' => $url,
-					'post_data' => $postFields,
-					'results' => 'File saved to ' . $filePath,
-					'file_name' => $filename,
-				]);
-
-				if ($activity_id !== 0) {
-					$activity_update = ActivityData::where('activity_id', $activity_id)
-						->where('user_id', $user_id)
-						->orderBy('id', 'desc')
-						->first();
-
-					if ($activity_update) {
-						$json_data = json_decode($activity_update->json_data, true);
-
-						if ($json_data && isset($json_data['questions'])) {
-							foreach ($json_data['questions'] as &$question) {
-								if ($question['id'] === $question_id) {
-									if ($update_field === 'question') {
-										$question['audio'] = '/storage/question_audio/' . $filename;
-										$question['audio_tts'] = $text;
-									} elseif ($update_field === 'answer' && $answer_id) {
-										foreach ($question['answers'] as &$answer) {
-											if ($answer['id'] === $answer_id) {
-												$answer['audio'] = '/storage/question_audio/' . $filename;
-												$answer['audio_tts'] = $text;
-												break;
-											}
+					if ($json_data && isset($json_data['questions'])) {
+						foreach ($json_data['questions'] as &$question) {
+							if ($question['id'] === $question_id) {
+								if ($update_field === 'question') {
+									$question['audio'] = '/storage/question_audio/' . $tts_results['filename'];
+									$question['audio_tts'] = $text;
+								} elseif ($update_field === 'answer' && $answer_id) {
+									foreach ($question['answers'] as &$answer) {
+										if ($answer['id'] === $answer_id) {
+											$answer['audio'] = '/storage/question_audio/' . $tts_results['filename'];
+											$answer['audio_tts'] = $text;
+											break;
 										}
 									}
-									break;
 								}
+								break;
 							}
-
-							$activity_update->json_data = json_encode($json_data);
-							$activity_update->save();
 						}
+
+						$activity_update->json_data = json_encode($json_data);
+						$activity_update->save();
 					}
 				}
-
-				return response()->json([
-					'url' => $url,
-					'file_path' => $filePath,
-					'file_url' => $fileUrl,
-					'audio_path' => '/storage/question_audio/' . $filename,
-				]);
-
-			} else {
-				$filename = $response->first()->file_name;
-//				$filename = basename($fileSaveTo);
-				$filePath = Storage::disk('public')->path('question_audio/' . $filename);
-				$fileUrl = Storage::disk('public')->url('question_audio/' . $filename);
-
-				if ($activity_id !== 0) {
-					$activity_update = ActivityData::where('activity_id', $activity_id)
-						->where('user_id', $user_id)
-						->orderBy('id', 'desc')
-						->first();
-
-					if ($activity_update) {
-						$json_data = json_decode($activity_update->json_data, true);
-
-						if ($json_data && isset($json_data['questions'])) {
-							foreach ($json_data['questions'] as &$question) {
-								if ($question['id'] === $question_id) {
-									if ($update_field === 'question') {
-										$question['audio'] = '/storage/question_audio/' . $filename;
-										$question['audio_tts'] = $text;
-									} elseif ($update_field === 'answer' && $answer_id) {
-										foreach ($question['answers'] as &$answer) {
-											if ($answer['id'] === $answer_id) {
-												$answer['audio'] = '/storage/question_audio/' . $filename;
-												$answer['audio_tts'] = $text;
-												break;
-											}
-										}
-									}
-									break;
-								}
-							}
-
-							$activity_update->json_data = json_encode($json_data);
-							$activity_update->save();
-						}
-					}
-				}
-
-				return response()->json([
-					'url' => $url,
-					'file_path' => $filePath,
-					'file_url' => $fileUrl,
-					'audio_path' => '/storage/question_audio/' . $filename,
-				]);
 			}
+
+			return response()->json($tts_results);
+
 		}
 
 
@@ -530,11 +433,11 @@
 
 		public function setTheme(Request $request)
 		{
-			if (!Auth::user()) {
-				return response()->json([
-					                        'error' => 'You must be logged in to access this resource.',
-				                        ]);
-			}
+//			if (!Auth::user()) {
+//				return response()->json([
+//					                        'error' => 'You must be logged in to access this resource.',
+//				                        ]);
+//			}
 
 			$user = $request->user();
 			$user_id = $user->id ?? 0;
@@ -551,6 +454,6 @@
 			} else {
 				$rst = 'error';
 			}
-			return $rst;
+			return response()->json(array('rst' => $rst));
 		}
 	}

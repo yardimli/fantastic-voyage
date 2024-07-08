@@ -115,6 +115,12 @@
 	font-weight: bold;
 }
 
+.story-title {
+	font-size: 60px;
+	margin: 10px;
+	font-weight: bold;
+}
+
 .start-btn {
 	border: 2px #6BE3A2 solid;
 	border-radius: 5px;
@@ -135,7 +141,21 @@
 	left: 0;
 }
 
+#story-header {
+	position: absolute;
+	padding: 5px;
+	top: 0;
+	left: 0;
+}
+
 #quiz-footer {
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+#story-footer {
 	text-align: center;
 	position: absolute;
 	bottom: 0;
@@ -147,14 +167,15 @@
 }
 
 #question-div {
-	overflow: hidden;
-	padding: 5px;
+	overflow: auto;
+	padding: 5px 15px 5px 5px;
+	margin-top:5px;
 	box-sizing: border-box;
 	min-height: 60px;
 }
 
 .audio-image {
-	width: 35px;
+	width: 28px;
 	margin: 0 5px;
 	z-index: 5;
 	cursor: pointer;
@@ -179,6 +200,22 @@
 	justify-content: center;
 	align-items: center;
 	padding: 5px; /* Adjust padding to create space for image text */
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	transition: transform 0.2s; /* Smooth transition for other interactions */
+}
+
+.story-answer-btn {
+	color: black;
+	position: absolute;
+	/*text-align: center;*/
+	line-height: 1.3; /* This is arbitrary, adjust as necessary */
+	cursor: pointer;
+	justify-content: center;
+	align-items: center;
+	padding: 5px; /* Adjust padding to create space for image text */
+	padding-left:10px;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
@@ -302,6 +339,10 @@
 }
 
 .answer-btn:hover .answer-bg-img {
+	opacity: 1;
+}
+
+.story-answer-btn:hover .answer-bg-img {
 	opacity: 1;
 }
 

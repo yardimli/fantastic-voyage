@@ -96,12 +96,17 @@
 	Route::post('/quiz-upload/{file_type}', [QuizBuilderController::class, 'quizUpload'])->name('quiz-upload');
 	Route::post('/set-theme', [QuizBuilderController::class, 'setTheme'])->name('set-theme');
 
-	Route::post('/quiz-content-builder-json', [QuizContentBuilderController::class, 'index'])->name('quiz-content-builder-json');
+	Route::post('/quiz-content-builder-json', [QuizContentBuilderController::class, 'addNewVoyage'])->name('quiz-content-builder-json');
 	Route::get('/fetch_progress', [QuizContentBuilderController::class, 'fetchProgress'])->name('fetch_progress');
 
 	Route::get('/load-game/{activity_id}/{question?}', [QuizGameBuilderController::class, 'index'])->name('load-game');
 
 	Route::get('/load-game-in-page/{activity_id}', [QuizGameBuilderController::class, 'inPage'])->name('load-game-in-page');
+
+
+	Route::get('/load-story/{activity_id}/{step?}', [QuizGameBuilderController::class, 'storyIndex'])->name('load-story');
+
+	Route::get('/load-story-in-page/{activity_id}', [QuizGameBuilderController::class, 'storyInPage'])->name('load-story-in-page');
 
 	Route::get('/landing', [StaticPagesController::class, 'landing'])->name('landing.page');
 
