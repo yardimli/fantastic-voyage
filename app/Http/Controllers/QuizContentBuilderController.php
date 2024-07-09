@@ -38,6 +38,9 @@
 			$new_id = $request->input('next_id') ?? 1;
 			$return_json = $request->input('return_json') ?? false;
 
+			Log::info('---------------Log addNewVoyage--------------------------');
+			Log::info($content_type, $user_content, $language, $voice_id, $quantity, $new_num, $new_id, $return_json);
+
 			if ($content_type === 'story') {
 				$rst = $this->buildStoryContent($user_content, '', '', $language, $voice_id);
 
