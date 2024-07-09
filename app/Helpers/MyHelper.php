@@ -298,6 +298,13 @@
 						if ($upscale_result_json['output'][0] != null) {
 							file_put_contents($save_path, file_get_contents($upscale_result_json['output'][0]));
 							$found_image = true;
+							//save the image as a jpg
+							$image = imagecreatefrompng($save_path);
+							imagejpeg($image, str_replace('.png', '.jpg', $save_path));
+
+							$image = imagecreatefrompng($save_path);
+							$image = imagescale($image, 512);
+							imagejpeg($image, str_replace('.png', '-512.jpg', $save_path));
 						}
 					}
 				}

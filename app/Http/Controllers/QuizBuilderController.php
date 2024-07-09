@@ -379,6 +379,26 @@
 				->where('is_deleted', 0)
 				->where('type', $type)
 				->get();
+
+			//loop all $activity['cover_image'] and check if they exist
+			foreach ($activities as $activity) {
+				if (!empty($activity['cover_image'])) {
+					$cover_image =  base_path(str_replace('/storage/quiz_images/','storage/app/public/quiz_images/', $activity['cover_image']));
+
+					$cover_image_jpg = str_replace('.png', '.jpg', $cover_image);
+					if (!file_exists($cover_image_jpg) && file_exists($cover_image)) {
+
+						//save the image as a jpg
+						$image = imagecreatefrompng($cover_image);
+						imagejpeg($image, str_replace('.png', '.jpg', $cover_image));
+
+						$image = imagecreatefrompng($cover_image);
+						$image = imagescale($image, 512);
+						imagejpeg($image, str_replace('.png', '-512.jpg', $cover_image));
+					}
+				}
+			}
+
 			return view('quiz.quiz-activities', compact('user_id', 'activities', 'type'));
 		}
 

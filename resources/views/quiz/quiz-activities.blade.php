@@ -22,7 +22,7 @@
 									<div class="col-6 col-xl-3 mb-3">
 										<div class="activity-card"
 										     data-link="{{ $activity['type'] === 'quiz' ? route('load-game-in-page',[ $activity['id']]) : route('load-story-in-page', [ $activity['id']]) }}"
-										     style="cursor:pointer; height: 200px; width: 100%; border: 1px solid #ccc; border-radius: 5px; background: {{ $activity['cover_image'] ? 'url('.$activity['cover_image'].') center/cover no-repeat' : '' }}; text-align: center; color:white;">
+										     style="cursor:pointer; height: 200px; width: 100%; border: 1px solid #ccc; border-radius: 5px; background: {{ $activity['cover_image'] ? 'url('.str_replace('.png', '-512.jpg', $activity['cover_image']).') center/cover no-repeat' : '' }}; text-align: center; color:white;">
 											<div class="d-flex flex-column justify-content-between align-items-center"
 											     style="height: 180px;">
 												<div class="w-100 d-flex justify-content-center">
