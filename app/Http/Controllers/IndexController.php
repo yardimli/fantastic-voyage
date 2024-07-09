@@ -12,7 +12,7 @@
 	{
 		use SharedFunction;
 
-		public function index(Request $request)
+		public function indexPage(Request $request)
 		{
 
 			$voices = MyHelper::fetchVoices($request);

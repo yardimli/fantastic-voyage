@@ -3,7 +3,6 @@
 	use App\Helpers\MyHelper;
 	use App\Http\Controllers\Auth\ForgotPasswordController;
 	use App\Http\Controllers\Auth\ResetPasswordController;
-	use App\Http\Controllers\GradesController;
 	use App\Http\Controllers\IndexController;
 	use App\Http\Controllers\QuizBuilderController;
 	use App\Http\Controllers\QuizContentBuilderController;
@@ -13,8 +12,6 @@
 	use App\Http\Controllers\StaticPagesController;
 	use App\Http\Controllers\UserSettingsController;
 	use App\Http\Controllers\VerifyThankYouController;
-	use App\Http\Controllers\LessonController;
-//	use App\Http\LangController;
 	use App\Mail\ThankYouForYourOrder;
 	use Illuminate\Http\Request;
 	use Illuminate\Support\Facades\Auth;
@@ -32,7 +29,7 @@
 	| be assigned to the "web" middleware group. Make something great!
 	|
 	*/
-	Route::get('/', [IndexController::class, 'index'])->name('index');
+	Route::get('/', [IndexController::class, 'indexPage'])->name('index');
 
 	Route::get('quiz-builder/{activity_id?}', [QuizBuilderController::class, 'show_quizBuilder'])->name('quiz-builder');
 	Route::get('quiz-activities', [QuizBuilderController::class, 'quizActivities'])->name('quiz-activities');

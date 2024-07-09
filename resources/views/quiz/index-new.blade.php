@@ -398,6 +398,9 @@
 					complete: function () {
 						// $('#spinIcon').removeClass('fa-spin');
 						// $('#spinIcon').css('display', 'none');
+					},
+					error: function (err) {
+						console.error(err);
 					}
 				});
 			});
