@@ -19,6 +19,111 @@
 	class QuizContentBuilderController extends Controller
 	{
 
+		public function createNextStory(Request $request)
+		{
+			$user = $request->user();
+			$user_id = $user->id ?? 0;
+			$activity_id = $request->input('activity_id') ?? 0;
+			$answer_index = $request->input('answer_index') ?? 0;
+			$chapter_text = $request->input('chapter_text') ?? '';
+			$choice = $request->input('choice') ?? '';
+			$step = $request->input('step') ?? 1;
+
+			//check if $activity_id exists
+			$activity = Activity::where('id', $activity_id)
+				->first();
+			if ($activity === null) {
+				return response()->json(['error' => 'Activity not found']);
+			}
+			//check if step story_data exists
+			$story_data = StoryData::where('activity_id', $activity_id)
+				->where('step', $step)
+				->first();
+			if ($story_data === null) {
+				return response()->json(['error' => 'Story Data not found']);
+			}
+			//update step choice
+			$story_data->choice = $choice;
+			$story_data->save();
+
+			$story_history = '';
+			$story_steps = StoryData::where('activity_id', $activity_id)
+				->orderBy('step', 'asc')
+				->get();
+			foreach ($story_steps as $story_step) {
+				$story_history .= $story_step->chapter_text . "\n\n";
+				$story_history .= 'Choice: ' . $story_step->choice . "\n\n";
+			}
+			$next_step = $step + 1;
+
+			//check if $next_step story_data exists
+			$story_data = StoryData::where('activity_id', $activity_id)
+				->where('step', $next_step)
+				->first();
+
+			if ($story_data !== null) {
+				return response()->json(array(
+					'title' => $activity->title,
+					'image' => $story_data->image,
+					'chapter_text' => $story_data->chapter_text,
+					'chapter_voice' => $story_data->chapter_voice,
+					'choices' => json_decode($story_data->choices),
+					'step' => $next_step
+				));
+			}
+
+			$language = $activity->language;
+			$voice_id = $activity->voice_id;
+
+			$rst = $this->buildStoryContent($activity->prompt, $activity->title, $story_history, $next_step, $language);
+
+			if ($rst['success'] === false) {
+				return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
+			}
+
+			if (!empty($voice_id)) {
+				$tts_results_text = MyHelper::eleven_labs_text_to_speech($voice_id, $rst['chapterText']);
+			} else {
+				$tts_results_text = ['audio_path' => '', 'filename' => ''];
+			}
+
+			foreach ($rst['choices'] as $key => $choice) {
+				if (!empty($voice_id)) {
+					$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $choice['text']);
+				} else {
+					$tts_results = ['audio_path' => '', 'filename' => ''];
+				}
+				$rst['choices'][$key]['audio'] = $tts_results['audio_path'];
+			}
+
+			$story = new StoryData();
+			$story->user_id = $user_id;
+			$story->activity_id = $activity_id;
+			$story->step = $next_step;
+			$story->title = $activity->title;
+			$story->image = $rst['coverImage'];
+			$story->chapter_text = $rst['chapterText'];
+			$story->chapter_voice = $tts_results_text['audio_path'];
+			$story->choices = json_encode($rst['choices']);
+			$story->choice = '';
+			$story->language = $language;
+			$story->json_data = json_encode($rst['returnJSON']);
+			$story->save();
+
+			return response()->json(array(
+				'title' => $rst['title'],
+				'image' => $rst['coverImage'],
+				'chapter_text' => $rst['chapterText'],
+				'chapter_voice' => $tts_results_text['audio_path'],
+				'choices' => $rst['choices'],
+				'step' => $next_step,
+				'success' => true
+			));
+
+
+		}
+
+
 		public function addNewVoyage(Request $request)
 		{
 			$user = $request->user();
@@ -34,10 +139,14 @@
 			$return_json = $request->input('return_json') ?? false;
 
 			Log::info('---------------Log addNewVoyage--------------------------');
-			Log::info('content-type: ' . $content_type. ' user_content: ' . $user_content. ' language: ' . $language. ' voice_id: ' . $voice_id. ' quantity: ' . $quantity. ' new_num: ' . $new_num. ' new_id: ' . $new_id. ' return_json: ' . $return_json);
+			Log::info('content-type: ' . $content_type . ' user_content: ' . $user_content . ' language: ' . $language . ' voice_id: ' . $voice_id . ' quantity: ' . $quantity . ' new_num: ' . $new_num . ' new_id: ' . $new_id . ' return_json: ' . $return_json);
 
 			if ($content_type === 'story') {
-				$rst = $this->buildStoryContent($user_content, '', '', '', $language);
+				$rst = $this->buildStoryContent($user_content, '', '', 1, $language);
+
+				if ($rst['success'] === false) {
+					return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
+				}
 
 				$activity = new Activity();
 				$activity->user_id = $user_id;
@@ -55,11 +164,18 @@
 
 				$insertId = $activity->id;
 
-
-				$tts_results_text = MyHelper::eleven_labs_text_to_speech($voice_id, $rst['chapterText']);
+				if (!empty($voice_id)) {
+					$tts_results_text = MyHelper::eleven_labs_text_to_speech($voice_id, $rst['chapterText']);
+				} else {
+					$tts_results_text = ['audio_path' => '', 'filename' => ''];
+				}
 
 				foreach ($rst['choices'] as $key => $choice) {
-					$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $choice['text']);
+					if (!empty($voice_id)) {
+						$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $choice['text']);
+					} else {
+						$tts_results = ['audio_path' => '', 'filename' => ''];
+					}
 					$rst['choices'][$key]['audio'] = $tts_results['audio_path'];
 				}
 
@@ -79,6 +195,7 @@
 				$story->save();
 
 				$rst['activity_id'] = $insertId;
+				$rst['success'] = true;
 
 				return response()->json($rst);
 			} else
@@ -225,13 +342,14 @@
 
 
 		//-------------------------------------------------------------------------------------------
-		public function buildStoryContent($user_content, $story_title, $prev_chapter, $choice, $language)
+		public function buildStoryContent($user_content, $story_title, $prev_chapter, $step, $language)
 		{
 			$prompt = "Create an interactive story with the story text and four, 2-3 sentence choices of how the story might continue. Use the following topic: " . $user_content . ". The story can be fact or fiction.";
 
 			$schema_str = file_get_contents(public_path('texts/story-first-chapter.json'));
 			if ($prev_chapter !== '') {
-				$prompt .= "\n\nThe previous chapter was: " . $prev_chapter . ", the users choice of how to continue is: " . $choice . ".";
+
+				$prompt = "Create an interactive story with the story text and four, 2-3 sentence choices of how the story might continue. Use the following topic: " . $user_content . ". This is the " . $step . ". step of the story. The previous texts and choices are:\n\n" . $prev_chapter . ".";
 
 				$schema_str = file_get_contents(public_path('texts/story-second-chapter.json'));
 			}
@@ -270,6 +388,10 @@
 			$chapterText = $content_array['chapterText'];
 			$chapterImagePrompt = $content_array['chapterImagePrompt'];
 
+			if (empty($content_array['chapterChoices'])) {
+				return array('title' => $storyTitle, 'chapterText' => $chapterText, 'coverImage' => $chapterImagePrompt, 'choices' => [], 'returnJSON' => $complete_json, 'success' => false);
+			}
+
 			$chapterChoices = [];
 			for ($i = 0; $i < 4; $i++) {
 				$chapterChoices[] = array('text' => $content_array['chapterChoices'][$i]['choiceText'], 'audio' => '');
@@ -280,7 +402,7 @@
 			$chapterCoverImageFilename = 'chapter_image_cover_' . $timestamp . '.png';
 			MyHelper::replicate_create_image_sdxl_lightning($chapterCoverImageFilename, $chapterImagePrompt);
 
-			return array('title' => $storyTitle, 'chapterText' => $chapterText, 'coverImage' => '/storage/quiz_images/' . $chapterCoverImageFilename, 'choices' => $chapterChoices, 'returnJSON' => $complete_json);
+			return array('title' => $storyTitle, 'chapterText' => $chapterText, 'coverImage' => '/storage/quiz_images/' . $chapterCoverImageFilename, 'choices' => $chapterChoices, 'returnJSON' => $complete_json, 'success' => true);
 		}
 
 		//-------------------------------------------------------------------------------------------

@@ -100,6 +100,7 @@
 
 			$story = StoryData::where('user_id', $user_id)
 				->where('activity_id', $activity_id)
+				->where('step', $step)
 				->orderBy('id', 'desc')
 				->first();
 

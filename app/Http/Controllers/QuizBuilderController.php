@@ -40,7 +40,12 @@
 
 			Log::info('convertTextToSpeech: ' . $voice_id . ' -- ' . $text . ' -- ' . $question_id . ' -- ' . $answer_id . ' -- ' . $activity_id . ' -- ' . $update_field);
 
-			$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $text);
+			if (!empty($voice_id)) {
+				$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $text);
+			} else
+			{
+				$tts_results = ['audio_path' => '', 'filename' => ''];
+			}
 
 			if ($activity_id !== 0) {
 				$activity_update = ActivityData::where('activity_id', $activity_id)

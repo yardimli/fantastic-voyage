@@ -97,6 +97,8 @@
 	Route::post('/quiz-content-builder-json', [QuizContentBuilderController::class, 'addNewVoyage'])->name('quiz-content-builder-json');
 	Route::get('/fetch_progress', [QuizContentBuilderController::class, 'fetchProgress'])->name('fetch_progress');
 
+	Route::post('/create-next-story', [QuizContentBuilderController::class, 'createNextStory'])->name('create-next-story');
+
 	Route::get('/load-game/{activity_id}/{question?}', [QuizGameBuilderController::class, 'index'])->name('load-game');
 
 	Route::get('/load-game-in-page/{activity_id}', [QuizGameBuilderController::class, 'inPage'])->name('load-game-in-page');

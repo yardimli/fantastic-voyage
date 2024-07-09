@@ -129,8 +129,10 @@ $(document).ready(function () {
 			correctImage.classList.add('zoom-in-rotate');
 		}, 10);
 		
+		let answerIndex = $(this).data('index');
+		
 		setTimeout(function () {
-			goToNextQuestion();
+			goToNextQuestion(answerIndex);
 		}, 1500);
 		
 	});
@@ -215,19 +217,62 @@ $(document).ready(function () {
 			success: function (data) {
 				// console.log(data);
 				location.reload();
+			},
+			error: function (data) {
+				console.log('Error:', data);
 			}
 		});
 	});
 });
 
-function goToNextQuestion() {
+function goToNextQuestion(answerIndex) {
 	if (currentAudio) {
 		continueAudioPlayback = false;
 		currentAudio.pause();
 		currentAudio.currentTime = 0;
 	}
+	$('#loading-page').show();
+	
+	var csrfToken = $('meta[name="csrf-token"]').attr('content');
 	//load the next question call LLM AJAX
-	alert('Next Question');
+	$.ajax({
+		type: "POST",
+		url: "/create-next-story",
+		data: {
+			activity_id: $('#activity_id').val(),
+			answer_index: answerIndex,
+			chapter_text: chapter_text,
+			choice: chapter_choices.choices[answerIndex].text,
+			step: chapter_step,
+		},
+		headers: {
+			'X-CSRF-TOKEN': csrfToken
+		},
+		success: function (data) {
+			console.log(data);
+			var chapter_success = data.success;
+			if (!chapter_success) {
+				$('#loading-page').hide();
+				alert('Please try again');
+				return;
+			}
+			
+			chapter_step = data.step;
+			chapter_image = data.image;
+			chapter_voice = data.chapter_voice;
+			chapter_text = data.chapter_text;
+			chapter_choices = {"choices": data.choices};
+			$('#loading-page').hide();
+			showStory(true);
+			
+			// location.reload();
+		},
+		error: function (data) {
+			console.log('Error:', data);
+			alert('Error: ' + data);
+		}
+	});
+	// alert('Next Question');
 }
 
 let resizeIsGoingOn = false;
@@ -425,11 +470,11 @@ function resizeDivToWindowSize() {
 	
 	for (var i = 0; i < chapter_choices.choices.length; i++) {
 		var button = document.createElement('div');
-		button.style.width = ((bottomDivsWidth * buttonWidthMultiplier)  - 10) + 'px'; // Subtracting 10 for padding
+		button.style.width = ((bottomDivsWidth * buttonWidthMultiplier) - 10) + 'px'; // Subtracting 10 for padding
 		buttonWidth = ((bottomDivsWidth * buttonWidthMultiplier) - 10);
 		button.style.height = (chapter_choices.choices.length == 2 ? bottomDivHeight : bottomDivHeight / chapter_choices.choices.length - 10) + 'px'; // Subtracting 10 for padding
 		buttonHeight = (chapter_choices.choices.length == 2 ? bottomDivHeight : bottomDivHeight / chapter_choices.choices.length - 10);
-		button.style.top = ( i * (bottomDivHeight / chapter_choices.choices.length) ) + 'px';
+		button.style.top = (i * (bottomDivHeight / chapter_choices.choices.length)) + 'px';
 		button.style.left = 0;
 		
 		button.className = 'story-answer-btn';

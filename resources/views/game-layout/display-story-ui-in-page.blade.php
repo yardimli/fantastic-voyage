@@ -3,22 +3,17 @@
 @section('title', 'Story Voyage')
 
 @section('content')
-	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}" />
-	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}" />
+	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}"/>
+	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}"/>
 	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
 	<script src="{{ asset('assets/js/play-story.js') }}"></script>
-	<div class="container mt-5 mb-5 pb-5">
-
-		<div class="create-header ms-4 mt-4 pb-2 d-flex align-items-end  justify-content-between">
-
-			<div id="breadcrumbs" class="">
-				<span class="breadcrumb-separator fas fa-chevron-right"></span>
-				<a class="clickable-breadcrumb breadcrumb" href="/quiz-activities">{{__('default.My Activities')}}</a>
-				<span class="breadcrumb-separator fas fa-chevron-right"></span>
-				<a href="{{ route('quiz-builder',[ $activity_id]) }}"><span class="breadcrumb ">{{__('default.Enter Content')}}</span></a>
-				<span class="breadcrumb-separator fas fa-chevron-right"></span>
-				<span class="breadcrumb selected-breadcrumb">{{__('default.Play')}}</span>
-			</div>
+	<div class="container" style="margin-top: 60px;">
+		
+		<div id="breadcrumbs" class="pt-2 pb-2">
+			<span class="breadcrumb-separator fas fa-chevron-right"></span>
+			<a class="clickable-breadcrumb breadcrumb" href="{{route('activities.page', ['type' => 'story'])}}">Stories</a>
+			<span class="breadcrumb-separator fas fa-chevron-right"></span>
+			<span class="breadcrumb selected-breadcrumb">{{__('default.Play')}}</span>
 		</div>
 		
 		<audio id="audio-player" style="display: none;"></audio>
@@ -50,7 +45,7 @@
 						<span id="page-counter"></span>
 					</div>
 					<i class="fa fa-caret-right audio-control-btn" id="start-story"></i>
-
+				
 				</div>
 			</div>
 			<div id="endgame-page">
@@ -58,13 +53,13 @@
 					<div class="title">{{ __('default.Game Finished') }}</div>
 					<div style="color: #3faa6f">{{ __('default.Time Spent') }}</div>
 					<div class="time-spent" style="font-size: 32px;"></div>
-{{--					<div id="restart">ReStart</div>--}}
+					{{--					<div id="restart">ReStart</div>--}}
 				</div>
 			</div>
 			<img id="full-screen" src="{{ asset('assets/phaser/images/full_screen.png') }}">
 			<img id="mute-audio" src="{{ asset('assets/phaser/images/sound.png') }}">
 		</div>
-
+		
 		<div id="themes_div">
 			@foreach ($themes as $theme)
 				<img src="{{ asset('assets/phaser/images/' . $theme . '.png') }}"
@@ -72,10 +67,10 @@
 				     data-theme="{{ $theme }}">
 			@endforeach
 		</div>
-
-
+		
+		
 		@endsection
-
+		
 		@push('scripts')
 			<script>
 				let chapter_step = {{ $step }};

@@ -2,7 +2,7 @@
   "type": "function",
   "function": {
     "name": "create_story_chapter_and_choices",
-    "description": "Create a schema for a chapter to the story that consists of one chapter and multiple choices of how the story can continue. The chapter should be in the given topic.",
+    "description": "The first chapter to the story that consists of one chapter and multiple choices of how the story will continue. The chapter should be in the given topic.",
     "parameters": {
       "type": "object",
       "properties": {
