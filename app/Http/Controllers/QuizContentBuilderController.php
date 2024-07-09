@@ -37,7 +37,7 @@
 			Log::info($content_type, $user_content, $language, $voice_id, $quantity, $new_num, $new_id, $return_json);
 
 			if ($content_type === 'story') {
-				$rst = $this->buildStoryContent($user_content, '', '', $language, $voice_id);
+				$rst = $this->buildStoryContent($user_content, '', '', '', $language);
 
 				$activity = new Activity();
 				$activity->user_id = $user_id;
