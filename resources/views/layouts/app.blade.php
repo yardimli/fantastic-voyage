@@ -181,12 +181,13 @@ Header START -->
 					
 					<!-- Nav item 4 Mega menu -->
 						<li class="nav-item">
-							<a class="nav-link active" href="{{route('activities.page')}}">The Quizzes</a>
+							<a class="nav-link active" href="{{route('activities.page', ['type' => 'quiz'])}}">Quizzes</a>
 						</li>
 					
 					<li class="nav-item">
-						<a class="nav-link active" href="{{route('activities.page')}}">Voyages</a>
+						<a class="nav-link active" href="{{route('activities.page', ['type' => 'story'])}}">Stories</a>
 					</li>
+					
 					
 					<li class="nav-item">
 							<a class="nav-link active" href="{{route('index')}}">Create</a>

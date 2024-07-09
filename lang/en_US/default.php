@@ -179,6 +179,7 @@
 		"Privacy Policy" => "Privacy Policy",
 		"Please enter your email address" => "Please enter your email address",
 		"Loading..." => "Loading...",
+		"Delete" => "Delete",
 
 
 

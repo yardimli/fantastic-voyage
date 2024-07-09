@@ -367,7 +367,7 @@
 
 		}
 
-		public function quizActivities(Request $request)
+		public function quizActivities(Request $request, $type = 'quiz')
 		{
 //			if (!Auth::user()) {
 //				return redirect()->route('login');
@@ -377,8 +377,9 @@
 			$user_id = $user->id ?? 0;
 			$activities = Activity::where('user_id', $user_id)
 				->where('is_deleted', 0)
+				->where('type', $type)
 				->get();
-			return view('quiz.quiz-activities', compact('user_id', 'activities'));
+			return view('quiz.quiz-activities', compact('user_id', 'activities', 'type'));
 		}
 
 		public function quizActivitiesAction(Request $request, $action, $id)

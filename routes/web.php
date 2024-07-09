@@ -36,6 +36,7 @@
 	Route::get('quiz-activities-action/{action}/{id}', [QuizBuilderController::class, 'quizActivitiesAction'])->name('quiz-activities-action');
 
 	Route::get('activities-page', [QuizBuilderController::class, 'quizActivities'])->name('activities.page');
+	Route::get('activities-page/{type?}', [QuizBuilderController::class, 'quizActivities'])->name('activities.page');
 
 
 	Route::get('phaser-summer-zoom', function () {
