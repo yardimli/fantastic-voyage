@@ -43,6 +43,11 @@
 				}
 
 				if ($e->getPrevious() instanceof \Illuminate\Session\TokenMismatchException) {
+					if ($request->expectsJson()) {
+						return response()->json([
+							'message' => 'CSRF token mismatch. Please refresh the page and try again.'
+						], 419);
+					}
 					return redirect()->route('/');
 				};
 			});

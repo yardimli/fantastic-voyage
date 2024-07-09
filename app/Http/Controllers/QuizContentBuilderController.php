@@ -86,43 +86,44 @@
 				$rst['activity_id'] = $insertId;
 
 				return response()->json($rst);
-			} else if ($content_type === 'quiz') {
+			} else
+				if ($content_type === 'quiz') {
 
-				$html = '';
-				$rst = $this->buildQuizContent($user_content, $language, $voice_id, $new_num, $new_id, $quantity);
+					$html = '';
+					$rst = $this->buildQuizContent($user_content, $language, $voice_id, $new_num, $new_id, $quantity);
 
-				$html .= $rst['html'];
-				if ($return_json) {
-					//create activity
-					$activity = new Activity();
-					$activity->user_id = $user_id;
-					$activity->type = 'quiz';
-					$activity->title = $rst['title'];
-					$activity->cover_image = $rst['coverImage'];
-					$activity->keywords = $rst['keywords'];
-					$activity->prompt = $user_content;
-					$activity->language = $language;
-					$activity->voice_id = $voice_id;
-					$activity->theme = 'space';
-					$activity->is_deleted = 0;
-					$activity->save();
+					$html .= $rst['html'];
+					if ($return_json) {
+						//create activity
+						$activity = new Activity();
+						$activity->user_id = $user_id;
+						$activity->type = 'quiz';
+						$activity->title = $rst['title'];
+						$activity->cover_image = $rst['coverImage'];
+						$activity->keywords = $rst['keywords'];
+						$activity->prompt = $user_content;
+						$activity->language = $language;
+						$activity->voice_id = $voice_id;
+						$activity->theme = 'space';
+						$activity->is_deleted = 0;
+						$activity->save();
 
-					$insertId = $activity->id;
+						$insertId = $activity->id;
 
-					$activityData = new ActivityData();
-					$activityData->user_id = $user_id;
-					$activityData->activity_id = $insertId;
-					$activityData->language = $language;
-					$activityData->json_data = json_encode(array('questions' => $rst['returnJSON']));
-					$activityData->save();
+						$activityData = new ActivityData();
+						$activityData->user_id = $user_id;
+						$activityData->activity_id = $insertId;
+						$activityData->language = $language;
+						$activityData->json_data = json_encode(array('questions' => $rst['returnJSON']));
+						$activityData->save();
 
-					$rst['activity_id'] = $insertId;
+						$rst['activity_id'] = $insertId;
 
-					return response()->json($rst);
-				} else {
-					return $html;
+						return response()->json($rst);
+					} else {
+						return $html;
+					}
 				}
-			}
 		}
 
 		//-------------------------------------------------------------------------------------------
@@ -234,7 +235,7 @@
 			$prompt = "Create an interactive story with the story text and four, 2-3 sentence choices of how the story might continue. Use the following topic: " . $user_content . ". The story can be fact or fiction.";
 
 			$schema_str = file_get_contents(public_path('texts/story-first-chapter.json'));
-			if ($prev_chapter!=='') {
+			if ($prev_chapter !== '') {
 				$prompt .= "\n\nThe previous chapter was: " . $prev_chapter . ", the users choice of how to continue is: " . $choice . ".";
 
 				$schema_str = file_get_contents(public_path('texts/story-second-chapter.json'));
@@ -265,8 +266,8 @@
 			$content_array = json_decode($content, true);
 			Log::info($content_array);
 
-			if ($prev_chapter==='') {
-			$storyTitle = $content_array['storyTitle'];
+			if ($prev_chapter === '') {
+				$storyTitle = $content_array['storyTitle'];
 			} else {
 				$storyTitle = $story_title;
 			}
