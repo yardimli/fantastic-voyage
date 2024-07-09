@@ -34,7 +34,7 @@
 			$return_json = $request->input('return_json') ?? false;
 
 			Log::info('---------------Log addNewVoyage--------------------------');
-			Log::info($content_type, $user_content, $language, $voice_id, $quantity, $new_num, $new_id, $return_json);
+			Log::info('content-type: ' . $content_type. ' user_content: ' . $user_content. ' language: ' . $language. ' voice_id: ' . $voice_id. ' quantity: ' . $quantity. ' new_num: ' . $new_num. ' new_id: ' . $new_id. ' return_json: ' . $return_json);
 
 			if ($content_type === 'story') {
 				$rst = $this->buildStoryContent($user_content, '', '', '', $language);
