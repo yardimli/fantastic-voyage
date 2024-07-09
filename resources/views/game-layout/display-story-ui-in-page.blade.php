@@ -79,13 +79,13 @@
 		@push('scripts')
 			<script>
 				let chapter_step = {{ $step }};
-				let story_title = '{!! str_replace("'","\'", $title); !!}';
-				let type_description = '{!! str_replace("'","\'", $type_description); !!}';
-				let chapter_image = '{!!  $image !!}';
-				let chapter_voice = '{!!  $chapter_voice !!}';
-				let chapter_text = '{!! str_replace("'","\'", $chapter_text); !!}';
-				let chapter_choices ={ "choices" : {!! $choices !!} };
-				let current_theme = '{!! str_replace("'","\'", $current_theme); !!}';
+				let story_title = '{!! $title !!}';
+				let type_description = '{!! $type_description !!}';
+				let chapter_image = '{!! $image !!}';
+				let chapter_voice = '{!! $chapter_voice !!}';
+				let chapter_text = '{!! $chapter_text !!}';
+				let chapter_choices = {"choices": {!! $choices !!}};
+				let current_theme = '{!! $current_theme !!}';
 				window.translations = {
 					'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
 				};

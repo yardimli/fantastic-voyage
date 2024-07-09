@@ -339,7 +339,8 @@ function resizeDivToWindowSize() {
 	var questionDiv = document.getElementById('question-div');
 	
 	
-	questionDiv.textContent = chapter_text.replace(/\\n/g, '<br>');
+	questionDiv.innerHTML = chapter_text.replace(/\\n/g, '<br>');
+	questionDiv.innerHTML = chapter_text.replace(/\n/g, '<br>');
 	questionDiv.style.fontSize = '40px';
 	questionDiv.style.display = 'block'; // Show the div if there is text
 	
@@ -440,7 +441,7 @@ function resizeDivToWindowSize() {
 		
 		var answerText = document.createElement('div');
 		answerText.className = 'answer-text';
-		answerText.textContent = chapter_choices.choices[i]['text'];
+		answerText.innerHTML = chapter_choices.choices[i]['text'];
 		button.appendChild(answerText);
 		
 		if (chapter_choices.choices[i]['audio'] !== null && chapter_choices.choices[i]['audio'] !== '') {

@@ -108,10 +108,21 @@
 				->first();
 
 			$title = $activity->title;
+			$title = str_replace("'", "\'", $title);
+			$title = str_replace("\n", "\\n", $title);
+
 			$image = $story->image;
+
 			$chapter_text = $story->chapter_text;
+			$chapter_text = str_replace("\n", "\\n", $chapter_text);
+			$chapter_text = str_replace("'", "\'", $chapter_text);
+
 			$chapter_voice = $story->chapter_voice;
+
 			$choices = $story->choices;
+			$choices = str_replace("'", "\'", $choices);
+			$choices = str_replace("\n", "<br>", $choices);
+
 			$current_theme = $activity->theme ?? 'beach';
 
 			$themes = ['beach', 'jungle', 'mid-autumn', 'moon', 'rabbit', 'space', 'taipei'];
