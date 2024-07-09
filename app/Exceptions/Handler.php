@@ -48,7 +48,8 @@
 							'message' => 'CSRF token mismatch. Please refresh the page and try again.'
 						], 419);
 					}
-					return redirect()->route('/');
+					return response()->view('errors.error-419', [], 419);
+//					return redirect()->route('/');
 				};
 			});
 
