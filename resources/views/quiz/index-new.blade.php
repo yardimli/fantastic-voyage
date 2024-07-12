@@ -48,6 +48,7 @@
 												<option value="" selected>Type</option>
 												<option value="quiz">Quiz</option>
 												<option value="story">Story</option>
+												<option value="cliffhanger">Cliffhanger</option>
 											</select>
 										</div>
 									</div>
@@ -101,7 +102,8 @@
 								</div>
 								<!-- Form END -->
 								<div class="progress mt-4" style="height: 5px; display: none;">
-									<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" id="progress-bar"></div>
+									<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+									     style="width: 0%;" id="progress-bar"></div>
 								</div>
 							</div>
 						</div>
@@ -304,7 +306,7 @@
 			var increment = (intervalDuration / duration) * 100; // percentage to increase at each interval
 			
 			clearInterval(progress_interval);
-			progress_interval = setInterval(function() {
+			progress_interval = setInterval(function () {
 				start += increment;
 				$progressBar.css('width', start + '%');
 				
@@ -387,10 +389,11 @@
 						if (data == '') {
 							showMessage('Something went wrong with the AI. Please try again.');
 						} else {
-							if (content_type==='quiz') {
+							if (content_type === 'quiz') {
 								window.location.href = '/load-game-in-page/' + data.activity_id;
-							} else
-							{
+							} else if (content_type === 'cliffhanger') {
+								window.location.href = '/load-cliffhanger-in-page/' + data.activity_id;
+							} else if (content_type === 'story') {
 								window.location.href = '/load-story-in-page/' + data.activity_id;
 							}
 						}
@@ -398,12 +401,14 @@
 					complete: function () {
 						// $('#spinIcon').removeClass('fa-spin');
 						// $('#spinIcon').css('display', 'none');
-					},
+					}
+					,
 					error: function (err) {
 						console.error(err);
 					}
 				});
-			});
+			})
+			;
 		});
 	</script>
 

@@ -185,6 +185,10 @@ Header START -->
 						</li>
 					
 					<li class="nav-item">
+						<a class="nav-link active" href="{{route('activities.page', ['type' => 'cliffhanger'])}}">Cliff Hanger</a>
+					</li>
+					
+					<li class="nav-item">
 						<a class="nav-link active" href="{{route('activities.page', ['type' => 'story'])}}">Stories</a>
 					</li>
 					

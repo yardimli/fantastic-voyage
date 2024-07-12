@@ -99,6 +99,9 @@
 
 	Route::post('/create-next-story', [QuizContentBuilderController::class, 'createNextStory'])->name('create-next-story');
 
+	Route::post('/create-next-cliffhanger', [QuizContentBuilderController::class, 'createNextCliffhanger'])->name('create-next-cliffhanger');
+
+
 	Route::get('/load-game/{activity_id}/{question?}', [QuizGameBuilderController::class, 'index'])->name('load-game');
 
 	Route::get('/load-game-in-page/{activity_id}', [QuizGameBuilderController::class, 'inPage'])->name('load-game-in-page');
@@ -107,6 +110,11 @@
 	Route::get('/load-story/{activity_id}/{step?}', [QuizGameBuilderController::class, 'storyIndex'])->name('load-story');
 
 	Route::get('/load-story-in-page/{activity_id}', [QuizGameBuilderController::class, 'storyInPage'])->name('load-story-in-page');
+
+
+	Route::get('/load-cliffhanger/{activity_id}/{step?}', [QuizGameBuilderController::class, 'cliffhangerIndex'])->name('load-cliffhanger');
+
+	Route::get('/load-cliffhanger-in-page/{activity_id}', [QuizGameBuilderController::class, 'cliffhangerInPage'])->name('load-cliffhanger-in-page');
 
 	Route::get('/landing', [StaticPagesController::class, 'landing'])->name('landing.page');
 

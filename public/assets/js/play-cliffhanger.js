@@ -9,15 +9,42 @@ var audioTimer1 = null;
 let timerDisplay = null;
 let runningTimer;
 let seconds = 0, minutes = 0;
+let currentImage = null;
+let waitForMouseMoveInteraction = 2;
+
 //look at the user agent to determine if the user is on a mobile device
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 	isOnMobile = true;
 }
+
+let progressBar;
+let progressInterval;
+
+function startProgressBar() {
+	let progress = 0;
+	const progressBarElement = document.getElementById('progress-bar');
+	
+	progressInterval = setInterval(() => {
+		progress += 0.5; // Increase by 0.5% every 100ms
+		progressBarElement.style.width = `${progress}%`;
+		
+		if (progress >= 100) {
+			clearInterval(progressInterval);
+		}
+	}, 125);
+}
+
+function stopProgressBar() {
+	clearInterval(progressInterval);
+	document.getElementById('progress-bar').style.width = '100%';
+}
+
 $(document).ready(function () {
 	timerDisplay = document.getElementById('timer');
 	currentAudio = document.getElementById('audio-player');
 	
 	$('#loading-page').hide();
+	$("#loading-page").removeClass("hidden-layer");
 	
 	$('#preload-page .story-title').text(story_title);
 	$('#type-description').text(type_description);
@@ -132,9 +159,50 @@ $(document).ready(function () {
 		let answerIndex = $(this).data('index');
 		
 		setTimeout(function () {
-			goToNextQuestion(answerIndex);
+			goToNextChapter(answerIndex);
 		}, 1500);
 		
+	});
+	
+	let currentTransition = null;
+	
+	$(document).on('mousemove', '.story-answer-btn', function () {
+		if (waitForMouseMoveInteraction <= 0) {
+			let answerIndex = $(this).data('index');
+			let answerImage = chapter_choices.choices[answerIndex].image;
+			
+			if (answerImage !== null && answerImage !== '') {
+				if (answerImage !== currentImage) {
+					// Stop any ongoing transition
+					if (currentTransition) {
+						currentTransition.stop(true, false);
+					}
+					
+					// Get the current and next image elements
+					const $currentImg = $('#current-question-img');
+					const $nextImg = $('#next-question-img');
+					
+					// Set the next image's source to the new image
+					$nextImg.attr('src', answerImage);
+					$nextImg.css('opacity', 0); // Make it invisible (opacity 0)
+					
+					// Show the next image (still invisible due to opacity 0)
+					$nextImg.show();
+					
+					// Fade out the current image and fade in the next image
+					currentTransition = $.when(
+						$currentImg.stop().animate({opacity: 0}, 500),
+						$nextImg.stop().animate({opacity: 1}, 500)
+					).done(function () {
+						$nextImg.attr('id', 'current-question-img'); // Next image becomes current
+						$currentImg.attr('id', 'next-question-img'); // Current image becomes next
+						currentTransition = null;
+					});
+					
+					currentImage = answerImage;
+				}
+			}
+		}
 	});
 	
 	$(document).on('click', '.audio-image', function (e) {
@@ -223,25 +291,26 @@ $(document).ready(function () {
 			}
 		});
 	});
-});
+})
+;
 
-function goToNextQuestion(answerIndex) {
+function goToNextChapter(answerIndex) {
 	if (currentAudio) {
 		continueAudioPlayback = false;
 		currentAudio.pause();
 		currentAudio.currentTime = 0;
 	}
-	$('#loading-page').show();
+	$('#loading-page').fadeIn();
+	startProgressBar();
 	
 	var csrfToken = $('meta[name="csrf-token"]').attr('content');
 	//load the next question call LLM AJAX
 	$.ajax({
 		type: "POST",
-		url: "/create-next-story",
+		url: "/create-next-cliffhanger",
 		data: {
 			activity_id: $('#activity_id').val(),
 			answer_index: answerIndex,
-			chapter_text: chapter_text,
 			choice: chapter_choices.choices[answerIndex].text,
 			step: chapter_step,
 		},
@@ -249,25 +318,26 @@ function goToNextQuestion(answerIndex) {
 			'X-CSRF-TOKEN': csrfToken
 		},
 		success: function (data) {
+			stopProgressBar();
 			console.log(data);
 			var chapter_success = data.success;
 			if (!chapter_success) {
-				$('#loading-page').hide();
+				$('#loading-page').fadeOut();
 				alert('Please try again');
 				return;
 			}
 			
 			chapter_step = data.step;
 			chapter_image = data.image;
-			chapter_voice = data.chapter_voice;
-			chapter_text = data.chapter_text;
 			chapter_choices = {"choices": data.choices};
-			$('#loading-page').hide();
+			$('#loading-page').fadeOut();
+			waitForMouseMoveInteraction = 2;
 			showStory(true);
 			
 			// location.reload();
 		},
 		error: function (data) {
+			stopProgressBar();
 			console.log('Error:', data);
 			alert('Error: ' + data);
 		}
@@ -293,26 +363,18 @@ window.addEventListener('resize', function () {
 });
 
 function showStory(autoPlayAudio) {
-	// console.log(question);
-	
 	let ajaxPromises = [];
 	
-	$('#loading-page').show();
+	// $('#loading-page').show();
+	// $('#loading-page').fadeOut();
 	
-	$('#loading-page').hide();
-	var questionDiv = document.getElementById('question-div');
 	var chapterImageDiv = document.getElementById('question-image-div');
 	var answersDiv = document.getElementById('answers-div');
-	questionDiv.innerHTML = "";
-	chapterImageDiv.innerHTML = "";
 	answersDiv.innerHTML = "";
 	var audioArr = [];
 	resizeDivToWindowSize();
 	
 	if (autoPlayAudio && !isMute) {
-		if (chapter_voice !== null && chapter_voice !== '') {
-			audioArr.push(chapter_voice);
-		}
 		//for each answer, if there is audio, add it to the audio array
 		chapter_choices.choices.forEach(function (answer) {
 			if (answer['audio'] !== null && answer['audio'] !== '') {
@@ -333,17 +395,6 @@ function showStory(autoPlayAudio) {
 		fadeIn = true;
 	}
 	
-}
-
-
-function __(key, replacements) {
-	let translation = window.translations[key] || '';
-	
-	Object.keys(replacements).forEach(function (placeholder) {
-		translation = translation.replace(':' + placeholder, replacements[placeholder]);
-	});
-	
-	return translation;
 }
 
 function resizeDivToWindowSize() {
@@ -381,42 +432,6 @@ function resizeDivToWindowSize() {
 	footerDiv.style.width = (windowWidth - borderOffset) + 'px';
 	footerDiv.style.height = '50px';
 	
-	var questionDiv = document.getElementById('question-div');
-	
-	
-	questionDiv.innerHTML = chapter_text.replace(/\\n/g, '<br>');
-	questionDiv.innerHTML = chapter_text.replace(/\n/g, '<br>');
-	questionDiv.style.fontSize = '40px';
-	questionDiv.style.display = 'block'; // Show the div if there is text
-	
-	if (chapter_voice !== null && chapter_voice !== '') {
-		var audioImage = document.createElement('img');
-		audioImage.src = '/assets/phaser/images/sound.png';
-		audioImage.className = 'audio-image';
-		audioImage.dataset.audio = chapter_voice;
-		
-		var qAudioImgPromise = new Promise(function (resolve) {
-			audioImage.onload = function () {
-				resolve(true);
-			};
-		});
-		promises.push(qAudioImgPromise);
-		
-		questionDiv.prepend(audioImage);
-	}
-	
-	// Reset the height to 'auto' before setting the width
-	questionDiv.style.maxHeight = parseInt(mainDiv.style.height) / 5 + 'px';
-	questionDiv.style.width = mainDiv.style.width;
-	// Now calculate and set the height based on the new scrollHeight
-	// questionDiv.style.height = questionDivHeight + 'px';
-	Promise.all(promises).then(function () {
-		adjustFontSizeToFit([questionDiv], 40, 20);
-	});
-	
-	var questionDivHeight = questionDiv.clientHeight;
-	// console.log('questionDivHeight=>'+questionDivHeight);
-	
 	var bottomDivHeight;
 	var bottomDivsWidth;
 	var chapterImageDivHeight;
@@ -425,45 +440,45 @@ function resizeDivToWindowSize() {
 	if (windowWidth < 600) {
 		buttonWidthMultiplier = 1;
 		imageWidthMultiplier = 1;
-		chapterImageDivHeight = (parseInt(mainDiv.style.height) - questionDivHeight - footerDivHeight) / 3;
-		bottomDivHeight = (parseInt(mainDiv.style.height) - questionDivHeight - footerDivHeight) / 3 * 2;
+		chapterImageDivHeight = (parseInt(mainDiv.style.height) - footerDivHeight) / 3;
+		bottomDivHeight = (parseInt(mainDiv.style.height) - footerDivHeight) / 3 * 2;
 		bottomDivsWidth = parseInt(mainDiv.style.width);
 	} else {
-		chapterImageDivHeight = parseInt(mainDiv.style.height) - questionDivHeight - footerDivHeight;
-		bottomDivHeight = parseInt(mainDiv.style.height) - questionDivHeight - footerDivHeight;
+		chapterImageDivHeight = parseInt(mainDiv.style.height) - footerDivHeight;
+		bottomDivHeight = parseInt(mainDiv.style.height) - footerDivHeight;
 		bottomDivsWidth = (parseInt(mainDiv.style.width) / 2);
 	}
 	
 	var chapterImageDivPadding = 10;
 	var chapterImageDiv = document.getElementById('question-image-div');
-	insertChapterImage();
+	
+	
+	// Set the initial image source
+	if (chapter_image === null || chapter_image === '') {
+		// Use first answer image if chapter_image is not available
+		const answerImage = chapter_choices.choices[0].image;
+		if (answerImage !== null && answerImage !== '') {
+			$('#current-question-img').attr('src', answerImage);
+		}
+	} else {
+		$('#current-question-img').attr('src', chapter_image);
+	}
+	
 	chapterImageDiv.style.width = ((bottomDivsWidth * imageWidthMultiplier) - chapterImageDivPadding) + 'px';
 	chapterImageDiv.style.height = (chapterImageDivHeight - chapterImageDivPadding) + 'px';
-	chapterImageDiv.style.top = (questionDivHeight + 10) + 'px';
+	chapterImageDiv.style.top = '10px';
 	chapterImageDiv.style.left = '0px';
-	
-	// Adjust the image size to fit the div
-	$('.question-img').css('width', '100%');
-	// Displayed size
-	var qImg = document.querySelector('.question-img');
-	qImg.onload = function () {
-		var displayedHeight = this.height;
-		if (displayedHeight > chapterImageDivHeight) {
-			$('.question-img').css('height', '100%');
-			$('.question-img').css('width', 'auto');
-		}
-	}
 	
 	var answersDiv = document.getElementById('answers-div');
 	answersDiv.style.width = (bottomDivsWidth * buttonWidthMultiplier) + 'px';
 	answersDiv.style.height = bottomDivHeight + 'px';
-	answersDiv.style.top = (windowWidth < 600) ? (questionDivHeight + 5 + chapterImageDivHeight) + 'px' : (questionDivHeight + 10) + 'px';
+	answersDiv.style.top = (windowWidth < 600) ? (5 + chapterImageDivHeight) + 'px' : (10) + 'px';
 	answersDiv.style.left = (windowWidth < 600) ? '0px' : (bottomDivsWidth * imageWidthMultiplier) + 'px';
 	
 	
 	// Empty the answersDiv and recreate buttons on each resize to ensure clean state
 	answersDiv.innerHTML = '';
-	var chapterTextFontSize = questionDiv.style.fontSize == '0px' || questionDiv.style.fontSize == '' ? '40' : questionDiv.style.fontSize.replace('px', '');
+	var chapterTextFontSize = 40;
 	var buttonsArray = [];
 	
 	// Create and append the buttons
@@ -477,7 +492,7 @@ function resizeDivToWindowSize() {
 		button.style.top = (i * (bottomDivHeight / chapter_choices.choices.length)) + 'px';
 		button.style.left = 0;
 		
-		button.className = 'story-answer-btn';
+		button.className = 'story-answer-btn button-opacity-0';
 		button.dataset.index = i;
 		var bg_img = document.createElement('img');
 		bg_img.className = 'answer-bg-img';
@@ -513,6 +528,28 @@ function resizeDivToWindowSize() {
 	Promise.all(promises).then(function () {
 		adjustFontSizeToFit(buttonsArray, Math.round(chapterTextFontSize * 1.25), Math.round(chapterTextFontSize * 0.25));
 	});
+	
+	
+	let initalDelay = 500;
+	if (chapter_step === 1) {
+		initalDelay = 2500;
+	}
+// Remove the button-opacity-0 class and add slide-in with delay
+	$('.story-answer-btn').each(function (index) {
+		var $button = $(this);
+		console.log(index);
+		setTimeout(function () {
+			$button.removeClass('button-opacity-0').addClass('slide-in');
+		}, initalDelay + (index * 250));
+	});
+	
+	var totalButtons = $('.story-answer-btn').length;
+	var totalDelay = initalDelay + (totalButtons * 250) + 500;
+	
+	setTimeout(function () {
+		$('.story-answer-btn').removeClass('slide-in');
+	}, totalDelay);
+	
 	if (isMute) {
 		//make all the audio images disabled
 		$('.audio-image').addClass('audio-image-disabled');
@@ -520,17 +557,6 @@ function resizeDivToWindowSize() {
 		//make all the audio images enabled
 		$('.audio-image').removeClass('audio-image-disabled');
 	}
-}
-
-
-function insertChapterImage() {
-	var chapterImageDiv = document.getElementById('question-image-div');
-	
-	var qImg = document.createElement('img');
-	qImg.src = chapter_image; // Replace with the actual path to your image
-	qImg.className = 'question-img';
-	chapterImageDiv.appendChild(qImg);
-	chapterImageDiv.style.display = 'block'; // Show the div if there is an image
 }
 
 function adjustFontSizeToFit(elements, maxFontSize, minFontSize) {
@@ -604,6 +630,19 @@ function playSequence(audioSrcArray, index, waitTime = 0) {
 		});
 	}, waitTime); // Delay of 2 seconds
 	
+	//find answer index of the current audio
+	for (let i = 0; i < chapter_choices.choices.length; i++) {
+		if (chapter_choices.choices[i].audio === audioSrcArray[index]) {
+			//change question image to the current answer image
+			console.log('changing image to', i, chapter_choices.choices[i].image);
+			var answerImage = chapter_choices.choices[i].image;
+			if (answerImage !== null && answerImage !== '') {
+				$('.question-img').attr('src', answerImage);
+				$('.question-img').show();
+			}
+			break;
+		}
+	}
 	
 	currentAudio.onplay = function () {
 		changeImageToPlayingState(audioSrcArray[index]);
@@ -688,6 +727,8 @@ function updateTimerDisplay() {
 			minutes = 0;
 		}
 	}
+	
+	waitForMouseMoveInteraction--;
 	
 	let minutesStr = minutes.toString().padStart(2, '0');
 	let secondsStr = seconds.toString().padStart(2, '0');

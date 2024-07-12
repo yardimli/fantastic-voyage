@@ -1,0 +1,35 @@
+{
+  "type": "function",
+  "function": {
+    "name": "create_story_chapter_choices",
+    "description": "Multiple text choices and image prompts for the next chapter of the story. The chapter should be in the given prompt and follow previous chapters told in the prompt.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "chapterChoices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "choiceText": {
+                "type": "string",
+                "description": "A story that consists of 2-3 sentences, that will be the continuation from the previous chapters in the story."
+              },
+              "choiceImagePrompt": {
+                "type": "string",
+                "description": "For the given chapter create a cover image prompt that dalle can use to generate the image and abide to the following policy: // 1. The prompt must be in English. Translate to English if needed. // 2. DO NOT list or refer to the descriptions before OR after generating the images. // 3. Do not create more than 1 image."
+              }
+            },
+            "required": [
+              "choiceText",
+              "choiceImagePrompt"
+            ]
+          }
+        }
+      },
+      "required": [
+        "chapterChoices"
+      ]
+    }
+  }
+}

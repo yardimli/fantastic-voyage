@@ -395,3 +395,37 @@
 	}
 }
 
+@keyframes slideInRight {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+.slide-in {
+	animation: slideInRight 0.5s ease-in-out;
+}
+
+.button-opacity-0 {
+	opacity: 0;
+}
+
+#question-image-div {
+	position: relative; /* Ensure the container can position its children absolutely */
+}
+
+.question-img {
+	width: 100%; /* Adjust as needed */
+	height: auto; /* Adjust as needed */
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.hidden-layer {
+	display: none;
+}

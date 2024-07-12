@@ -134,4 +134,59 @@
 		}
 
 
+
+
+		public function cliffhangerIndex(Request $request, $activity_id, $step = null)
+		{
+			$user = $request->user();
+			$user_id = $user->id ?? 0;
+			$activity_id = $activity_id ?? -1;
+
+			$rst = $this->buildCliffhangerUI($user_id, $activity_id, 'game-layout.display-cliffhanger-ui', $step ?? 1);
+			return $rst;
+		}
+
+		public function cliffhangerInPage(Request $request, $activity_id)
+		{
+
+			$user = $request->user();
+			$user_id = $user->id ?? 0;
+			$activity_id = $activity_id ?? -1;
+
+			$rst = $this->buildCliffhangerUI($user_id, $activity_id, 'game-layout.display-cliffhanger-ui-in-page');
+			return $rst;
+		}
+
+
+		public function buildCliffhangerUI($user_id, $activity_id, $view = 'game-layout.display-cliffhanger-ui', $step = 1)
+		{
+
+			$story = StoryData::where('user_id', $user_id)
+				->where('activity_id', $activity_id)
+				->where('step', $step)
+				->orderBy('id', 'desc')
+				->first();
+
+			$activity = Activity::where('user_id', $user_id)
+				->where('id', $activity_id)
+				->first();
+
+			$title = $activity->title;
+			$title = str_replace("'", "\'", $title);
+			$title = str_replace("\n", "\\n", $title);
+
+			$image = $story->image;
+
+			$choices = $story->choices;
+			$choices = str_replace("'", "\'", $choices);
+			$choices = str_replace("\n", "<br>", $choices);
+
+			$current_theme = $activity->theme ?? 'beach';
+
+			$themes = ['beach', 'jungle', 'mid-autumn', 'moon', 'rabbit', 'space', 'taipei'];
+
+			$type_description = 'A series of multiple choice stories. Tap the choice to proceed.';
+
+			return view($view, compact('title', 'image', 'type_description', 'current_theme', 'themes', 'activity_id', 'choices', 'step'));
+		}
 	}

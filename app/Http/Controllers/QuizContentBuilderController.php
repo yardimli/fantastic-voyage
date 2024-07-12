@@ -123,6 +123,100 @@
 
 		}
 
+		public function createNextCliffhanger(Request $request)
+		{
+			$user = $request->user();
+			$user_id = $user->id ?? 0;
+			$activity_id = $request->input('activity_id') ?? 0;
+			$answer_index = $request->input('answer_index') ?? 0;
+			$choice = $request->input('choice') ?? '';
+			$step = $request->input('step') ?? 1;
+
+			//check if $activity_id exists
+			$activity = Activity::where('id', $activity_id)
+				->first();
+			if ($activity === null) {
+				return response()->json(['error' => 'Activity not found']);
+			}
+
+			$next_step = $step + 1;
+			//check if $next_step story_data exists
+			$story_data = StoryData::where('activity_id', $activity_id)
+				->where('step', $next_step)
+				->first();
+
+			if ($story_data !== null) {
+				return response()->json(array(
+					'title' => $activity->title,
+					'image' => $story_data->image,
+					'choices' => json_decode($story_data->choices),
+					'step' => $next_step,
+					'success' => true
+				));
+			}
+
+			//check if step story_data exists
+			$story_data = StoryData::where('activity_id', $activity_id)
+				->where('step', $step)
+				->first();
+			if ($story_data === null) {
+				return response()->json(['error' => 'Story Data not found']);
+			}
+
+			//update step choice
+			$story_data->choice = $choice;
+			$story_data->save();
+
+			$story_history = '';
+			$story_steps = StoryData::where('activity_id', $activity_id)
+				->orderBy('step', 'asc')
+				->get();
+			foreach ($story_steps as $story_step) {
+				$story_history .= $story_step->choice . "\n\n";
+			}
+
+			$language = $activity->language;
+			$voice_id = $activity->voice_id;
+
+			$rst = $this->buildCliffhangerContent($activity->prompt, $activity->title, $story_history, $next_step, $language);
+
+			if ($rst['success'] === false) {
+				return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
+			}
+
+			foreach ($rst['choices'] as $key => $choice) {
+				if (!empty($voice_id)) {
+					$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $choice['text']);
+				} else {
+					$tts_results = ['audio_path' => '', 'filename' => ''];
+				}
+				$rst['choices'][$key]['audio'] = $tts_results['audio_path'];
+			}
+
+			$story = new StoryData();
+			$story->user_id = $user_id;
+			$story->activity_id = $activity_id;
+			$story->step = $next_step;
+			$story->title = $activity->title;
+			$story->image = $rst['coverImage'];
+			$story->choices = json_encode($rst['choices']);
+			$story->choice = '';
+			$story->language = $language;
+			$story->json_data = json_encode($rst['returnJSON']);
+			$story->save();
+
+			return response()->json(array(
+				'title' => $rst['title'],
+				'image' => $rst['coverImage'],
+				'choices' => $rst['choices'],
+				'step' => $next_step,
+				'success' => true
+			));
+
+
+		}
+
+
 
 		public function addNewVoyage(Request $request)
 		{
@@ -141,7 +235,56 @@
 			Log::info('---------------Log addNewVoyage--------------------------');
 			Log::info('content-type: ' . $content_type . ' user_content: ' . $user_content . ' language: ' . $language . ' voice_id: ' . $voice_id . ' quantity: ' . $quantity . ' new_num: ' . $new_num . ' new_id: ' . $new_id . ' return_json: ' . $return_json);
 
-			if ($content_type === 'story') {
+			if ($content_type === 'cliffhanger') {
+				$rst = $this->buildCliffhangerContent($user_content, '', '', 1, $language);
+
+				if ($rst['success'] === false) {
+					return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
+				}
+
+				$activity = new Activity();
+				$activity->user_id = $user_id;
+				$activity->title = $rst['title'];
+				$activity->cover_image = $rst['coverImage'];
+				$activity->keywords = '';
+				$activity->question_count = $quantity;
+				$activity->voice_id = $voice_id;
+				$activity->language = $language;
+				$activity->prompt = $user_content;
+				$activity->type = 'story';
+				$activity->theme = 'space';
+				$activity->is_deleted = 0;
+				$activity->save();
+
+				$insertId = $activity->id;
+
+				foreach ($rst['choices'] as $key => $choice) {
+					if (!empty($voice_id)) {
+						$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $choice['text']);
+					} else {
+						$tts_results = ['audio_path' => '', 'filename' => ''];
+					}
+					$rst['choices'][$key]['audio'] = $tts_results['audio_path'];
+				}
+
+
+				$story = new StoryData();
+				$story->user_id = $user_id;
+				$story->activity_id = $insertId;
+				$story->step = 1;
+				$story->title = $rst['title'];
+				$story->image = $rst['coverImage'];
+				$story->choices = json_encode($rst['choices']);
+				$story->choice = '';
+				$story->language = $language;
+				$story->json_data = json_encode($rst['returnJSON']);
+				$story->save();
+
+				$rst['activity_id'] = $insertId;
+				$rst['success'] = true;
+
+				return response()->json($rst);
+			} else if ($content_type === 'story') {
 				$rst = $this->buildStoryContent($user_content, '', '', 1, $language);
 
 				if ($rst['success'] === false) {
@@ -403,6 +546,80 @@
 			MyHelper::replicate_create_image_sdxl_lightning($chapterCoverImageFilename, $chapterImagePrompt);
 
 			return array('title' => $storyTitle, 'chapterText' => $chapterText, 'coverImage' => '/storage/quiz_images/' . $chapterCoverImageFilename, 'choices' => $chapterChoices, 'returnJSON' => $complete_json, 'success' => true);
+		}
+
+
+		//-------------------------------------------------------------------------------------------
+		public function buildCliffhangerContent($user_content, $story_title, $prev_chapter, $step, $language)
+		{
+			$prompt = "Using the prompt:" . $user_content . ".\nWrite 2 alternative first chapters. Each chapter should be 2-3 sentence long. Each chapter should end with a cliffhanger. The story should be written in " . $language ;
+
+			$schema_str = file_get_contents(public_path('texts/cliffhanger-first-chapter.json'));
+			if ($prev_chapter !== '') {
+
+				$prompt = "Story Title: " . $story_title . ".\nStory Prompt: " . $user_content . ".\nThe Story so far:\n" . $prev_chapter . ".\n\nContinue writing 2 alternative chapters that continue the story. Each chapter should be 2-3 sentence long. Follow the original story prompt: ".$user_content .". Each chapter should end with a cliffhanger. The story should be written in " . $language. "";
+
+				$schema_str = file_get_contents(public_path('texts/cliffhanger-second-chapter.json'));
+			}
+
+			$prompt .= "\n\nThe story should be written in " . $language;
+
+
+			$chat_messages = [];
+			$chat_messages[] = [
+				'role' => 'system',
+				'content' => 'You are an expert story teller.'
+			];
+			$chat_messages[] = [
+				'role' => 'user',
+				'content' => $prompt
+			];
+
+			$schema = json_decode($schema_str, true);
+
+			$complete_json = $this->openAI_question($chat_messages, $schema, 1, 3680, 'gpt-4o'); // 'gpt-4o' 'gpt-3.5-turbo');
+			$complete_rst = json_decode($complete_json['complete'], true);
+			Log::info('---------------Log complete_rst--------------------------');
+			Log::info($chat_messages);
+			Log::info($schema);
+			Log::info($complete_rst);
+			$content = $complete_rst['choices'][0]['message']['tool_calls'][0]['function']['arguments'];
+			$content_array = json_decode($content, true);
+			Log::info($content_array);
+
+			if ($prev_chapter === '') {
+				$storyTitle = $content_array['storyTitle'];
+				$chapterImagePrompt = $content_array['storyImagePrompt'];
+			} else {
+				$storyTitle = $story_title;
+				$chapterImagePrompt = '';
+			}
+
+
+			if (empty($content_array['chapterChoices'])) {
+				return array('title' => $storyTitle, 'coverImage' => $chapterImagePrompt, 'choices' => [], 'returnJSON' => $complete_json, 'success' => false);
+			}
+			$timestamp = time();
+
+			$chapterChoices = [];
+			for ($i = 0; $i < count($content_array['chapterChoices']); $i++) {
+				$chapterImageFilename = 'chapter_image_' . $timestamp . '_C' . $step . 'A' . ($i + 1) . '.png';
+				MyHelper::replicate_create_image_sdxl_lightning($chapterImageFilename, $content_array['chapterChoices'][$i]['choiceImagePrompt']);
+
+				$chapterChoices[] = array('text' => $content_array['chapterChoices'][$i]['choiceText'], 'audio' => '', 'image' => '/storage/quiz_images/' . $chapterImageFilename);
+			}
+
+			if ($prev_chapter === '') {
+				$chapterCoverImageFilename = 'chapter_image_cover_' . $timestamp . '.png';
+				MyHelper::replicate_create_image_sdxl_lightning($chapterCoverImageFilename, $chapterImagePrompt);
+				$chapterCoverImageFilepath = '/storage/quiz_images/' . $chapterCoverImageFilename;
+			} else
+			{
+				$chapterCoverImageFilename = '';
+				$chapterCoverImageFilepath = '';
+			}
+
+			return array('title' => $storyTitle, 'coverImage' => $chapterCoverImageFilepath, 'choices' => $chapterChoices, 'returnJSON' => $complete_json, 'success' => true);
 		}
 
 		//-------------------------------------------------------------------------------------------
