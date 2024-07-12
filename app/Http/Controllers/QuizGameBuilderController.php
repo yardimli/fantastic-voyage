@@ -104,6 +104,10 @@
 				->orderBy('id', 'desc')
 				->first();
 
+			if (!$story) {
+				return json_encode(['error' => 'No story found']);
+			}
+
 			$activity = Activity::where('user_id', $user_id)
 				->where('id', $activity_id)
 				->first();
@@ -167,9 +171,17 @@
 				->orderBy('id', 'desc')
 				->first();
 
+			if (!$story) {
+				return json_encode(['error' => 'No story found', 'user_id' => $user_id, 'activity_id' => $activity_id, 'step' => $step]);
+			}
+
 			$activity = Activity::where('user_id', $user_id)
 				->where('id', $activity_id)
 				->first();
+
+			if (!$activity) {
+				return json_encode(['error' => 'No activity found', 'user_id' => $user_id, 'activity_id' => $activity_id, 'step' => $step]);
+			}
 
 			$title = $activity->title;
 			$title = str_replace("'", "\'", $title);

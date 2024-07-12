@@ -20,8 +20,18 @@
 							<div class="row">
 								@foreach($activities as $activity)
 									<div class="col-6 col-xl-3 mb-3">
+										@php
+											$dataLink = '';
+											if ($activity['type'] === 'quiz') {
+													$dataLink = route('load-game-in-page', [$activity['id']]);
+											} elseif ($activity['type'] === 'story') {
+													$dataLink = route('load-story-in-page', [$activity['id']]);
+											} elseif ($activity['type'] === 'cliffhanger') {
+													$dataLink = route('load-cliffhanger-in-page', [$activity['id']]);
+											}
+										@endphp
 										<div class="activity-card"
-										     data-link="{{ $activity['type'] === 'quiz' ? route('load-game-in-page',[ $activity['id']]) : route('load-story-in-page', [ $activity['id']]) }}"
+										     data-link="{{ $dataLink }}"
 										     style="cursor:pointer; height: 200px; width: 100%; border: 1px solid #ccc; border-radius: 5px; background: {{ $activity['cover_image'] ? 'url('.str_replace('.png', '-512.jpg', $activity['cover_image']).') center/cover no-repeat' : '' }}; text-align: center; color:white;">
 											<div class="d-flex flex-column justify-content-between align-items-center"
 											     style="height: 180px;">

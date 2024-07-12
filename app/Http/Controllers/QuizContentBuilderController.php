@@ -251,8 +251,8 @@
 				$activity->voice_id = $voice_id;
 				$activity->language = $language;
 				$activity->prompt = $user_content;
-				$activity->type = 'story';
-				$activity->theme = 'space';
+				$activity->type = 'cliffhanger';
+				$activity->theme = 'moon';
 				$activity->is_deleted = 0;
 				$activity->save();
 
