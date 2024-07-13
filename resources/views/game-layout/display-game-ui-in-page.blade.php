@@ -6,7 +6,7 @@
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}"/>
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}"/>
 	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
-	<script src="{{ asset('assets/js/quiz-game.js') }}"></script>
+	<script src="{{ asset('assets/js/play-quiz.js') }}"></script>
 	<div class="container" style="margin-top: 60px;">
 		
 		<div id="breadcrumbs" class="pt-2 pb-2">

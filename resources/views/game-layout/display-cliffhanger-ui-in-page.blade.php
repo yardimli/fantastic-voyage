@@ -46,8 +46,8 @@
 			</div>
 			<div id="main-div" style="overflow: hidden;" class="hide-main-div">
 				<div id="question-image-div">
-					<img class="question-img" id="current-question-img" src="">
-					<img class="question-img" id="next-question-img" src="" style="display: none;">
+					<img class="question-img" id="current-question-img" src="" style="position:absolute; top:0px; left:0px;">
+					<img class="question-img" id="next-question-img" src="" style="display: none; position:absolute; top:0px; left:0px;">
 				</div>
 				<div id="answers-div"></div>
 				<div id="story-footer" style="text-align: center;">

@@ -25,7 +25,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.css">
 
     <link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
-    <script src="{{ asset('assets/js/quiz-game.js') }}"></script>
+    <script src="{{ asset('assets/js/play-quiz.js') }}"></script>
 
     <!-- Preload the answer image -->
     <link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}"/>

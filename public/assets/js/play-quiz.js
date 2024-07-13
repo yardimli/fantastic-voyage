@@ -627,7 +627,11 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	var bottomDivHeight;
 	var bottomDivsWidth;
 	var questionImageDivHeight;
+	var buttonWidthMultiplier = 1.2;
+	var imageWidthMultiplier = 0.8;
 	if (windowWidth < 600) {
+		buttonWidthMultiplier = 1;
+		imageWidthMultiplier = 1;
 		questionImageDivHeight = (parseInt(mainDiv.style.height) - questionDivHeight - headerDivHeight - footerDivHeight) / 3;
 		bottomDivHeight = (parseInt(mainDiv.style.height) - questionDivHeight - headerDivHeight - footerDivHeight) / 3 * 2;
 		bottomDivsWidth = parseInt(mainDiv.style.width);
@@ -640,7 +644,7 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	var questionImageDivPadding = 10;
 	var questionImageDiv = document.getElementById('question-image-div');
 	insertQuestionImage(questionImage);
-	questionImageDiv.style.width = (bottomDivsWidth - questionImageDivPadding) + 'px';
+	questionImageDiv.style.width = ((bottomDivsWidth - questionImageDivPadding)*imageWidthMultiplier) + 'px';
 	questionImageDiv.style.height = (questionImageDivHeight - questionImageDivPadding) + 'px';
 	questionImageDiv.style.top = questionDivHeight + headerDivHeight + 'px';
 	questionImageDiv.style.left = '0px';
@@ -660,12 +664,14 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	}
 	
 	var answersDiv = document.getElementById('answers-div');
-	answersDiv.style.width = bottomDivsWidth + 'px';
+	answersDiv.style.width = (bottomDivsWidth*buttonWidthMultiplier) + 'px';
 	answersDiv.style.height = bottomDivHeight + 'px';
 	answersDiv.style.top = (windowWidth < 600) ? (headerDivHeight + questionDivHeight + questionImageDivHeight) + 'px' : headerDivHeight + questionDivHeight + 'px';
-	answersDiv.style.left = (windowWidth < 600) ? '0px' : bottomDivsWidth + 'px';
+	answersDiv.style.left = (windowWidth < 600) ? '0px' : (bottomDivsWidth*imageWidthMultiplier) + 'px';
 	
 	if (questionImageDiv.style.display == 'none') {
+		buttonWidthMultiplier = 1;
+		imageWidthMultiplier = 1;
 		// If questionImageDiv is not visible, set answersDiv to 100% width
 		answersDiv.style.width = mainDiv.style.width;
 		answersDiv.style.top = headerDivHeight + questionDivHeight + 'px';
@@ -688,8 +694,8 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	var columns = answers.length > 4 ? 3 : 2;
 	for (var i = 0; i < answers.length; i++) {
 		var button = document.createElement('div');
-		button.style.width = (bottomDivsWidth / columns - 10) + 'px'; // Subtracting 10 for padding
-		buttonWidth = (bottomDivsWidth / columns - 10);
+		button.style.width = ((bottomDivsWidth*buttonWidthMultiplier) / columns - 10) + 'px'; // Subtracting 10 for padding
+		buttonWidth = ((bottomDivsWidth*buttonWidthMultiplier) / columns - 10);
 		button.style.height = (answers.length == 2 ? bottomDivHeight : bottomDivHeight / 2 - 10) + 'px'; // Subtracting 10 for padding
 		buttonHeight = (answers.length == 2 ? bottomDivHeight : bottomDivHeight / 2 - 10);
 		button.style.top = (i < columns ? 0 : bottomDivHeight / 2) + 'px';
@@ -697,10 +703,10 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 			if (i % 3 === 0) {
 				button.style.left = 0;
 			} else {
-				button.style.left = (i % 3 === 1 ? bottomDivsWidth / 3 + 5 : (bottomDivsWidth / 3 + 5) * 2) + 'px';
+				button.style.left = (i % 3 === 1 ? (bottomDivsWidth*buttonWidthMultiplier) / 3 + 5 : ((bottomDivsWidth*buttonWidthMultiplier) / 3 + 5) * 2) + 'px';
 			}
 		} else {
-			button.style.left = (i % 2 === 0 ? 5 : bottomDivsWidth / 2 + 5) + 'px';
+			button.style.left = (i % 2 === 0 ? 5 : (bottomDivsWidth*buttonWidthMultiplier) / 2 + 5) + 'px';
 		}
 		
 		button.className = 'answer-btn';

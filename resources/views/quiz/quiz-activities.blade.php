@@ -57,9 +57,9 @@
 									</div>
 								@endforeach
 							</div>
-							<div class="mt-4">
-								<a href="{{ route('quiz-builder') }}" class="btn btn-info">{{__('default.Create New Quiz')}}</a>
-							</div>
+{{--							<div class="mt-4">--}}
+{{--								<a href="{{ route('quiz-builder') }}" class="btn btn-info">{{__('default.Create New Quiz')}}</a>--}}
+{{--							</div>--}}
 						</div>
 					</div>
 				</div>
