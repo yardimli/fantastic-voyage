@@ -402,10 +402,10 @@
 
 			$complete_json = $this->openAI_question($chat_messages, $schema, 1, 3680, 'gpt-4o'); // 'gpt-4o' 'gpt-3.5-turbo');
 			$complete_rst = json_decode($complete_json['complete'], true);
-			Log::info('---------------Log complete_rst--------------------------');
-			Log::info($chat_messages);
-			Log::info($schema);
-			Log::info($complete_rst);
+//			Log::info('---------------Log complete_rst--------------------------');
+//			Log::info($chat_messages);
+//			Log::info($schema);
+//			Log::info($complete_rst);
 //			$content = $complete_rst['choices'][0]['message']['function_call']['arguments'];
 			$content = $complete_rst['choices'][0]['message']['tool_calls'][0]['function']['arguments'];
 			Log::info($content);
@@ -426,7 +426,7 @@
 			$quizImagePrompt = $content_array['quizImagePrompt'];
 
 			$quizCoverImageFilename = 'quiz_image_cover_' . $timestamp . '.png';
-			MyHelper::replicate_create_image_sdxl_lightning($quizCoverImageFilename, $quizImageKeywords . ', ' . $quizImagePrompt);
+			MyHelper::stability_ai_create_image($quizCoverImageFilename, $quizImageKeywords . ', ' . $quizImagePrompt);
 
 			if ($content_array !== null) {
 				foreach ($content_array['quizSet'] as $index => &$quiz) {
@@ -434,7 +434,7 @@
 					$id = $next_id + $index;
 
 					$image_filename = 'quiz_image_' . $timestamp . '_Q' . $id . '.png';
-					MyHelper::replicate_create_image_sdxl_lightning($image_filename, $quizImageKeywords . ', ' . $quiz['image_prompt']);
+					MyHelper::stability_ai_create_image($image_filename, $quizImageKeywords . ', ' . $quiz['image_prompt']);
 
 					$question_array = [];
 					$question_array['id'] = 'Q' . $id;
@@ -514,10 +514,10 @@
 
 			$complete_json = $this->openAI_question($chat_messages, $schema, 1, 3680, 'gpt-4o'); // 'gpt-4o' 'gpt-3.5-turbo');
 			$complete_rst = json_decode($complete_json['complete'], true);
-			Log::info('---------------Log complete_rst--------------------------');
-			Log::info($chat_messages);
-			Log::info($schema);
-			Log::info($complete_rst);
+//			Log::info('---------------Log complete_rst--------------------------');
+//			Log::info($chat_messages);
+//			Log::info($schema);
+//			Log::info($complete_rst);
 			$content = $complete_rst['choices'][0]['message']['tool_calls'][0]['function']['arguments'];
 			$content_array = json_decode($content, true);
 			Log::info($content_array);
@@ -543,7 +543,7 @@
 			$timestamp = time();
 
 			$chapterCoverImageFilename = 'chapter_image_cover_' . $timestamp . '.png';
-			MyHelper::replicate_create_image_sdxl_lightning($chapterCoverImageFilename, $chapterImagePrompt);
+			MyHelper::stability_ai_create_image($chapterCoverImageFilename, $chapterImagePrompt);
 
 			return array('title' => $storyTitle, 'chapterText' => $chapterText, 'coverImage' => '/storage/quiz_images/' . $chapterCoverImageFilename, 'choices' => $chapterChoices, 'returnJSON' => $complete_json, 'success' => true);
 		}
@@ -579,10 +579,10 @@
 
 			$complete_json = $this->openAI_question($chat_messages, $schema, 1, 3680, 'gpt-4o'); // 'gpt-4o' 'gpt-3.5-turbo');
 			$complete_rst = json_decode($complete_json['complete'], true);
-			Log::info('---------------Log complete_rst--------------------------');
-			Log::info($chat_messages);
-			Log::info($schema);
-			Log::info($complete_rst);
+//			Log::info('---------------Log complete_rst--------------------------');
+//			Log::info($chat_messages);
+//			Log::info($schema);
+//			Log::info($complete_rst);
 			$content = $complete_rst['choices'][0]['message']['tool_calls'][0]['function']['arguments'];
 			$content_array = json_decode($content, true);
 			Log::info($content_array);
@@ -604,14 +604,14 @@
 			$chapterChoices = [];
 			for ($i = 0; $i < count($content_array['chapterChoices']); $i++) {
 				$chapterImageFilename = 'chapter_image_' . $timestamp . '_C' . $step . 'A' . ($i + 1) . '.png';
-				MyHelper::replicate_create_image_sdxl_lightning($chapterImageFilename, $content_array['chapterChoices'][$i]['choiceImagePrompt']);
+				MyHelper::stability_ai_create_image($chapterImageFilename, $content_array['chapterChoices'][$i]['choiceImagePrompt']);
 
 				$chapterChoices[] = array('text' => $content_array['chapterChoices'][$i]['choiceText'], 'audio' => '', 'image' => '/storage/quiz_images/' . $chapterImageFilename);
 			}
 
 			if ($prev_chapter === '') {
 				$chapterCoverImageFilename = 'chapter_image_cover_' . $timestamp . '.png';
-				MyHelper::replicate_create_image_sdxl_lightning($chapterCoverImageFilename, $chapterImagePrompt);
+				MyHelper::stability_ai_create_image($chapterCoverImageFilename, $chapterImagePrompt);
 				$chapterCoverImageFilepath = '/storage/quiz_images/' . $chapterCoverImageFilename;
 			} else
 			{

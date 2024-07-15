@@ -15,6 +15,8 @@
 	use Illuminate\Support\Facades\Storage;
 	use Illuminate\Support\Facades\Validator;
 	use Illuminate\Support\Str;
+	use GuzzleHttp\Client;
+	use GuzzleHttp\Exception\RequestException;
 
 	class MyHelper
 	{
@@ -312,6 +314,119 @@
 			Session::start();
 		}
 
+		public static function replicate_create_image_proteus($image_filename, $prompt)
+		{
+			Log::info('replicate_create_image_proteus image with file: ' . $image_filename . ' and prompt: ' . $prompt);
+
+			//make sure folder exists
+			$save_folder = Storage::disk('public')->path('quiz_images');
+			if (!file_exists($save_folder)) {
+				mkdir($save_folder, 0777, true);
+			}
+
+			$save_path = Storage::disk('public')->path('quiz_images/' . $image_filename);
+			$image_url = Storage::disk('public')->url('quiz_images/' . $image_filename);
+
+			Log::info('image_url: ' . $image_url);
+			Log::info('save_path: ' . $save_path);
+
+			Session::save();
+
+			$url = 'https://api.replicate.com/v1/predictions';
+			$ch = curl_init($url);
+
+			$payload = json_encode(array(
+				'version' => '06775cd262843edbde5abab958abdbb65a0a6b58ca301c9fd78fa55c775fc019',
+				'input' => array(
+					'prompt' => $prompt,
+					'width' => 1024,
+					'height' => 1024,
+					'scheduler' => 'KarrasDPM',
+					'guidance_scale' => 7.5,
+					'negative_prompt' => 'worst quality, low quality',
+					'num_inference_steps' => 20,
+					'disable_safety_checker' => true,
+					'apply_watermark' => false,
+				)
+			));
+
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Authorization: Token ' . env('REPLICATE_TOKEN'),
+				'Content-Type: application/json'
+			));
+
+			# Return response instead of printing.
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			# Send request.
+			$result = curl_exec($ch);
+
+			if (curl_exec($ch) === false) {
+				Log::info('replicate_create_image_proteus error: ');
+				Log::info(curl_error($ch));
+			}
+
+			curl_close($ch);
+			# Print response.
+
+			$result_json = json_decode($result, true);
+			Log::info('replicate_create_image_proteus result: ');
+			Log::info($result_json);
+
+			//wait for url
+			$check_url = $result_json['urls']['get'];
+
+			$found_image = false;
+			$check_count = 0;
+
+			while (!$found_image && $check_count < 14) {
+				sleep(1);
+				$check_count++;
+
+				$ch = curl_init($check_url);
+
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'Authorization: Token ' . env('REPLICATE_TOKEN'),
+					'Content-Type: application/json'
+				));
+
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+				# Return response instead of printing.
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				# Send request.
+
+				$result = curl_exec($ch);
+
+				curl_close($ch);
+				# Print response.
+				$upscale_result_json = json_decode($result, true);
+
+				Log::info('replicate_create_image_proteus check result: ');
+				Log::info($upscale_result_json);
+				//check if output key exists
+				if (array_key_exists('output', $upscale_result_json)) {
+					if ($upscale_result_json['output'] != null) {
+						if ($upscale_result_json['output'][0] != null) {
+							file_put_contents($save_path, file_get_contents($upscale_result_json['output'][0]));
+							$found_image = true;
+							//save the image as a jpg
+							$image = imagecreatefrompng($save_path);
+							imagejpeg($image, str_replace('.png', '.jpg', $save_path));
+
+							$image = imagecreatefrompng($save_path);
+							$image = imagescale($image, 512);
+							imagejpeg($image, str_replace('.png', '-512.jpg', $save_path));
+						}
+					}
+				}
+			}
+			Session::start();
+		}
+
 		public static function eleven_labs_text_to_speech($voice_id, $text)
 		{
 			$url = 'https://api.elevenlabs.io/v1/text-to-speech/' . $voice_id;
@@ -386,6 +501,75 @@
 					'audio_path' => '/storage/question_audio/' . $filename,
 					'filename' => $filename,
 				];
+			}
+		}
+
+
+		public static function stability_ai_create_image($image_filename, $prompt)
+		{
+
+			Log::info('stability_ai_create_image image with file: ' . $image_filename . ' and prompt: ' . $prompt);
+
+			$stabilityApiKey = env('STABILITY_API_KEY', null);
+			if (empty($stabilityApiKey)) {
+				Log::error('STABILITY_API_KEY environment variable is not set');
+				return response()->json(['error' => 'STABILITY_API_KEY environment variable is not set'], 500);
+			}
+
+			//make sure folder exists
+			$save_folder = Storage::disk('public')->path('quiz_images');
+			if (!file_exists($save_folder)) {
+				mkdir($save_folder, 0777, true);
+			}
+
+			$save_path = Storage::disk('public')->path('quiz_images/' . $image_filename);
+			$image_url = Storage::disk('public')->url('quiz_images/' . $image_filename);
+
+			Log::info('image_url: ' . $image_url);
+			Log::info('save_path: ' . $save_path);
+
+			$url = "https://api.stability.ai/v2beta/stable-image/generate/sd3";
+
+			$request_data = [
+				'headers' => [
+					'Accept' => 'image/*',
+					'Authorization' => 'Bearer ' . $stabilityApiKey
+				],
+				'multipart' => [
+					[
+						'name' => 'prompt',
+						'contents' => $prompt
+					],
+					[
+						'name' => 'mode',
+						'contents' => 'text-to-image'
+					],
+					[
+						'name' => 'model',
+						'contents' => 'sd3-large-turbo' //sd3-large, sd3-medium, sd3-large-turbo
+					],
+//					[
+//						'name' => 'negative_prompt',
+//						'contents' => 'ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face'
+//					]
+				],
+				'sink' => $save_path
+			];
+
+			$client = new Client();
+			try {
+				$response = $client->request('POST', $url, $request_data);
+
+				$image = imagecreatefrompng($save_path);
+				imagejpeg($image, str_replace('.png', '.jpg', $save_path));
+
+				$image = imagecreatefrompng($save_path);
+				$image = imagescale($image, 512);
+				imagejpeg($image, str_replace('.png', '-512.jpg', $save_path));
+
+				return response()->json(['success' => 'Image generated successfully', 'output_file' => $save_path], 200);
+			} catch (GuzzleException $e) {
+				return response()->json(['error' => 'Error generating image', 'message' => $e->getMessage()], 500);
 			}
 		}
 	}
