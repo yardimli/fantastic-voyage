@@ -12,7 +12,7 @@
 						<div id="breadcrumbs" class="mt-2">
 							<span class="breadcrumb-separator fas fa-chevron-right"></span>
 							<span
-								class="clickable-breadcrumb breadcrumb selected-breadcrumb">{{$type === 'quiz' ? "Quizzes" : "Stories"}}</span>
+								class="clickable-breadcrumb breadcrumb selected-breadcrumb">{{$type === 'quiz' ? "Quizzes" : "Investigations"}}</span>
 						</div>
 					</div>
 					<div class="card-body">
@@ -23,9 +23,9 @@
 										@php
 											$dataLink = '';
 											if ($activity['type'] === 'quiz') {
-													$dataLink = route('load-game-in-page', [$activity['id']]);
-											} elseif ($activity['type'] === 'story') {
-													$dataLink = route('load-story-in-page', [$activity['id']]);
+													$dataLink = route('load-quiz-in-page', [$activity['id']]);
+											} elseif ($activity['type'] === 'investigation') {
+													$dataLink = route('load-investigation-in-page', [$activity['id']]);
 											} elseif ($activity['type'] === 'cliffhanger') {
 													$dataLink = route('load-cliffhanger-in-page', [$activity['id']]);
 											}

@@ -20,6 +20,67 @@
 	class QuizBuilderController extends Controller
 	{
 
+		public function createQuestionImage(Request $request)
+		{
+			$user_id = Auth::user()->id ?? 0;
+			$question_id = $request->question_id ?? 0;
+			$activity_id = $request->activity_id ?? 0;
+			$update_field = $request->update_field ?? '';
+			$image_filename = '';
+
+			Log::info('createQuestionImage: ' . $question_id . ' -- ' . $activity_id . ' -- ' . $update_field);
+
+			$activity = Activity::where('id', $activity_id)
+				->first();
+
+			if ($activity) {
+				$quizImageKeywords = $activity['keywords'] ?? '';
+
+				$activity_update = ActivityData::where('activity_id', $activity_id)
+					->where('user_id', $user_id)
+					->orderBy('id', 'desc')
+					->first();
+
+				if ($activity_update) {
+					$json_data = json_decode($activity_update->json_data, true);
+					$timestamp = time();
+					$image_filename = '';
+
+					if ($json_data && isset($json_data['questions'])) {
+						foreach ($json_data['questions'] as &$question) {
+							if ($question['id'] === $question_id) {
+								if ($update_field === 'question') {
+
+									if ($question['image'] !== '' && $question['image'] !== null) {
+										$image_filename = $question['image'];
+									} else {
+										$image_filename = 'quiz_image_' . $timestamp . '_Q' . $question_id . '.png';
+										MyHelper::stability_ai_create_image($image_filename, $quizImageKeywords . ', ' . $question['image_prompt']);
+
+										$question['image'] = '/storage/quiz_images/' . $image_filename;
+									}
+								}
+								break;
+							}
+						}
+
+						$activity_update->json_data = json_encode($json_data);
+						$activity_update->save();
+					}
+					return response()->json(array('image_path' => '/storage/quiz_images/' . $image_filename));
+				} else
+				{
+					return response()->json([
+						'error' => 'Activity data not found.',
+					]);
+				}
+			} else
+			{
+				return response()->json([
+					'error' => 'Activity not found.',
+				]);
+			}
+		}
 
 		public function convertTextToSpeech(Request $request)
 		{
@@ -42,8 +103,7 @@
 
 			if (!empty($voice_id)) {
 				$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $text);
-			} else
-			{
+			} else {
 				$tts_results = ['audio_path' => '', 'filename' => ''];
 			}
 
@@ -160,7 +220,7 @@
 
 				// Redirect to the quiz-builder route,
 				// passing through the new activity's id
-				return redirect()->route('quiz-builder', [ 'activity_id' => $activity->id]);
+				return redirect()->route('quiz-builder', ['activity_id' => $activity->id]);
 			} else {
 				$activity = Activity::find($activity_id);
 				$title = $activity->title ?? "";
@@ -286,7 +346,6 @@
 			Storage::put($storagePath . $fileName, $contents);
 		}
 
-
 		public function quizItemBuildJson(Request $request)
 		{
 			if (!Auth::user()) {
@@ -388,7 +447,7 @@
 			//loop all $activity['cover_image'] and check if they exist
 			foreach ($activities as $activity) {
 				if (!empty($activity['cover_image'])) {
-					$cover_image =  base_path(str_replace('/storage/quiz_images/','storage/app/public/quiz_images/', $activity['cover_image']));
+					$cover_image = base_path(str_replace('/storage/quiz_images/', 'storage/app/public/quiz_images/', $activity['cover_image']));
 
 					$cover_image_jpg = str_replace('.png', '.jpg', $cover_image);
 					if (!file_exists($cover_image_jpg) && file_exists($cover_image)) {

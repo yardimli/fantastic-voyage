@@ -74,7 +74,7 @@ $(document).ready(function () {
 		
 		if (isOnMobile && displayInPage) {
 			var activity_id = $('#activity_id').val();
-			var gameUrl = '/load-story/' + activity_id;
+			var gameUrl = '/load-investigation/' + activity_id;
 			window.open(gameUrl, '_blank');
 		} else {
 			// Hide the #preload-page
@@ -237,7 +237,7 @@ function goToNextQuestion(answerIndex) {
 	//load the next question call LLM AJAX
 	$.ajax({
 		type: "POST",
-		url: "/create-next-story",
+		url: "/create-next-investigation",
 		data: {
 			activity_id: $('#activity_id').val(),
 			answer_index: answerIndex,

@@ -19,7 +19,7 @@
 	class QuizContentBuilderController extends Controller
 	{
 
-		public function createNextStory(Request $request)
+		public function createNextInvestigation(Request $request)
 		{
 			$user = $request->user();
 			$user_id = $user->id ?? 0;
@@ -68,14 +68,15 @@
 					'chapter_text' => $story_data->chapter_text,
 					'chapter_voice' => $story_data->chapter_voice,
 					'choices' => json_decode($story_data->choices),
-					'step' => $next_step
+					'step' => $next_step,
+					'success' => true
 				));
 			}
 
 			$language = $activity->language;
 			$voice_id = $activity->voice_id;
 
-			$rst = $this->buildStoryContent($activity->prompt, $activity->title, $story_history, $next_step, $language);
+			$rst = $this->buildInvestigationContent($activity->prompt, $activity->title, $story_history, $next_step, $language);
 
 			if ($rst['success'] === false) {
 				return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
@@ -145,12 +146,17 @@
 				->where('step', $next_step)
 				->first();
 
+			$total_steps = StoryData::where('activity_id', $activity_id)
+				->count();
+
 			if ($story_data !== null) {
 				return response()->json(array(
 					'title' => $activity->title,
 					'image' => $story_data->image,
 					'choices' => json_decode($story_data->choices),
+					'choice' => $story_data->choice,
 					'step' => $next_step,
+					'total_steps' => $total_steps,
 					'success' => true
 				));
 			}
@@ -205,18 +211,22 @@
 			$story->json_data = json_encode($rst['returnJSON']);
 			$story->save();
 
+
+			$total_steps = StoryData::where('activity_id', $activity_id)
+				->count();
+
 			return response()->json(array(
 				'title' => $rst['title'],
 				'image' => $rst['coverImage'],
 				'choices' => $rst['choices'],
+				'choice' => '',
 				'step' => $next_step,
+				'total_steps' => $total_steps,
 				'success' => true
 			));
 
 
 		}
-
-
 
 		public function addNewVoyage(Request $request)
 		{
@@ -284,8 +294,8 @@
 				$rst['success'] = true;
 
 				return response()->json($rst);
-			} else if ($content_type === 'story') {
-				$rst = $this->buildStoryContent($user_content, '', '', 1, $language);
+			} else if ($content_type === 'investigation') {
+				$rst = $this->buildInvestigationContent($user_content, '', '', 1, $language);
 
 				if ($rst['success'] === false) {
 					return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
@@ -433,13 +443,14 @@
 					$num = $next_num + $index;
 					$id = $next_id + $index;
 
-					$image_filename = 'quiz_image_' . $timestamp . '_Q' . $id . '.png';
-					MyHelper::stability_ai_create_image($image_filename, $quizImageKeywords . ', ' . $quiz['image_prompt']);
+//					$image_filename = 'quiz_image_' . $timestamp . '_Q' . $id . '.png';
+//					MyHelper::stability_ai_create_image($image_filename, $quizImageKeywords . ', ' . $quiz['image_prompt']);
 
 					$question_array = [];
 					$question_array['id'] = 'Q' . $id;
 					$question_array['text'] = $quiz['question'];
-					$question_array['image'] = '/storage/quiz_images/' . $image_filename;
+					$question_array['image'] = null; //'/storage/quiz_images/' . $image_filename;
+					$question_array['image_prompt'] = $quiz['image_prompt'];
 					$question_array['audio'] = null;
 					$question_array['audio_tts'] = null;
 					$question_array['voice_id'] = $voice_id;
@@ -485,16 +496,16 @@
 
 
 		//-------------------------------------------------------------------------------------------
-		public function buildStoryContent($user_content, $story_title, $prev_chapter, $step, $language)
+		public function buildInvestigationContent($user_content, $story_title, $prev_chapter, $step, $language)
 		{
 			$prompt = "Create an interactive story with the story text and four, 2-3 sentence choices of how the story might continue. Use the following topic: " . $user_content . ". The story can be fact or fiction.";
 
-			$schema_str = file_get_contents(public_path('texts/story-first-chapter.json'));
+			$schema_str = file_get_contents(public_path('texts/investigation-first-chapter.json'));
 			if ($prev_chapter !== '') {
 
 				$prompt = "Create an interactive story with the story text and four, 2-3 sentence choices of how the story might continue. Use the following topic: " . $user_content . ". This is the " . $step . ". step of the story. The previous texts and choices are:\n\n" . $prev_chapter . ".";
 
-				$schema_str = file_get_contents(public_path('texts/story-second-chapter.json'));
+				$schema_str = file_get_contents(public_path('texts/investigation-second-chapter.json'));
 			}
 
 			$prompt .= "\n\nThe story should be written in " . $language;
@@ -552,12 +563,12 @@
 		//-------------------------------------------------------------------------------------------
 		public function buildCliffhangerContent($user_content, $story_title, $prev_chapter, $step, $language)
 		{
-			$prompt = "Using the prompt:" . $user_content . ".\nWrite 2 alternative first chapters. Each chapter should be 2-3 sentence long. Each chapter should end with a cliffhanger. The story should be written in " . $language ;
+			$prompt = "Story prompt:" . $user_content . ".\nStory language: " . $language ;
 
 			$schema_str = file_get_contents(public_path('texts/cliffhanger-first-chapter.json'));
 			if ($prev_chapter !== '') {
 
-				$prompt = "Story Title: " . $story_title . ".\nStory Prompt: " . $user_content . ".\nThe Story so far:\n" . $prev_chapter . ".\n\nContinue writing 2 alternative chapters that continue the story. Each chapter should be 2-3 sentence long. Follow the original story prompt: ".$user_content .". Each chapter should end with a cliffhanger. The story should be written in " . $language. "";
+				$prompt = "Story Title: " . $story_title . ".\nStory Prompt: " . $user_content . ".\nThe Story so far:\n" . $prev_chapter . ".\nStory language:" . $language;
 
 				$schema_str = file_get_contents(public_path('texts/cliffhanger-second-chapter.json'));
 			}

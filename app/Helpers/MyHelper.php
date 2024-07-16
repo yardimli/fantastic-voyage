@@ -159,7 +159,7 @@
 			$check_count = 0;
 
 			while (!$found_image && $check_count < 14) {
-				sleep(1);
+				sleep(4);
 				$check_count++;
 
 				$ch = curl_init($check_url);
@@ -269,7 +269,7 @@
 			$check_count = 0;
 
 			while (!$found_image && $check_count < 14) {
-				sleep(1);
+				sleep(4);
 				$check_count++;
 
 				$ch = curl_init($check_url);
@@ -382,7 +382,7 @@
 			$check_count = 0;
 
 			while (!$found_image && $check_count < 14) {
-				sleep(1);
+				sleep(4);
 				$check_count++;
 
 				$ch = curl_init($check_url);
@@ -406,6 +406,227 @@
 				$upscale_result_json = json_decode($result, true);
 
 				Log::info('replicate_create_image_proteus check result: ');
+				Log::info($upscale_result_json);
+				//check if output key exists
+				if (array_key_exists('output', $upscale_result_json)) {
+					if ($upscale_result_json['output'] != null) {
+						if ($upscale_result_json['output'][0] != null) {
+							file_put_contents($save_path, file_get_contents($upscale_result_json['output'][0]));
+							$found_image = true;
+							//save the image as a jpg
+							$image = imagecreatefrompng($save_path);
+							imagejpeg($image, str_replace('.png', '.jpg', $save_path));
+
+							$image = imagecreatefrompng($save_path);
+							$image = imagescale($image, 512);
+							imagejpeg($image, str_replace('.png', '-512.jpg', $save_path));
+						}
+					}
+				}
+			}
+			Session::start();
+		}
+
+		public static function replicate_create_image_playground($image_filename, $prompt)
+		{
+			Log::info('replicate_create_image_playground image with file: ' . $image_filename . ' and prompt: ' . $prompt);
+
+			//make sure folder exists
+			$save_folder = Storage::disk('public')->path('quiz_images');
+			if (!file_exists($save_folder)) {
+				mkdir($save_folder, 0777, true);
+			}
+
+			$save_path = Storage::disk('public')->path('quiz_images/' . $image_filename);
+			$image_url = Storage::disk('public')->url('quiz_images/' . $image_filename);
+
+			Log::info('image_url: ' . $image_url);
+			Log::info('save_path: ' . $save_path);
+
+			Session::save();
+
+			$url = 'https://api.replicate.com/v1/predictions';
+			$ch = curl_init($url);
+
+			$payload = json_encode(array(
+				'version' => 'a45f82a1382bed5c7aeb861dac7c7d191b0fdf74d8d57c4a0e6ed7d4d0bf7d24',
+				'input' => array(
+					'prompt' => $prompt,
+					'negative_prompt' => 'worst quality, low quality',
+					'width' => 1024,
+					'height' => 1024,
+					'scheduler' => 'DPMSolver++',
+					'num_inference_steps' => 25,
+					'guidance_scale' => 3,
+					'disable_safety_checker' => true,
+					'apply_watermark' => false,
+				)
+			));
+
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Authorization: Token ' . env('REPLICATE_TOKEN'),
+				'Content-Type: application/json'
+			));
+
+			# Return response instead of printing.
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			# Send request.
+			$result = curl_exec($ch);
+
+			if (curl_exec($ch) === false) {
+				Log::info('replicate_create_image_playground error: ');
+				Log::info(curl_error($ch));
+			}
+
+			curl_close($ch);
+			# Print response.
+
+			$result_json = json_decode($result, true);
+			Log::info('replicate_create_image_playground result: ');
+			Log::info($result_json);
+
+			//wait for url
+			$check_url = $result_json['urls']['get'];
+
+			$found_image = false;
+			$check_count = 0;
+
+			while (!$found_image && $check_count < 14) {
+				sleep(3);
+				$check_count++;
+
+				$ch = curl_init($check_url);
+
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'Authorization: Token ' . env('REPLICATE_TOKEN'),
+					'Content-Type: application/json'
+				));
+
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+				# Return response instead of printing.
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				# Send request.
+
+				$result = curl_exec($ch);
+
+				curl_close($ch);
+				# Print response.
+				$upscale_result_json = json_decode($result, true);
+
+				Log::info('replicate_create_image_playground check result: ');
+				Log::info($upscale_result_json);
+				//check if output key exists
+				if (array_key_exists('output', $upscale_result_json)) {
+					if ($upscale_result_json['output'] != null) {
+						if ($upscale_result_json['output'][0] != null) {
+							file_put_contents($save_path, file_get_contents($upscale_result_json['output'][0]));
+							$found_image = true;
+							//save the image as a jpg
+							$image = imagecreatefrompng($save_path);
+							imagejpeg($image, str_replace('.png', '.jpg', $save_path));
+
+							$image = imagecreatefrompng($save_path);
+							$image = imagescale($image, 512);
+							imagejpeg($image, str_replace('.png', '-512.jpg', $save_path));
+						}
+					}
+				}
+			}
+			Session::start();
+		}
+
+		public static function replicate_create_image_sd3($image_filename, $prompt)
+		{
+			Log::info('replicate_create_image_sd3 image with file: ' . $image_filename . ' and prompt: ' . $prompt);
+
+			//make sure folder exists
+			$save_folder = Storage::disk('public')->path('quiz_images');
+			if (!file_exists($save_folder)) {
+				mkdir($save_folder, 0777, true);
+			}
+
+			$save_path = Storage::disk('public')->path('quiz_images/' . $image_filename);
+			$image_url = Storage::disk('public')->url('quiz_images/' . $image_filename);
+
+			Log::info('image_url: ' . $image_url);
+			Log::info('save_path: ' . $save_path);
+
+			Session::save();
+
+			$url = 'https://api.replicate.com/v1/models/stability-ai/stable-diffusion-3/predictions';
+			$ch = curl_init($url);
+
+			$payload = json_encode(array(
+				'input' => array(
+					'prompt' => $prompt,
+					'aspect_ratio' => '1:1',
+					'output_format' => 'png',
+					'cfg' => 3.5,
+					'steps' => 28,
+				)
+			));
+
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Authorization: Token ' . env('REPLICATE_TOKEN'),
+				'Content-Type: application/json'
+			));
+
+			# Return response instead of printing.
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			# Send request.
+			$result = curl_exec($ch);
+
+			if (curl_exec($ch) === false) {
+				Log::info('replicate_create_image_sd3 error: ');
+				Log::info(curl_error($ch));
+			}
+
+			curl_close($ch);
+			# Print response.
+
+			$result_json = json_decode($result, true);
+			Log::info('replicate_create_image_sd3 result: ');
+			Log::info($result_json);
+
+			//wait for url
+			$check_url = $result_json['urls']['get'];
+
+			$found_image = false;
+			$check_count = 0;
+
+			while (!$found_image && $check_count < 14) {
+				sleep(3);
+				$check_count++;
+
+				$ch = curl_init($check_url);
+
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'Authorization: Token ' . env('REPLICATE_TOKEN'),
+					'Content-Type: application/json'
+				));
+
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+				# Return response instead of printing.
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				# Send request.
+
+				$result = curl_exec($ch);
+
+				curl_close($ch);
+				# Print response.
+				$upscale_result_json = json_decode($result, true);
+
+				Log::info('replicate_create_image_sd3 check result: ');
 				Log::info($upscale_result_json);
 				//check if output key exists
 				if (array_key_exists('output', $upscale_result_json)) {

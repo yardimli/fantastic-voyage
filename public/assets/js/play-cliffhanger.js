@@ -11,6 +11,7 @@ let runningTimer;
 let seconds = 0, minutes = 0;
 let currentImage = null;
 let waitForMouseMoveInteraction = 2;
+let currentTransition = null;
 
 //look at the user agent to determine if the user is on a mobile device
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -31,7 +32,7 @@ function startProgressBar() {
 		if (progress >= 100) {
 			clearInterval(progressInterval);
 		}
-	}, 125);
+	}, 200);
 }
 
 function stopProgressBar() {
@@ -101,7 +102,7 @@ $(document).ready(function () {
 		
 		if (isOnMobile && displayInPage) {
 			var activity_id = $('#activity_id').val();
-			var gameUrl = '/load-story/' + activity_id;
+			var gameUrl = '/load-cliffhanger/' + activity_id;
 			window.open(gameUrl, '_blank');
 		} else {
 			// Hide the #preload-page
@@ -117,6 +118,103 @@ $(document).ready(function () {
 			showStory(true);
 			// $('.page-controller').css('display', 'block');
 			$('#start-story').css('display', 'none');
+		}
+	});
+	
+	
+	$('#prev').on('click', function () {
+		continueAudioPlayback = false;
+		if (currentAudio) {
+			currentAudio.pause();
+			currentAudio.currentTime = 0;
+		}
+		if (chapter_step > 1) {
+			$('#loading-page').fadeIn();
+			startProgressBar();
+
+			chapter_step--;
+			updateButtonStates(chapter_step);
+			$.ajax({
+				type: "POST",
+				url: "/cliffhanger-get-step",
+				data: {
+					activity_id: $('#activity_id').val(),
+					step: chapter_step,
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function (data) {
+					stopProgressBar();
+					$('#loading-page').fadeOut();
+					console.log(data);
+					if (data.result) {
+						story_title = data.activity.title;
+						chapter_image = data.activity.cover_image;
+						chapter_choices = {"choices": data.story.choices};
+						active_choice = data.story.choice || '';
+						waitForMouseMoveInteraction = 1;
+						showStory(true);
+					} else
+					{
+						alert('Step not found');
+					}
+				},
+				error: function (data) {
+					stopProgressBar();
+					$('#loading-page').fadeOut();
+					console.log('Error:', data);
+					alert('Error: ' + data.message);
+				}
+			});
+		}
+	});
+	
+	$('#next').on('click', function () {
+		if (currentAudio) {
+			continueAudioPlayback = false;
+			currentAudio.pause();
+			currentAudio.currentTime = 0;
+		}
+		
+		if (chapter_step < total_steps ) {
+			$('#loading-page').fadeIn();
+			startProgressBar();
+
+			chapter_step++;
+			updateButtonStates(chapter_step);
+			$.ajax({
+				type: "POST",
+				url: "/cliffhanger-get-step",
+				data: {
+					activity_id: $('#activity_id').val(),
+					step: chapter_step,
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function (data) {
+					stopProgressBar();
+					$('#loading-page').fadeOut();
+					console.log(data);
+					if (data.result) {
+						chapter_image = data.story.image;
+						chapter_choices = {"choices": data.story.choices};
+						active_choice = data.story.choice || '';
+						waitForMouseMoveInteraction = 1;
+						showStory(true);
+					} else
+					{
+						alert('Step not found');
+					}
+				},
+				error: function (data) {
+					stopProgressBar();
+					$('#loading-page').fadeOut();
+					console.log('Error:', data);
+					alert('Error: ' + data.message);
+				}
+			});
 		}
 	});
 	
@@ -163,8 +261,6 @@ $(document).ready(function () {
 		}, 1500);
 		
 	});
-	
-	let currentTransition = null;
 	
 	$(document).on('mousemove', '.story-answer-btn', function () {
 		if (waitForMouseMoveInteraction <= 0) {
@@ -291,8 +387,7 @@ $(document).ready(function () {
 			}
 		});
 	});
-})
-;
+});
 
 function goToNextChapter(answerIndex) {
 	if (currentAudio) {
@@ -319,10 +414,10 @@ function goToNextChapter(answerIndex) {
 		},
 		success: function (data) {
 			stopProgressBar();
+			$('#loading-page').fadeOut();
 			console.log(data);
 			var chapter_success = data.success;
 			if (!chapter_success) {
-				$('#loading-page').fadeOut();
 				alert('Please try again');
 				return;
 			}
@@ -330,7 +425,9 @@ function goToNextChapter(answerIndex) {
 			chapter_step = data.step;
 			chapter_image = data.image;
 			chapter_choices = {"choices": data.choices};
-			$('#loading-page').fadeOut();
+			active_choice = data.choice || '';
+			total_steps = data.total_steps;
+			
 			waitForMouseMoveInteraction = 2;
 			showStory(true);
 			
@@ -338,6 +435,7 @@ function goToNextChapter(answerIndex) {
 		},
 		error: function (data) {
 			stopProgressBar();
+			$('#loading-page').fadeOut();
 			console.log('Error:', data);
 			alert('Error: ' + data);
 		}
@@ -364,9 +462,7 @@ window.addEventListener('resize', function () {
 
 function showStory(autoPlayAudio) {
 	let ajaxPromises = [];
-	
-	// $('#loading-page').show();
-	// $('#loading-page').fadeOut();
+
 	
 	var chapterImageDiv = document.getElementById('question-image-div');
 	var answersDiv = document.getElementById('answers-div');
@@ -395,6 +491,30 @@ function showStory(autoPlayAudio) {
 		fadeIn = true;
 	}
 	
+	updateButtonStates(chapter_step);
+}
+
+function __(key, replacements) {
+	let translation = window.translations[key] || '';
+	
+	Object.keys(replacements).forEach(function (placeholder) {
+		translation = translation.replace(':' + placeholder, replacements[placeholder]);
+	});
+	
+	return translation;
+}
+
+function updateButtonStates(chapter_step) {
+	var pageCounterDiv = document.getElementById('page-counter');
+	let pageInfo = __('default.num_of_num', {index: chapter_step, total: total_steps});
+	pageCounterDiv.textContent = pageInfo;
+	// Disable or enable buttons depending on chapter_step
+	$('#prev').prop('disabled', chapter_step === 1);
+	$('#next').prop('disabled', chapter_step === total_steps );
+	
+	// Optionally, add a class for styling disabled buttons
+	$('#prev').toggleClass('disabled', chapter_step === 1);
+	$('#next').toggleClass('disabled', chapter_step === total_steps );
 }
 
 function resizeDivToWindowSize() {
@@ -504,6 +624,10 @@ function resizeDivToWindowSize() {
 		answerText.innerHTML = chapter_choices.choices[i]['text'];
 		button.appendChild(answerText);
 		
+		if (chapter_choices.choices[i]['text'] === active_choice) {
+			button.classList.add('previously-selected-answer-placeholder');
+		}
+		
 		if (chapter_choices.choices[i]['audio'] !== null && chapter_choices.choices[i]['audio'] !== '') {
 			var ansAudioImage = document.createElement('img');
 			ansAudioImage.src = '/assets/phaser/images/sound.png';
@@ -531,15 +655,26 @@ function resizeDivToWindowSize() {
 	
 	
 	let initalDelay = 500;
-	if (chapter_step === 1) {
+	if (chapter_step === 1 && active_choice === '') {
 		initalDelay = 2500;
 	}
 // Remove the button-opacity-0 class and add slide-in with delay
 	$('.story-answer-btn').each(function (index) {
 		var $button = $(this);
-		console.log(index);
+		// console.log(index);
 		setTimeout(function () {
 			$button.removeClass('button-opacity-0').addClass('slide-in');
+			if ($button.hasClass('previously-selected-answer-placeholder')) {
+				$button.removeClass('previously-selected-answer-placeholder');
+				$button.addClass('previously-selected-answer');
+				$button.find('.answer-bg-img').addClass('previously-selected-answer');
+				//set question image to the current answer image
+				var answerImage = chapter_choices.choices[index].image;
+				if (answerImage !== null && answerImage !== '') {
+					$('#current-question-img').attr('src', answerImage);
+					$("#next-question-img").attr('src', answerImage);
+				}
+			}
 		}, initalDelay + (index * 250));
 	});
 	

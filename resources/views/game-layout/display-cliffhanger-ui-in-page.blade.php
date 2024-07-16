@@ -51,11 +51,15 @@
 				</div>
 				<div id="answers-div"></div>
 				<div id="story-footer" style="text-align: center;">
-					<div id="timer" style="display: none;">00:00</div>
-					<div class="page-controller" style="display: none;">
+					<div class="page-controller" style="display: inline-block;">
+						<i class="fa fa-caret-left" id="prev"></i>
 						<span id="page-counter"></span>
+						<i class="fa fa-caret-right" id="next"></i>
 					</div>
-					<i class="fa fa-caret-right audio-control-btn" id="start-story"></i>
+					
+					<div id="timer" style="display: none; float:left;">00:00</div>
+
+					<i class="fa fa-caret-right" id="start-story"></i>
 				
 				</div>
 			</div>
@@ -84,11 +88,13 @@
 		
 		@push('scripts')
 			<script>
+				let total_steps = {{ $total_steps }};
 				let chapter_step = {{ $step }};
 				let story_title = '{!! $title !!}';
 				let type_description = '{!! $type_description !!}';
 				let chapter_image = '{!! $image !!}';
 				let chapter_choices = {"choices": {!! $choices !!}};
+				let active_choice = '{!! $choice !!}';
 				let current_theme = '{!! $current_theme !!}';
 				window.translations = {
 					'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'

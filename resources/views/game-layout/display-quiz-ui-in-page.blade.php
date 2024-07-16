@@ -6,6 +6,11 @@
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}"/>
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}"/>
 	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
+	<style>
+      .hidden-layer {
+          display: none !important;
+      }
+	</style>
 	<script src="{{ asset('assets/js/play-quiz.js') }}"></script>
 	<div class="container" style="margin-top: 60px;">
 		
@@ -27,9 +32,12 @@
 		<input type="hidden" id="activity_id" value="{{$activity_id}}">
 		<div id="game-ui-in-page" class="prevent-select">
 			@include('game-layout.phaser-game-background', ['animation' => $current_theme, 'view_target' => 'game-ui-in-page']) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
-			<div id="loading-page">
+			<div id="loading-page" class="hidden-layer">
 				<div style="margin: auto;">
-					<div style="font-size: 64px; font-weight: bold;">{{ __('default.Loading...') }}</div>
+					<div style="font-size: 64px; font-weight: bold;">Getting Next Question...</div>
+					<div id="progress-bar-container" style="width: 100%; height: 30px; background-color: #ddd; margin-top: 20px;">
+						<div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
+					</div>
 				</div>
 			</div>
 			<div id="preload-page">
@@ -52,11 +60,11 @@
 				<div id="answers-div"></div>
 				<div id="quiz-footer" style="text-align: center;">
 					<div class="page-controller" style="display: none;">
-						<i class="fa fa-caret-left audio-control-btn" id="prev"></i>
+						<i class="fa fa-caret-left" id="prev"></i>
 						<span id="page-counter"></span>
-						<i class="fa fa-caret-right audio-control-btn" id="next"></i>
+						<i class="fa fa-caret-right" id="next"></i>
 					</div>
-					<i class="fa fa-caret-right audio-control-btn" id="start-quiz"></i>
+					<i class="fa fa-caret-right" id="start-quiz"></i>
 				
 				</div>
 			</div>

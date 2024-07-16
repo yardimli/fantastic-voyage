@@ -15,10 +15,34 @@ let runningTimer;
 let seconds = 0, minutes = 0;
 let scoreDisplay = null;
 let score = 0;
+
 //look at the user agent to determine if the user is on a mobile device
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 	isOnMobile = true;
 }
+
+let progressBar;
+let progressInterval;
+
+function startProgressBar() {
+	let progress = 0;
+	const progressBarElement = document.getElementById('progress-bar');
+	
+	progressInterval = setInterval(() => {
+		progress += 0.5; // Increase by 0.5% every 100ms
+		progressBarElement.style.width = `${progress}%`;
+		
+		if (progress >= 100) {
+			clearInterval(progressInterval);
+		}
+	}, 200);
+}
+
+function stopProgressBar() {
+	clearInterval(progressInterval);
+	document.getElementById('progress-bar').style.width = '100%';
+}
+
 $(document).ready(function () {
 	timerDisplay = document.getElementById('timer');
 	scoreDisplay = document.getElementById('score');
@@ -27,7 +51,9 @@ $(document).ready(function () {
 	title = game_title;
 	var questions = data['questions'];
 	currentQuestion = questions[currentIndex];
+	
 	$('#loading-page').hide();
+	$("#loading-page").removeClass("hidden-layer");
 	
 	$('#preload-page .quiz-title').text(title);
 	$('#quiz-type-description').text(type_description);
@@ -90,7 +116,7 @@ $(document).ready(function () {
 		
 		if (isOnMobile && displayInPage) {
 			var activity_id = $('#activity_id').val();
-			var gameUrl = '/load-game/' + activity_id;
+			var gameUrl = '/load-quiz/' + activity_id;
 			window.open(gameUrl, '_blank');
 		} else {
 			// Hide the #preload-page
@@ -389,10 +415,36 @@ function showQuestion(question, currentIndex, autoPlayAudio) {
 	
 	let ajaxPromises = [];
 	
-	$('#loading-page').show();
+	if (currentAudio) {
+		continueAudioPlayback = false;
+		currentAudio.pause();
+		currentAudio.currentTime = 0;
+	}
+
+	$('#loading-page').fadeIn();
+	startProgressBar();
 	
+	if (question['image'] === null) {
+		ajaxPromises.push(
+			$.ajax({
+				url: '/create-question-image',
+				type: 'POST',
+				data: {
+					question_id: question['id'],
+					activity_id: $('#activity_id').val(),
+					update_field: 'question'
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			}).then(function (response) {
+				question['image'] = response.image_path;
+				questionImage = response.image_path;
+			})
+		);
+	}
 	
-	if (question['voice_id'] !== null && question['audio'] === null) {
+	if (question['voice_id'] !== null && question['voice_id'] !== '' && question['audio'] === null) {
 		ajaxPromises.push(
 			$.ajax({
 				url: '/convert-text-to-speech',
@@ -440,7 +492,10 @@ function showQuestion(question, currentIndex, autoPlayAudio) {
 	});
 	
 	Promise.all(ajaxPromises).then(() => {
-		$('#loading-page').hide();
+
+		stopProgressBar();
+		$('#loading-page').fadeOut();
+
 		var questionDiv = document.getElementById('question-div');
 		var questionImageDiv = document.getElementById('question-image-div');
 		var answersDiv = document.getElementById('answers-div');
@@ -644,7 +699,7 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	var questionImageDivPadding = 10;
 	var questionImageDiv = document.getElementById('question-image-div');
 	insertQuestionImage(questionImage);
-	questionImageDiv.style.width = ((bottomDivsWidth - questionImageDivPadding)*imageWidthMultiplier) + 'px';
+	questionImageDiv.style.width = ((bottomDivsWidth - questionImageDivPadding) * imageWidthMultiplier) + 'px';
 	questionImageDiv.style.height = (questionImageDivHeight - questionImageDivPadding) + 'px';
 	questionImageDiv.style.top = questionDivHeight + headerDivHeight + 'px';
 	questionImageDiv.style.left = '0px';
@@ -664,10 +719,10 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	}
 	
 	var answersDiv = document.getElementById('answers-div');
-	answersDiv.style.width = (bottomDivsWidth*buttonWidthMultiplier) + 'px';
+	answersDiv.style.width = (bottomDivsWidth * buttonWidthMultiplier) + 'px';
 	answersDiv.style.height = bottomDivHeight + 'px';
 	answersDiv.style.top = (windowWidth < 600) ? (headerDivHeight + questionDivHeight + questionImageDivHeight) + 'px' : headerDivHeight + questionDivHeight + 'px';
-	answersDiv.style.left = (windowWidth < 600) ? '0px' : (bottomDivsWidth*imageWidthMultiplier) + 'px';
+	answersDiv.style.left = (windowWidth < 600) ? '0px' : (bottomDivsWidth * imageWidthMultiplier) + 'px';
 	
 	if (questionImageDiv.style.display == 'none') {
 		buttonWidthMultiplier = 1;
@@ -694,8 +749,8 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 	var columns = answers.length > 4 ? 3 : 2;
 	for (var i = 0; i < answers.length; i++) {
 		var button = document.createElement('div');
-		button.style.width = ((bottomDivsWidth*buttonWidthMultiplier) / columns - 10) + 'px'; // Subtracting 10 for padding
-		buttonWidth = ((bottomDivsWidth*buttonWidthMultiplier) / columns - 10);
+		button.style.width = ((bottomDivsWidth * buttonWidthMultiplier) / columns - 10) + 'px'; // Subtracting 10 for padding
+		buttonWidth = ((bottomDivsWidth * buttonWidthMultiplier) / columns - 10);
 		button.style.height = (answers.length == 2 ? bottomDivHeight : bottomDivHeight / 2 - 10) + 'px'; // Subtracting 10 for padding
 		buttonHeight = (answers.length == 2 ? bottomDivHeight : bottomDivHeight / 2 - 10);
 		button.style.top = (i < columns ? 0 : bottomDivHeight / 2) + 'px';
@@ -703,10 +758,10 @@ function resizeDivToWindowSize(questionText, questionImage, questionAudio, answe
 			if (i % 3 === 0) {
 				button.style.left = 0;
 			} else {
-				button.style.left = (i % 3 === 1 ? (bottomDivsWidth*buttonWidthMultiplier) / 3 + 5 : ((bottomDivsWidth*buttonWidthMultiplier) / 3 + 5) * 2) + 'px';
+				button.style.left = (i % 3 === 1 ? (bottomDivsWidth * buttonWidthMultiplier) / 3 + 5 : ((bottomDivsWidth * buttonWidthMultiplier) / 3 + 5) * 2) + 'px';
 			}
 		} else {
-			button.style.left = (i % 2 === 0 ? 5 : (bottomDivsWidth*buttonWidthMultiplier) / 2 + 5) + 'px';
+			button.style.left = (i % 2 === 0 ? 5 : (bottomDivsWidth * buttonWidthMultiplier) / 2 + 5) + 'px';
 		}
 		
 		button.className = 'answer-btn';

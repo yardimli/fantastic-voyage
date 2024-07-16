@@ -77,7 +77,6 @@
 		// terms
 		public function terms(Request $request)
 		{
-			// Fetch last 10 stories
 			return view('user.terms');
 		}
 

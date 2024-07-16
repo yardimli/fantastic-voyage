@@ -16,13 +16,13 @@
 							<h1 class="h5 mb-0">Thank You!</h1>
 						</div>
 						<div class="card-body p-3">
-							Thank you for verifying your email address. You man now start creating your stories.
+							Thank you for verifying your email address. You man now start creating your activities.
 							<br>
 							<br>
-							You can start writing your story by clicking the "Compose" link above.
+							You can start creating your activity by clicking the "Compose" link above.
 							<br>
 							<br>
-							To view your stories, click the "My Stories" link above.
+							To view your activities, click the "My Activities" link above.
 							<br>
 							<br>
 							<div style="text-align: center; ">

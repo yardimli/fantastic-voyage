@@ -645,7 +645,7 @@ $(document).ready(function () {
 			$('#preview-confirm').modal('show');
 		}else{
 			isEdit = false;
-			var url = preview == 'in-page' ? '/load-game-in-page/' + activity_id : '/load-game/' + activity_id;
+			var url = preview == 'in-page' ? '/load-quiz-in-page/' + activity_id : '/load-game/' + activity_id;
 			window.open(url, '_blank');
 		}
 
@@ -718,7 +718,7 @@ $(document).ready(function () {
 			success: function (data) {
 				isEdit = false;
 				$('#preview-confirm').modal('hide');
-				var url = preview == 'in-page' ? '/load-game-in-page/' + activity_id : '/load-game/' + activity_id;
+				var url = preview == 'in-page' ? '/load-quiz-in-page/' + activity_id : '/load-game/' + activity_id;
 				window.open(url, '_blank');
 			}
 		});

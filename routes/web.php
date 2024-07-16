@@ -95,26 +95,26 @@
 	Route::post('/set-theme', [QuizBuilderController::class, 'setTheme'])->name('set-theme');
 
 	Route::post('/quiz-content-builder-json', [QuizContentBuilderController::class, 'addNewVoyage'])->name('quiz-content-builder-json');
-	Route::get('/fetch_progress', [QuizContentBuilderController::class, 'fetchProgress'])->name('fetch_progress');
 
-	Route::post('/create-next-story', [QuizContentBuilderController::class, 'createNextStory'])->name('create-next-story');
+	Route::post('/create-question-image', [QuizBuilderController::class, 'createQuestionImage'])->name('create-question-image');
+
+
+	Route::post('/create-next-investigation', [QuizContentBuilderController::class, 'createNextInvestigation'])->name('create-next-investigation');
 
 	Route::post('/create-next-cliffhanger', [QuizContentBuilderController::class, 'createNextCliffhanger'])->name('create-next-cliffhanger');
 
 
-	Route::get('/load-game/{activity_id}/{question?}', [QuizGameBuilderController::class, 'index'])->name('load-game');
+	Route::get('/load-quiz/{activity_id}/{question?}', [QuizGameBuilderController::class, 'index'])->name('load-quiz');
+	Route::get('/load-quiz-in-page/{activity_id}/{question?}', [QuizGameBuilderController::class, 'inPage'])->name('load-quiz-in-page');
 
-	Route::get('/load-game-in-page/{activity_id}', [QuizGameBuilderController::class, 'inPage'])->name('load-game-in-page');
 
-
-	Route::get('/load-story/{activity_id}/{step?}', [QuizGameBuilderController::class, 'storyIndex'])->name('load-story');
-
-	Route::get('/load-story-in-page/{activity_id}', [QuizGameBuilderController::class, 'storyInPage'])->name('load-story-in-page');
+	Route::get('/load-investigation/{activity_id}/{step?}', [QuizGameBuilderController::class, 'investigationIndex'])->name('load-investigation');
+	Route::get('/load-investigation-in-page/{activity_id}/{step?}', [QuizGameBuilderController::class, 'investigationInPage'])->name('load-investigation-in-page');
 
 
 	Route::get('/load-cliffhanger/{activity_id}/{step?}', [QuizGameBuilderController::class, 'cliffhangerIndex'])->name('load-cliffhanger');
-
-	Route::get('/load-cliffhanger-in-page/{activity_id}', [QuizGameBuilderController::class, 'cliffhangerInPage'])->name('load-cliffhanger-in-page');
+	Route::get('/load-cliffhanger-in-page/{activity_id}/{step?}', [QuizGameBuilderController::class, 'cliffhangerInPage'])->name('load-cliffhanger-in-page');
+	Route::post('/cliffhanger-get-step', [QuizGameBuilderController::class, 'cliffhangerGetStep'])->name('cliffhanger-get-step');
 
 	Route::get('/landing', [StaticPagesController::class, 'landing'])->name('landing.page');
 

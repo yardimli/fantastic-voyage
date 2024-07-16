@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="fantastic-voyage.com">
 	<meta name="description"
-	      content="Fantastic Voyage - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge">
+	      content="Fantastic Voyage - Unleash the Creativity Within: Where Human Ingenuity and AI Creativity Converge">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	
 	<!-- Quiz Builder -->
@@ -189,7 +189,7 @@ Header START -->
 					</li>
 					
 					<li class="nav-item">
-						<a class="nav-link active" href="{{route('activities.page', ['type' => 'story'])}}">Stories</a>
+						<a class="nav-link active" href="{{route('activities.page', ['type' => 'investigation'])}}">Investigations</a>
 					</li>
 					
 					

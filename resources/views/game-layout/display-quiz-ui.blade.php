@@ -41,8 +41,10 @@
 				font-family: 'Heebo', sans-serif;
 				line-height: 1.25;
 			}
+       .hidden-layer {
+           display: none !important;
+       }
     </style>
-
 </head>
 <?php
 	$data = json_decode($json_data, true);
@@ -57,9 +59,12 @@
 <audio id="audio-player" style="display: none;"></audio>
 @include('game-layout.phaser-game-background', ['animation' => $current_theme]) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
 @if($question === null)
-    <div id="loading-page">
+    <div id="loading-page" class="hidden-layer">
         <div style="margin: auto;">
-            <div style="font-size: 64px; font-weight: bold;">{{ __('default.Loading...') }}</div>
+            <div style="font-size: 64px; font-weight: bold;">Getting Next Question...</div>
+            <div id="progress-bar-container" style="width: 100%; height: 30px; background-color: #ddd; margin-top: 20px;">
+                <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
+            </div>
         </div>
     </div>
     <div id="preload-page">

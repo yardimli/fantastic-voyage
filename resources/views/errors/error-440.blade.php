@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Error Stories')
+@section('title', 'Error 440')
 
 @section('content')
 

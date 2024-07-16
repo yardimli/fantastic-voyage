@@ -2,7 +2,7 @@
   "type": "function",
   "function": {
     "name": "create_quiz_questions",
-    "description": "Create a schema for a quiz that consists of questions with multiple answers. For each question there should be only one answer that is TRUE and the rest FALSE. There should be 4 answers for each question.",
+    "description": "A quiz schema that consists of questions with multiple answers. For each question there should be only one answer that is TRUE and the rest FALSE. There should be 4 answers for each question.",
     "parameters": {
       "type": "object",
       "properties": {
@@ -16,7 +16,7 @@
         },
         "quizImagePrompt": {
           "type": "string",
-          "description": "For the given topic create a cover image prompt that dalle can use to generate the image and abide to the following policy: // 1. The prompt must be in English. Translate to English if needed. // 3. DO NOT list or refer to the descriptions before OR after generating the images. // 4. Do not create more than 1 image."
+          "description": "For the given topic create a cover image prompt that dalle can use to generate the image and abide to the following policy: // 1. The prompt must be in English. Translate to English if needed. // 2. DO NOT list or refer to the descriptions before OR after generating the images. // 3. Do not create more than 1 image. //4. The prompt should include the words pixel art"
         },
         "quizSet": {
           "type": "array",
@@ -29,7 +29,7 @@
               },
               "image_prompt": {
                 "type": "string",
-                "description": "for the question text create a prompt that dalle can use to generate the image and abide to the following policy: // 1. The prompt must be in English. Translate to English if needed. // 3. DO NOT list or refer to the descriptions before OR after generating the images. // 4. Do not create more than 1 image."
+                "description": "for the question text create a prompt that dalle can use to generate the image and abide to the following policy: // 1. The prompt must be in English. Translate to English if needed. // 2. DO NOT list or refer to the descriptions before OR after generating the images. // 3. Do not create more than 1 image. //4. The prompt should include the words pixel art"
               },
               "answers": {
                 "type": "array",

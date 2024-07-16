@@ -47,7 +47,7 @@
 											        aria-label="Default select example">
 												<option value="" selected>Type</option>
 												<option value="quiz">Quiz</option>
-												<option value="story">Story</option>
+												<option value="investigation">Investigation</option>
 												<option value="cliffhanger">Cliffhanger</option>
 											</select>
 										</div>
@@ -72,7 +72,7 @@
 											@endforeach
 											<select class="form-select me-1 pe-5" aria-label="Default select example"
 											        id="voice_id">
-												<option selected for="voice_id">Silent</option>
+												<option selected for="voice_id" value="" data-voice-name="">Silent</option>
 												@foreach($voices['voices'] as $voice)
 														<?php
 //														var_dump($voice);
@@ -390,11 +390,11 @@
 							showMessage('Something went wrong with the AI. Please try again.');
 						} else {
 							if (content_type === 'quiz') {
-								window.location.href = '/load-game-in-page/' + data.activity_id;
+								window.location.href = '/load-quiz-in-page/' + data.activity_id;
 							} else if (content_type === 'cliffhanger') {
 								window.location.href = '/load-cliffhanger-in-page/' + data.activity_id;
-							} else if (content_type === 'story') {
-								window.location.href = '/load-story-in-page/' + data.activity_id;
+							} else if (content_type === 'investigation') {
+								window.location.href = '/load-investigation-in-page/' + data.activity_id;
 							}
 						}
 					},

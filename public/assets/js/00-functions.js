@@ -1,5 +1,5 @@
 /**
- * Fantastic Voyage - Unleash the Stories Within: Where Human Ingenuity and AI Creativity Converge
+ * Fantastic Voyage - Unleash the Creativity Within: Where Human Ingenuity and AI Creativity Converge
  *
  * @author Fantastic Voyage (https://www.fantastic-voyage.com/)
  * @version 1.1.0

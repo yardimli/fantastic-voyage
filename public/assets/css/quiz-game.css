@@ -429,3 +429,7 @@
 .hidden-layer {
 	display: none;
 }
+
+.previously-selected-answer {
+	opacity: 1 !important;
+}

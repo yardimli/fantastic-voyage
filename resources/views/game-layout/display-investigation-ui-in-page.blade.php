@@ -6,12 +6,12 @@
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}"/>
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}"/>
 	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
-	<script src="{{ asset('assets/js/play-story.js') }}"></script>
+	<script src="{{ asset('assets/js/play-investigation.js') }}"></script>
 	<div class="container" style="margin-top: 60px;">
 		
 		<div id="breadcrumbs" class="pt-2 pb-2">
 			<span class="breadcrumb-separator fas fa-chevron-right"></span>
-			<a class="clickable-breadcrumb breadcrumb" href="{{route('activities.page', ['type' => 'story'])}}">Stories</a>
+			<a class="clickable-breadcrumb breadcrumb" href="{{route('activities.page', ['type' => 'investigation'])}}">Investigations</a>
 			<span class="breadcrumb-separator fas fa-chevron-right"></span>
 			<span class="breadcrumb selected-breadcrumb">{{__('default.Play')}}</span>
 		</div>
@@ -44,7 +44,7 @@
 					<div class="page-controller" style="display: none;">
 						<span id="page-counter"></span>
 					</div>
-					<i class="fa fa-caret-right audio-control-btn" id="start-story"></i>
+					<i class="fa fa-caret-right" id="start-story"></i>
 				
 				</div>
 			</div>
