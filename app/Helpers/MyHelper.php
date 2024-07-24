@@ -140,7 +140,7 @@
 			# Send request.
 			$result = curl_exec($ch);
 
-			if (curl_exec($ch) === false) {
+			if ($result === false) {
 				Log::info('replicate_upscale_image error: ');
 				Log::info(curl_error($ch));
 			}
@@ -250,7 +250,7 @@
 			# Send request.
 			$result = curl_exec($ch);
 
-			if (curl_exec($ch) === false) {
+			if ($result === false) {
 				Log::info('replicate_create_image_sdxl_lightning error: ');
 				Log::info(curl_error($ch));
 			}
@@ -363,7 +363,7 @@
 			# Send request.
 			$result = curl_exec($ch);
 
-			if (curl_exec($ch) === false) {
+			if ($result === false) {
 				Log::info('replicate_create_image_proteus error: ');
 				Log::info(curl_error($ch));
 			}
@@ -476,7 +476,7 @@
 			# Send request.
 			$result = curl_exec($ch);
 
-			if (curl_exec($ch) === false) {
+			if ($result === false) {
 				Log::info('replicate_create_image_playground error: ');
 				Log::info(curl_error($ch));
 			}
@@ -584,7 +584,7 @@
 			# Send request.
 			$result = curl_exec($ch);
 
-			if (curl_exec($ch) === false) {
+			if ($result === false) {
 				Log::info('replicate_create_image_sd3 error: ');
 				Log::info(curl_error($ch));
 			}

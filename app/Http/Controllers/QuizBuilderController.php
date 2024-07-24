@@ -55,7 +55,7 @@
 										$image_filename = $question['image'];
 									} else {
 										$image_filename = 'quiz_image_' . $timestamp . '_Q' . $question_id . '.png';
-										MyHelper::stability_ai_create_image($image_filename, $quizImageKeywords . ', ' . $question['image_prompt']);
+										MyHelper::replicate_create_image_sd3($image_filename, $quizImageKeywords . ', ' . $question['image_prompt']);
 
 										$question['image'] = '/storage/quiz_images/' . $image_filename;
 									}

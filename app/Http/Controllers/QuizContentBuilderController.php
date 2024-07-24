@@ -436,7 +436,7 @@
 			$quizImagePrompt = $content_array['quizImagePrompt'];
 
 			$quizCoverImageFilename = 'quiz_image_cover_' . $timestamp . '.png';
-			MyHelper::stability_ai_create_image($quizCoverImageFilename, $quizImageKeywords . ', ' . $quizImagePrompt);
+			MyHelper::replicate_create_image_sd3($quizCoverImageFilename, $quizImageKeywords . ', ' . $quizImagePrompt);
 
 			if ($content_array !== null) {
 				foreach ($content_array['quizSet'] as $index => &$quiz) {
@@ -554,7 +554,7 @@
 			$timestamp = time();
 
 			$chapterCoverImageFilename = 'chapter_image_cover_' . $timestamp . '.png';
-			MyHelper::stability_ai_create_image($chapterCoverImageFilename, $chapterImagePrompt);
+			MyHelper::replicate_create_image_sd3($chapterCoverImageFilename, $chapterImagePrompt);
 
 			return array('title' => $storyTitle, 'chapterText' => $chapterText, 'coverImage' => '/storage/quiz_images/' . $chapterCoverImageFilename, 'choices' => $chapterChoices, 'returnJSON' => $complete_json, 'success' => true);
 		}
@@ -615,14 +615,14 @@
 			$chapterChoices = [];
 			for ($i = 0; $i < count($content_array['chapterChoices']); $i++) {
 				$chapterImageFilename = 'chapter_image_' . $timestamp . '_C' . $step . 'A' . ($i + 1) . '.png';
-				MyHelper::stability_ai_create_image($chapterImageFilename, $content_array['chapterChoices'][$i]['choiceImagePrompt']);
+				MyHelper::replicate_create_image_sd3($chapterImageFilename, $content_array['chapterChoices'][$i]['choiceImagePrompt']);
 
 				$chapterChoices[] = array('text' => $content_array['chapterChoices'][$i]['choiceText'], 'audio' => '', 'image' => '/storage/quiz_images/' . $chapterImageFilename);
 			}
 
 			if ($prev_chapter === '') {
 				$chapterCoverImageFilename = 'chapter_image_cover_' . $timestamp . '.png';
-				MyHelper::stability_ai_create_image($chapterCoverImageFilename, $chapterImagePrompt);
+				MyHelper::replicate_create_image_sd3($chapterCoverImageFilename, $chapterImagePrompt);
 				$chapterCoverImageFilepath = '/storage/quiz_images/' . $chapterCoverImageFilename;
 			} else
 			{
