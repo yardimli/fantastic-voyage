@@ -101,7 +101,7 @@
 
 	Route::post('/create-next-investigation', [QuizContentBuilderController::class, 'createNextInvestigation'])->name('create-next-investigation');
 
-	Route::post('/create-next-cliffhanger', [QuizContentBuilderController::class, 'createNextCliffhanger'])->name('create-next-cliffhanger');
+	Route::post('/create-next-two-path-adventure', [QuizContentBuilderController::class, 'createNextTwoPathAdventure'])->name('create-next-two-path-adventure');
 
 
 	Route::get('/load-quiz/{activity_id}/{question?}', [QuizGameBuilderController::class, 'index'])->name('load-quiz');
@@ -110,11 +110,12 @@
 
 	Route::get('/load-investigation/{activity_id}/{step?}', [QuizGameBuilderController::class, 'investigationIndex'])->name('load-investigation');
 	Route::get('/load-investigation-in-page/{activity_id}/{step?}', [QuizGameBuilderController::class, 'investigationInPage'])->name('load-investigation-in-page');
+	Route::post('/investigation-get-step', [QuizGameBuilderController::class, 'investigationGetStep'])->name('investigation-get-step');
 
 
-	Route::get('/load-cliffhanger/{activity_id}/{step?}', [QuizGameBuilderController::class, 'cliffhangerIndex'])->name('load-cliffhanger');
-	Route::get('/load-cliffhanger-in-page/{activity_id}/{step?}', [QuizGameBuilderController::class, 'cliffhangerInPage'])->name('load-cliffhanger-in-page');
-	Route::post('/cliffhanger-get-step', [QuizGameBuilderController::class, 'cliffhangerGetStep'])->name('cliffhanger-get-step');
+	Route::get('/load-two-path-adventure/{activity_id}/{step?}', [QuizGameBuilderController::class, 'twoPathAdventureIndex'])->name('load-two-path-adventure');
+	Route::get('/load-two-path-adventure-in-page/{activity_id}/{step?}', [QuizGameBuilderController::class, 'twoPathAdventureInPage'])->name('load-two-path-adventure-in-page');
+	Route::post('/two-path-adventure-get-step', [QuizGameBuilderController::class, 'twoPathAdventureGetStep'])->name('two-choice-adventure-get-step');
 
 	Route::get('/landing', [StaticPagesController::class, 'landing'])->name('landing.page');
 

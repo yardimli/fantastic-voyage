@@ -48,7 +48,7 @@
 												<option value="" selected>Type</option>
 												<option value="quiz">Quiz</option>
 												<option value="investigation">Investigation</option>
-												<option value="cliffhanger">Cliffhanger</option>
+												<option value="two-path-adventure">Two Path Adventure</option>
 											</select>
 										</div>
 									</div>
@@ -391,8 +391,8 @@
 						} else {
 							if (content_type === 'quiz') {
 								window.location.href = '/load-quiz-in-page/' + data.activity_id;
-							} else if (content_type === 'cliffhanger') {
-								window.location.href = '/load-cliffhanger-in-page/' + data.activity_id;
+							} else if (content_type === 'two-path-adventure') {
+								window.location.href = '/load-two-path-adventure-in-page/' + data.activity_id;
 							} else if (content_type === 'investigation') {
 								window.location.href = '/load-investigation-in-page/' + data.activity_id;
 							}

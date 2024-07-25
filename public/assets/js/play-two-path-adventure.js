@@ -102,7 +102,7 @@ $(document).ready(function () {
 		
 		if (isOnMobile && displayInPage) {
 			var activity_id = $('#activity_id').val();
-			var gameUrl = '/load-cliffhanger/' + activity_id;
+			var gameUrl = '/load-two-path-adventure/' + activity_id;
 			window.open(gameUrl, '_blank');
 		} else {
 			// Hide the #preload-page
@@ -136,7 +136,7 @@ $(document).ready(function () {
 			updateButtonStates(chapter_step);
 			$.ajax({
 				type: "POST",
-				url: "/cliffhanger-get-step",
+				url: "/two-path-adventure-get-step",
 				data: {
 					activity_id: $('#activity_id').val(),
 					step: chapter_step,
@@ -185,7 +185,7 @@ $(document).ready(function () {
 			updateButtonStates(chapter_step);
 			$.ajax({
 				type: "POST",
-				url: "/cliffhanger-get-step",
+				url: "/two-path-adventure-get-step",
 				data: {
 					activity_id: $('#activity_id').val(),
 					step: chapter_step,
@@ -402,7 +402,7 @@ function goToNextChapter(answerIndex) {
 	//load the next question call LLM AJAX
 	$.ajax({
 		type: "POST",
-		url: "/create-next-cliffhanger",
+		url: "/create-next-two-path-adventure",
 		data: {
 			activity_id: $('#activity_id').val(),
 			answer_index: answerIndex,
@@ -572,6 +572,8 @@ function resizeDivToWindowSize() {
 	var chapterImageDivPadding = 10;
 	var chapterImageDiv = document.getElementById('question-image-div');
 	
+	var questionImgs = document.getElementsByClassName('question-img');
+	
 	
 	// Set the initial image source
 	if (chapter_image === null || chapter_image === '') {
@@ -588,6 +590,23 @@ function resizeDivToWindowSize() {
 	chapterImageDiv.style.height = (chapterImageDivHeight - chapterImageDivPadding) + 'px';
 	chapterImageDiv.style.top = '10px';
 	chapterImageDiv.style.left = '0px';
+	
+	if ( ((bottomDivsWidth * imageWidthMultiplier) - chapterImageDivPadding) > (chapterImageDivHeight - chapterImageDivPadding) ){
+		for (var i = 0; i < questionImgs.length; i++) {
+			var questionImg = questionImgs[i];
+			questionImg.style.height = '100%';
+			questionImg.style.width = 'auto';
+			questionImg.style.left = ((((bottomDivsWidth * imageWidthMultiplier) - chapterImageDivPadding) / 2) - ((chapterImageDivHeight - chapterImageDivPadding) / 2)) + 'px';
+		}
+	} else
+	{
+		for (var i = 0; i < questionImgs.length; i++) {
+			var questionImg = questionImgs[i];
+			questionImg.style.height = '100%';
+			questionImg.style.width = 'auto';
+			questionImg.style.left = ((chapterImageDiv.style.width / 2) - (questionImg.style.width / 2)) + 'px';
+		}
+	}
 	
 	var answersDiv = document.getElementById('answers-div');
 	answersDiv.style.width = (bottomDivsWidth * buttonWidthMultiplier) + 'px';

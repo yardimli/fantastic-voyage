@@ -11,12 +11,12 @@
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}"/>
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}"/>
 	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
-	<script src="{{ asset('assets/js/play-cliffhanger.js') }}"></script>
+	<script src="{{ asset('assets/js/play-two-path-adventure.js') }}"></script>
 	<div class="container" style="margin-top: 60px;">
 		
 		<div id="breadcrumbs" class="pt-2 pb-2">
 			<span class="breadcrumb-separator fas fa-chevron-right"></span>
-			<a class="clickable-breadcrumb breadcrumb" href="{{route('activities.page', ['type' => 'cliffhanger'])}}">Cliffhangers</a>
+			<a class="clickable-breadcrumb breadcrumb" href="{{route('activities.page', ['type' => 'two-path-adventure'])}}">Adventures</a>
 			<span class="breadcrumb-separator fas fa-chevron-right"></span>
 			<span class="breadcrumb selected-breadcrumb">{{__('default.Play')}}</span>
 		</div>
@@ -27,7 +27,7 @@
 			@include('game-layout.phaser-game-background', ['animation' => $current_theme, 'view_target' => 'game-ui-in-page']) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
 			<div id="loading-page" class="hidden-layer">
 				<div style="margin: auto;">
-					<div style="font-size: 64px; font-weight: bold;">Writing Next Chapter...</div>
+					<div style="font-size: 44px; font-weight: bold;">Writing Next Chapter...</div>
 					<div id="progress-bar-container"
 					     style="width: 100%; height: 30px; background-color: #ddd; margin-top: 20px;">
 						<div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>

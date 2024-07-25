@@ -34,8 +34,8 @@
 			@include('game-layout.phaser-game-background', ['animation' => $current_theme, 'view_target' => 'game-ui-in-page']) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
 			<div id="loading-page" class="hidden-layer">
 				<div style="margin: auto;">
-					<div style="font-size: 64px; font-weight: bold;">Getting Next Question...</div>
-					<div id="progress-bar-container" style="width: 100%; height: 30px; background-color: #ddd; margin-top: 20px;">
+					<div style="font-size: 44px; font-weight: bold;">Getting Next Question...</div>
+					<div id="progress-bar-container" style="width: 90%; height: 30px; background-color: #ddd; margin-top: 20px; margin-left:auto; margin-right:auto;">
 						<div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
 					</div>
 				</div>

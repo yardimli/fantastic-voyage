@@ -68,14 +68,12 @@
 						$activity_update->save();
 					}
 					return response()->json(array('image_path' => '/storage/quiz_images/' . $image_filename));
-				} else
-				{
+				} else {
 					return response()->json([
 						'error' => 'Activity data not found.',
 					]);
 				}
-			} else
-			{
+			} else {
 				return response()->json([
 					'error' => 'Activity not found.',
 				]);
@@ -463,7 +461,23 @@
 				}
 			}
 
-			return view('quiz.quiz-activities', compact('user_id', 'activities', 'type'));
+			if ($type === 'quiz') {
+				$type_string = 'Quizzes';
+			} else if ($type === 'investigation') {
+				$type_string = 'Investigations';
+			} elseif ($type === 'two-path-adventure') {
+				$type_string = 'Two Path Adventures';
+			} elseif ($type === 'story') {
+				$type_string = 'Stories';
+			} elseif ($type === 'game') {
+				$type_string = 'Games';
+			} elseif ($type === 'activity') {
+				$type_string = 'Activities';
+			} else {
+				$type_string = 'Activities';
+			}
+
+			return view('quiz.quiz-activities', compact('user_id', 'activities', 'type', 'type_string'));
 		}
 
 		public function quizActivitiesAction(Request $request, $action, $id)

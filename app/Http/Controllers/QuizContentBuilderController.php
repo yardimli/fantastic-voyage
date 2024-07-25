@@ -61,6 +61,9 @@
 				->where('step', $next_step)
 				->first();
 
+			$total_steps = StoryData::where('activity_id', $activity_id)
+				->count();
+
 			if ($story_data !== null) {
 				return response()->json(array(
 					'title' => $activity->title,
@@ -68,6 +71,8 @@
 					'chapter_text' => $story_data->chapter_text,
 					'chapter_voice' => $story_data->chapter_voice,
 					'choices' => json_decode($story_data->choices),
+					'choice' => $story_data->choice,
+					'total_steps' => $total_steps,
 					'step' => $next_step,
 					'success' => true
 				));
@@ -111,6 +116,9 @@
 			$story->json_data = json_encode($rst['returnJSON']);
 			$story->save();
 
+			$total_steps = StoryData::where('activity_id', $activity_id)
+				->count();
+
 			return response()->json(array(
 				'title' => $rst['title'],
 				'image' => $rst['coverImage'],
@@ -118,13 +126,14 @@
 				'chapter_voice' => $tts_results_text['audio_path'],
 				'choices' => $rst['choices'],
 				'step' => $next_step,
+				'total_steps' => $total_steps,
 				'success' => true
 			));
 
 
 		}
 
-		public function createNextCliffhanger(Request $request)
+		public function createNextTwoPathAdventure(Request $request)
 		{
 			$user = $request->user();
 			$user_id = $user->id ?? 0;
@@ -184,7 +193,7 @@
 			$language = $activity->language;
 			$voice_id = $activity->voice_id;
 
-			$rst = $this->buildCliffhangerContent($activity->prompt, $activity->title, $story_history, $next_step, $language);
+			$rst = $this->buildTwoPathAdventureContent($activity->prompt, $activity->title, $story_history, $next_step, $language);
 
 			if ($rst['success'] === false) {
 				return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
@@ -245,8 +254,8 @@
 			Log::info('---------------Log addNewVoyage--------------------------');
 			Log::info('content-type: ' . $content_type . ' user_content: ' . $user_content . ' language: ' . $language . ' voice_id: ' . $voice_id . ' quantity: ' . $quantity . ' new_num: ' . $new_num . ' new_id: ' . $new_id . ' return_json: ' . $return_json);
 
-			if ($content_type === 'cliffhanger') {
-				$rst = $this->buildCliffhangerContent($user_content, '', '', 1, $language);
+			if ($content_type === 'two-path-adventure') {
+				$rst = $this->buildTwoPathAdventureContent($user_content, '', '', 1, $language);
 
 				if ($rst['success'] === false) {
 					return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
@@ -261,7 +270,7 @@
 				$activity->voice_id = $voice_id;
 				$activity->language = $language;
 				$activity->prompt = $user_content;
-				$activity->type = 'cliffhanger';
+				$activity->type = 'two-path-adventure';
 				$activity->theme = 'moon';
 				$activity->is_deleted = 0;
 				$activity->save();
@@ -561,16 +570,16 @@
 
 
 		//-------------------------------------------------------------------------------------------
-		public function buildCliffhangerContent($user_content, $story_title, $prev_chapter, $step, $language)
+		public function buildTwoPathAdventureContent($user_content, $story_title, $prev_chapter, $step, $language)
 		{
 			$prompt = "Story prompt:" . $user_content . ".\nStory language: " . $language ;
 
-			$schema_str = file_get_contents(public_path('texts/cliffhanger-first-chapter.json'));
+			$schema_str = file_get_contents(public_path('texts/two-path-adventure-first-chapter.json'));
 			if ($prev_chapter !== '') {
 
 				$prompt = "Story Title: " . $story_title . ".\nStory Prompt: " . $user_content . ".\nThe Story so far:\n" . $prev_chapter . ".\nStory language:" . $language;
 
-				$schema_str = file_get_contents(public_path('texts/cliffhanger-second-chapter.json'));
+				$schema_str = file_get_contents(public_path('texts/two-path-adventure-second-chapter.json'));
 			}
 
 			$prompt .= "\n\nThe story should be written in " . $language;

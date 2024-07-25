@@ -73,7 +73,7 @@
 		//-------------------------------------------------------------------------
 
 
-		public function InvestigationIndex(Request $request, $activity_id, $step = null)
+		public function investigationIndex(Request $request, $activity_id, $step = null)
 		{
 			$user = $request->user();
 			$user_id = $user->id ?? 0;
@@ -83,7 +83,7 @@
 			return $rst;
 		}
 
-		public function InvestigationInPage(Request $request, $activity_id)
+		public function investigationInPage(Request $request, $activity_id)
 		{
 
 			$user = $request->user();
@@ -107,6 +107,10 @@
 				return json_encode(['error' => 'No story found']);
 			}
 
+			$total_steps = StoryData::where('user_id', $user_id)
+				->where('activity_id', $activity_id)
+				->count();
+
 			$activity = Activity::where('user_id', $user_id)
 				->where('id', $activity_id)
 				->first();
@@ -127,38 +131,18 @@
 			$choices = str_replace("'", "\'", $choices);
 			$choices = str_replace("\n", "<br>", $choices);
 
+			$choice = $story->choice ?? '';
+
 			$current_theme = $activity->theme ?? 'beach';
 
 			$themes = ['beach', 'jungle', 'mid-autumn', 'moon', 'rabbit', 'space', 'taipei'];
 
 			$type_description = 'A series of multiple choice Investigations. Tap the choice to proceed.';
 
-			return view($view, compact('title', 'image', 'chapter_text', 'chapter_voice', 'type_description', 'current_theme', 'themes', 'activity_id', 'choices', 'step'));
+			return view($view, compact('title', 'image', 'chapter_text', 'chapter_voice', 'type_description', 'current_theme', 'themes', 'activity_id', 'choices', 'step', 'total_steps', 'choice'));
 		}
 
-
-		//-------------------------------------------------------------------------
-		public function cliffhangerIndex(Request $request, $activity_id, $step = null)
-		{
-			$user = $request->user();
-			$user_id = $user->id ?? 0;
-			$activity_id = $activity_id ?? -1;
-
-			$rst = $this->buildCliffhangerUI($user_id, $activity_id, 'game-layout.display-cliffhanger-ui', $step ?? 1);
-			return $rst;
-		}
-
-		public function cliffhangerInPage(Request $request, $activity_id, $step = null)
-		{
-			$user = $request->user();
-			$user_id = $user->id ?? 0;
-			$activity_id = $activity_id ?? -1;
-
-			$rst = $this->buildCliffhangerUI($user_id, $activity_id, 'game-layout.display-cliffhanger-ui-in-page', $step ?? 1);
-			return $rst;
-		}
-
-		public function cliffhangerGetStep(Request $request)
+		public function investigationGetStep(Request $request)
 		{
 			$activity_id = $request->input('activity_id');
 			$step = $request->input('step') ?? 1;
@@ -185,7 +169,56 @@
 			}
 		}
 
-		public function buildCliffhangerUI($user_id, $activity_id, $view = 'game-layout.display-cliffhanger-ui', $step = 1)
+
+		//-------------------------------------------------------------------------
+		public function twoPathAdventureIndex(Request $request, $activity_id, $step = null)
+		{
+			$user = $request->user();
+			$user_id = $user->id ?? 0;
+			$activity_id = $activity_id ?? -1;
+
+			$rst = $this->buildTwoPathAdventureUI($user_id, $activity_id, 'game-layout.display-two-path-adventure-ui', $step ?? 1);
+			return $rst;
+		}
+
+		public function twoPathAdventureInPage(Request $request, $activity_id, $step = null)
+		{
+			$user = $request->user();
+			$user_id = $user->id ?? 0;
+			$activity_id = $activity_id ?? -1;
+
+			$rst = $this->buildTwoPathAdventureUI($user_id, $activity_id, 'game-layout.display-two-path-adventure-ui-in-page', $step ?? 1);
+			return $rst;
+		}
+
+		public function twoPathAdventureGetStep(Request $request)
+		{
+			$activity_id = $request->input('activity_id');
+			$step = $request->input('step') ?? 1;
+
+			$user = $request->user();
+			$user_id = $user->id ?? 0;
+
+			$story = StoryData::where('user_id', $user_id)
+				->where('activity_id', $activity_id)
+				->where('step', $step)
+				->orderBy('id', 'desc')
+				->first();
+
+			$activity = Activity::where('user_id', $user_id)
+				->where('id', $activity_id)
+				->first();
+
+			if (!$story || !$activity) {
+				return response()->json(['result' => false, 'message' => 'No story found']);
+			} else
+			{
+				$story['choices'] = json_decode($story['choices']);
+				return response()->json(['result' => true, 'message' => 'Story found', 'story' => $story, 'activity' => $activity]);
+			}
+		}
+
+		public function buildTwoPathAdventureUI($user_id, $activity_id, $view = 'game-layout.display-two-path-adventure-ui', $step = 1)
 		{
 
 			$story = StoryData::where('user_id', $user_id)

@@ -25,7 +25,7 @@
 	<link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.css">
 	
 	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
-	<script src="{{ asset('assets/js/play-cliffhanger.js') }}"></script>
+	<script src="{{ asset('assets/js/play-two-path-adventure.js') }}"></script>
 	
 	<!-- Preload the answer image -->
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}"/>
@@ -49,11 +49,12 @@
 </head>
 <body>
 <audio id="audio-player" style="display: none;"></audio>
+<input type="hidden" id="activity_id" value="{{$activity_id}}">
 @include('game-layout.phaser-game-background', ['animation' => $current_theme]) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
 <div id="loading-page" class="hidden-layer">
 	<div style="margin: auto;">
-		<div style="font-size: 64px; font-weight: bold;">Writing Next Chapter...</div>
-		<div id="progress-bar-container" style="width: 100%; height: 30px; background-color: #ddd; margin-top: 20px;">
+		<div style="font-size: 44px; font-weight: bold;">Writing Next Chapter...</div>
+		<div id="progress-bar-container" style="width: 90%; height: 30px; background-color: #ddd; margin-top: 20px; margin-left:auto; margin-right:auto;">
 			<div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
 		</div>
 	</div>

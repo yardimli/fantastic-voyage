@@ -9,15 +9,41 @@ var audioTimer1 = null;
 let timerDisplay = null;
 let runningTimer;
 let seconds = 0, minutes = 0;
+let waitForMouseMoveInteraction = 2;
+
 //look at the user agent to determine if the user is on a mobile device
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 	isOnMobile = true;
 }
+
+let progressBar;
+let progressInterval;
+
+function startProgressBar() {
+	let progress = 0;
+	const progressBarElement = document.getElementById('progress-bar');
+	
+	progressInterval = setInterval(() => {
+		progress += 0.5; // Increase by 0.5% every 100ms
+		progressBarElement.style.width = `${progress}%`;
+		
+		if (progress >= 100) {
+			clearInterval(progressInterval);
+		}
+	}, 200);
+}
+
+function stopProgressBar() {
+	clearInterval(progressInterval);
+	document.getElementById('progress-bar').style.width = '100%';
+}
+
 $(document).ready(function () {
 	timerDisplay = document.getElementById('timer');
 	currentAudio = document.getElementById('audio-player');
 	
 	$('#loading-page').hide();
+	$("#loading-page").removeClass("hidden-layer");
 	
 	$('#preload-page .story-title').text(story_title);
 	$('#type-description').text(type_description);
@@ -92,6 +118,103 @@ $(document).ready(function () {
 			$('#start-story').css('display', 'none');
 		}
 	});
+	
+	$('#prev').on('click', function () {
+		continueAudioPlayback = false;
+		if (currentAudio) {
+			currentAudio.pause();
+			currentAudio.currentTime = 0;
+		}
+		if (chapter_step > 1) {
+			$('#loading-page').fadeIn();
+			startProgressBar();
+			
+			chapter_step--;
+			updateButtonStates(chapter_step);
+			$.ajax({
+				type: "POST",
+				url: "/investigation-get-step",
+				data: {
+					activity_id: $('#activity_id').val(),
+					step: chapter_step,
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function (data) {
+					stopProgressBar();
+					$('#loading-page').fadeOut();
+					console.log(data);
+					if (data.result) {
+						story_title = data.activity.title;
+						chapter_image = data.activity.cover_image;
+						chapter_choices = {"choices": data.story.choices};
+						active_choice = data.story.choice || '';
+						waitForMouseMoveInteraction = 1;
+						showStory(true);
+					} else
+					{
+						alert('Step not found');
+					}
+				},
+				error: function (data) {
+					stopProgressBar();
+					$('#loading-page').fadeOut();
+					console.log('Error:', data);
+					alert('Error: ' + data.message);
+				}
+			});
+		}
+	});
+	
+	$('#next').on('click', function () {
+		if (currentAudio) {
+			continueAudioPlayback = false;
+			currentAudio.pause();
+			currentAudio.currentTime = 0;
+		}
+		
+		if (chapter_step < total_steps ) {
+			$('#loading-page').fadeIn();
+			startProgressBar();
+			
+			chapter_step++;
+			updateButtonStates(chapter_step);
+			$.ajax({
+				type: "POST",
+				url: "/investigation-get-step",
+				data: {
+					activity_id: $('#activity_id').val(),
+					step: chapter_step,
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function (data) {
+					stopProgressBar();
+					$('#loading-page').fadeOut();
+					console.log(data);
+					if (data.result) {
+						chapter_image = data.story.image;
+						chapter_choices = {"choices": data.story.choices};
+						active_choice = data.story.choice || '';
+						waitForMouseMoveInteraction = 1;
+						showStory(true);
+					} else
+					{
+						alert('Step not found');
+					}
+				},
+				error: function (data) {
+					stopProgressBar();
+					$('#loading-page').fadeOut();
+					console.log('Error:', data);
+					alert('Error: ' + data.message);
+				}
+			});
+		}
+	});
+	
 	
 	
 	$('#start-story').on('click', function () {
@@ -231,7 +354,8 @@ function goToNextQuestion(answerIndex) {
 		currentAudio.pause();
 		currentAudio.currentTime = 0;
 	}
-	$('#loading-page').show();
+	$('#loading-page').fadeIn();
+	startProgressBar();
 	
 	var csrfToken = $('meta[name="csrf-token"]').attr('content');
 	//load the next question call LLM AJAX
@@ -249,10 +373,12 @@ function goToNextQuestion(answerIndex) {
 			'X-CSRF-TOKEN': csrfToken
 		},
 		success: function (data) {
+			stopProgressBar();
+			$('#loading-page').fadeOut();
+
 			console.log(data);
 			var chapter_success = data.success;
 			if (!chapter_success) {
-				$('#loading-page').hide();
 				alert('Please try again');
 				return;
 			}
@@ -262,12 +388,17 @@ function goToNextQuestion(answerIndex) {
 			chapter_voice = data.chapter_voice;
 			chapter_text = data.chapter_text;
 			chapter_choices = {"choices": data.choices};
-			$('#loading-page').hide();
+			active_choice = data.choice || '';
+			total_steps = data.total_steps;
+			
+			waitForMouseMoveInteraction = 2;
 			showStory(true);
 			
 			// location.reload();
 		},
 		error: function (data) {
+			stopProgressBar();
+			$('#loading-page').fadeOut();
 			console.log('Error:', data);
 			alert('Error: ' + data);
 		}
@@ -296,10 +427,7 @@ function showStory(autoPlayAudio) {
 	// console.log(question);
 	
 	let ajaxPromises = [];
-	
-	$('#loading-page').show();
-	
-	$('#loading-page').hide();
+
 	var questionDiv = document.getElementById('question-div');
 	var chapterImageDiv = document.getElementById('question-image-div');
 	var answersDiv = document.getElementById('answers-div');
@@ -333,6 +461,7 @@ function showStory(autoPlayAudio) {
 		fadeIn = true;
 	}
 	
+	updateButtonStates(chapter_step);
 }
 
 
@@ -344,6 +473,19 @@ function __(key, replacements) {
 	});
 	
 	return translation;
+}
+
+function updateButtonStates(chapter_step) {
+	var pageCounterDiv = document.getElementById('page-counter');
+	let pageInfo = __('default.num_of_num', {index: chapter_step, total: total_steps});
+	pageCounterDiv.textContent = pageInfo;
+	// Disable or enable buttons depending on chapter_step
+	$('#prev').prop('disabled', chapter_step === 1);
+	$('#next').prop('disabled', chapter_step === total_steps );
+	
+	// Optionally, add a class for styling disabled buttons
+	$('#prev').toggleClass('disabled', chapter_step === 1);
+	$('#next').toggleClass('disabled', chapter_step === total_steps );
 }
 
 function resizeDivToWindowSize() {
@@ -477,7 +619,7 @@ function resizeDivToWindowSize() {
 		button.style.top = (i * (bottomDivHeight / chapter_choices.choices.length)) + 'px';
 		button.style.left = 0;
 		
-		button.className = 'story-answer-btn';
+		button.className = 'story-answer-btn button-opacity-0';
 		button.dataset.index = i;
 		var bg_img = document.createElement('img');
 		bg_img.className = 'answer-bg-img';
@@ -488,6 +630,10 @@ function resizeDivToWindowSize() {
 		answerText.className = 'answer-text';
 		answerText.innerHTML = chapter_choices.choices[i]['text'];
 		button.appendChild(answerText);
+		
+		if (chapter_choices.choices[i]['text'] === active_choice) {
+			button.classList.add('previously-selected-answer-placeholder');
+		}
 		
 		if (chapter_choices.choices[i]['audio'] !== null && chapter_choices.choices[i]['audio'] !== '') {
 			var ansAudioImage = document.createElement('img');
@@ -513,6 +659,46 @@ function resizeDivToWindowSize() {
 	Promise.all(promises).then(function () {
 		adjustFontSizeToFit(buttonsArray, Math.round(chapterTextFontSize * 1.25), Math.round(chapterTextFontSize * 0.25));
 	});
+	
+	let initalDelay = 500;
+	if (chapter_step === 1 && active_choice === '') {
+		initalDelay = 2500;
+	}
+// Remove the button-opacity-0 class and add slide-in with delay
+	$('.story-answer-btn').each(function (index) {
+		var $button = $(this);
+		// console.log(index);
+		setTimeout(function () {
+			$button.removeClass('button-opacity-0').addClass('slide-in');
+			if ($button.hasClass('previously-selected-answer-placeholder')) {
+				$button.removeClass('previously-selected-answer-placeholder');
+				$button.addClass('previously-selected-answer');
+				$button.find('.answer-bg-img').addClass('previously-selected-answer');
+				//set question image to the current answer image
+				var answerImage = chapter_choices.choices[index].image;
+				if (answerImage !== null && answerImage !== '') {
+					$('#current-question-img').attr('src', answerImage);
+					$("#next-question-img").attr('src', answerImage);
+				}
+			}
+		}, initalDelay + (index * 250));
+	});
+	
+	var totalButtons = $('.story-answer-btn').length;
+	var totalDelay = initalDelay + (totalButtons * 250) + 500;
+	
+	setTimeout(function () {
+		$('.story-answer-btn').removeClass('slide-in');
+	}, totalDelay);
+	
+	if (isMute) {
+		//make all the audio images disabled
+		$('.audio-image').addClass('audio-image-disabled');
+	} else {
+		//make all the audio images enabled
+		$('.audio-image').removeClass('audio-image-disabled');
+	}
+	
 	if (isMute) {
 		//make all the audio images disabled
 		$('.audio-image').addClass('audio-image-disabled');

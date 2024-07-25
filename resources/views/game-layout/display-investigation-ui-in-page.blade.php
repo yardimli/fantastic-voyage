@@ -3,6 +3,11 @@
 @section('title', 'Story Voyage')
 
 @section('content')
+	<style>
+      .hidden-layer {
+          display: none !important;
+      }
+	</style>
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/correct.png') }}"/>
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}"/>
 	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
@@ -20,9 +25,13 @@
 		<input type="hidden" id="activity_id" value="{{$activity_id}}">
 		<div id="game-ui-in-page" class="prevent-select">
 			@include('game-layout.phaser-game-background', ['animation' => $current_theme, 'view_target' => 'game-ui-in-page']) <!-- beach, jungle, mid-autumn, moon, rabbit, space, summer, taipei, winter -->
-			<div id="loading-page">
+			<div id="loading-page" class="hidden-layer">
 				<div style="margin: auto;">
-					<div style="font-size: 64px; font-weight: bold;">{{ __('default.Loading...') }}</div>
+					<div style="font-size: 44px; font-weight: bold;">Writing Next Chapter...</div>
+					<div id="progress-bar-container"
+					     style="width: 100%; height: 30px; background-color: #ddd; margin-top: 20px;">
+						<div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
+					</div>
 				</div>
 			</div>
 			<div id="preload-page">
@@ -40,10 +49,14 @@
 				<div id="question-image-div"></div>
 				<div id="answers-div"></div>
 				<div id="story-footer" style="text-align: center;">
-					<div id="timer" style="display: none;">00:00</div>
-					<div class="page-controller" style="display: none;">
+					<div class="page-controller" style="display: inline-block;">
+						<i class="fa fa-caret-left" id="prev"></i>
 						<span id="page-counter"></span>
+						<i class="fa fa-caret-right" id="next"></i>
 					</div>
+					
+					<div id="timer" style="display: none; float:left;">00:00</div>
+					
 					<i class="fa fa-caret-right" id="start-story"></i>
 				
 				</div>
@@ -73,6 +86,7 @@
 		
 		@push('scripts')
 			<script>
+				let total_steps = {{ $total_steps }};
 				let chapter_step = {{ $step }};
 				let story_title = '{!! $title !!}';
 				let type_description = '{!! $type_description !!}';
@@ -80,6 +94,7 @@
 				let chapter_voice = '{!! $chapter_voice !!}';
 				let chapter_text = '{!! $chapter_text !!}';
 				let chapter_choices = {"choices": {!! $choices !!}};
+				let active_choice = '{!! $choice !!}';
 				let current_theme = '{!! $current_theme !!}';
 				window.translations = {
 					'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
