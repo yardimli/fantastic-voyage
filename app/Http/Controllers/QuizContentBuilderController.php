@@ -555,7 +555,7 @@
 			}
 
 			$chapterChoices = [];
-			for ($i = 0; $i < 4; $i++) {
+			for ($i = 0; $i < count($content_array['chapterChoices']); $i++) {
 				$chapterChoices[] = array('text' => $content_array['chapterChoices'][$i]['choiceText'], 'audio' => '');
 			}
 
