@@ -307,7 +307,7 @@
 				$rst = $this->buildInvestigationContent($user_content, '', '', 1, $language);
 
 				if ($rst['success'] === false) {
-					return response()->json(['success' => false, 'error' => 'Failed to create story', 'rst' => $rst]);
+					return response()->json(['success' => false, 'error' => 'Failed to create investigation', 'rst' => $rst]);
 				}
 
 				$activity = new Activity();
@@ -319,7 +319,7 @@
 				$activity->voice_id = $voice_id;
 				$activity->language = $language;
 				$activity->prompt = $user_content;
-				$activity->type = 'story';
+				$activity->type = 'investigation';
 				$activity->theme = 'space';
 				$activity->is_deleted = 0;
 				$activity->save();
@@ -360,44 +360,43 @@
 				$rst['success'] = true;
 
 				return response()->json($rst);
-			} else
-				if ($content_type === 'quiz') {
+			} else if ($content_type === 'quiz') {
 
-					$html = '';
-					$rst = $this->buildQuizContent($user_content, $language, $voice_id, $new_num, $new_id, $quantity);
+				$html = '';
+				$rst = $this->buildQuizContent($user_content, $language, $voice_id, $new_num, $new_id, $quantity);
 
-					$html .= $rst['html'];
-					if ($return_json) {
-						//create activity
-						$activity = new Activity();
-						$activity->user_id = $user_id;
-						$activity->type = 'quiz';
-						$activity->title = $rst['title'];
-						$activity->cover_image = $rst['coverImage'];
-						$activity->keywords = $rst['keywords'];
-						$activity->prompt = $user_content;
-						$activity->language = $language;
-						$activity->voice_id = $voice_id;
-						$activity->theme = 'space';
-						$activity->is_deleted = 0;
-						$activity->save();
+				$html .= $rst['html'];
+				if ($return_json) {
+					//create activity
+					$activity = new Activity();
+					$activity->user_id = $user_id;
+					$activity->title = $rst['title'];
+					$activity->cover_image = $rst['coverImage'];
+					$activity->keywords = $rst['keywords'];
+					$activity->prompt = $user_content;
+					$activity->language = $language;
+					$activity->voice_id = $voice_id;
+					$activity->theme = 'space';
+					$activity->type = 'quiz';
+					$activity->is_deleted = 0;
+					$activity->save();
 
-						$insertId = $activity->id;
+					$insertId = $activity->id;
 
-						$activityData = new ActivityData();
-						$activityData->user_id = $user_id;
-						$activityData->activity_id = $insertId;
-						$activityData->language = $language;
-						$activityData->json_data = json_encode(array('questions' => $rst['returnJSON']));
-						$activityData->save();
+					$activityData = new ActivityData();
+					$activityData->user_id = $user_id;
+					$activityData->activity_id = $insertId;
+					$activityData->language = $language;
+					$activityData->json_data = json_encode(array('questions' => $rst['returnJSON']));
+					$activityData->save();
 
-						$rst['activity_id'] = $insertId;
+					$rst['activity_id'] = $insertId;
 
-						return response()->json($rst);
-					} else {
-						return $html;
-					}
+					return response()->json($rst);
+				} else {
+					return $html;
 				}
+			}
 		}
 
 		//-------------------------------------------------------------------------------------------
@@ -572,7 +571,7 @@
 		//-------------------------------------------------------------------------------------------
 		public function buildTwoPathAdventureContent($user_content, $story_title, $prev_chapter, $step, $language)
 		{
-			$prompt = "Story prompt:" . $user_content . ".\nStory language: " . $language ;
+			$prompt = "Story prompt:" . $user_content . ".\nStory language: " . $language;
 
 			$schema_str = file_get_contents(public_path('texts/two-path-adventure-first-chapter.json'));
 			if ($prev_chapter !== '') {
@@ -633,8 +632,7 @@
 				$chapterCoverImageFilename = 'chapter_image_cover_' . $timestamp . '.png';
 				MyHelper::replicate_create_image_sd3($chapterCoverImageFilename, $chapterImagePrompt);
 				$chapterCoverImageFilepath = '/storage/quiz_images/' . $chapterCoverImageFilename;
-			} else
-			{
+			} else {
 				$chapterCoverImageFilename = '';
 				$chapterCoverImageFilepath = '';
 			}
