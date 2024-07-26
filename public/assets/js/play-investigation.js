@@ -200,9 +200,13 @@ $(document).ready(function () {
 					$('#loading-page').fadeOut();
 					console.log(data);
 					if (data.result) {
+						chapter_step = data.story.step;
 						chapter_image = data.story.image;
+						chapter_voice = data.story.chapter_voice;
+						chapter_text = data.story.chapter_text;
 						chapter_choices = {"choices": data.story.choices};
 						active_choice = data.story.choice || '';
+
 						waitForMouseMoveInteraction = 1;
 						showStory(true);
 					} else
