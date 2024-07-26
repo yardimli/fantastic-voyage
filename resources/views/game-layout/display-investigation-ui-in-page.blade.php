@@ -87,11 +87,6 @@
 	<!-- **************** MAIN CONTENT END **************** -->
 	
 	@include('layouts.footer')
-
-@endsection
-
-@push('scripts')
-	
 	
 	@endsection
 	
