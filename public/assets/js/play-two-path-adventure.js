@@ -99,6 +99,7 @@ $(document).ready(function () {
 	}
 	
 	$('.start-btn').click(function () {
+		$("#themes_div").hide();
 		
 		if (isOnMobile && displayInPage) {
 			var activity_id = $('#activity_id').val();
@@ -131,7 +132,7 @@ $(document).ready(function () {
 		if (chapter_step > 1) {
 			$('#loading-page').fadeIn();
 			startProgressBar();
-
+			
 			chapter_step--;
 			updateButtonStates(chapter_step);
 			$.ajax({
@@ -150,13 +151,11 @@ $(document).ready(function () {
 					console.log(data);
 					if (data.result) {
 						story_title = data.activity.title;
-						chapter_image = data.activity.cover_image;
 						chapter_choices = {"choices": data.story.choices};
 						active_choice = data.story.choice || '';
 						waitForMouseMoveInteraction = 1;
 						showStory(true);
-					} else
-					{
+					} else {
 						alert('Step not found');
 					}
 				},
@@ -177,10 +176,10 @@ $(document).ready(function () {
 			currentAudio.currentTime = 0;
 		}
 		
-		if (chapter_step < total_steps ) {
+		if (chapter_step < total_steps) {
 			$('#loading-page').fadeIn();
 			startProgressBar();
-
+			
 			chapter_step++;
 			updateButtonStates(chapter_step);
 			$.ajax({
@@ -198,13 +197,11 @@ $(document).ready(function () {
 					$('#loading-page').fadeOut();
 					console.log(data);
 					if (data.result) {
-						chapter_image = data.story.image;
 						chapter_choices = {"choices": data.story.choices};
 						active_choice = data.story.choice || '';
 						waitForMouseMoveInteraction = 1;
 						showStory(true);
-					} else
-					{
+					} else {
 						alert('Step not found');
 					}
 				},
@@ -229,38 +226,102 @@ $(document).ready(function () {
 		showStory(true);
 	});
 	
-	$(document).on('click', '.story-answer-btn', function () {
-		var width = $(this).outerWidth();
-		var height = $(this).outerHeight();
+	
+	let lastClickedButton = null;
+	let lastClickTime = 0;
+	
+	$(document).on('click', '.story-answer-btn', function (e) {
+		if (isOnMobile) {
+			const currentTime = new Date().getTime();
+			if (this === lastClickedButton && currentTime - lastClickTime < 3000) {
+				// Double click detected, proceed with submission
+				handleButtonSubmission($(this));
+			} else {
+				// First click, update image
+				lastClickedButton = this;
+				lastClickTime = currentTime;
+				updateImageOnClick($(this));
+			}
+		} else {
+			// On desktop, proceed with submission immediately
+			handleButtonSubmission($(this));
+		}
+	});
+	
+	function updateImageOnClick($button) {
+		let answerIndex = $button.data('index');
+		let answerImage = chapter_choices.choices[answerIndex].image;
+		
+		if (answerImage !== null && answerImage !== '') {
+			$('#current-question-img').attr('src', answerImage);
+			$("#next-question-img").attr('src', answerImage);
+		}
+	}
+	
+	function handleButtonSubmission($button) {
+		var width = $button.outerWidth();
+		var height = $button.outerHeight();
 		if (currentAudio) {
 			continueAudioPlayback = false;
 			currentAudio.pause();
 			currentAudio.currentTime = 0;
 		}
 		$('.story-answer-btn').removeClass('animate-zoom');
-		$(this).addClass('animate-zoom');
+		$button.addClass('animate-zoom');
 		
 		$('.story-answer-btn').prop('disabled', true);
 		
 		const correctImage = document.createElement('img');
-		correctImage.src = '/assets/phaser/images/correct.png'; // Set the source of your correct image
+		correctImage.src = '/assets/phaser/images/correct.png';
 		correctImage.classList.add('correct-image', 'fade-in');
 		setImageSize(correctImage, width, height);
 		
-		this.appendChild(correctImage);
+		$button[0].appendChild(correctImage);
 		
 		setTimeout(() => {
 			correctImage.classList.add('visible');
 			correctImage.classList.add('zoom-in-rotate');
 		}, 10);
 		
-		let answerIndex = $(this).data('index');
+		let answerIndex = $button.data('index');
 		
 		setTimeout(function () {
 			goToNextChapter(answerIndex);
 		}, 1500);
-		
-	});
+	}
+	
+	// $(document).on('click', '.story-answer-btn', function () {
+	// 	var width = $(this).outerWidth();
+	// 	var height = $(this).outerHeight();
+	// 	if (currentAudio) {
+	// 		continueAudioPlayback = false;
+	// 		currentAudio.pause();
+	// 		currentAudio.currentTime = 0;
+	// 	}
+	// 	$('.story-answer-btn').removeClass('animate-zoom');
+	// 	$(this).addClass('animate-zoom');
+	//
+	// 	$('.story-answer-btn').prop('disabled', true);
+	//
+	// 	const correctImage = document.createElement('img');
+	// 	correctImage.src = '/assets/phaser/images/correct.png'; // Set the source of your correct image
+	// 	correctImage.classList.add('correct-image', 'fade-in');
+	// 	setImageSize(correctImage, width, height);
+	//
+	// 	this.appendChild(correctImage);
+	//
+	// 	setTimeout(() => {
+	// 		correctImage.classList.add('visible');
+	// 		correctImage.classList.add('zoom-in-rotate');
+	// 	}, 10);
+	//
+	// 	let answerIndex = $(this).data('index');
+	//
+	// 	setTimeout(function () {
+	// 		goToNextChapter(answerIndex);
+	// 	}, 1500);
+	//
+	// });
 	
 	$(document).on('mousemove', '.story-answer-btn', function () {
 		if (waitForMouseMoveInteraction <= 0) {
@@ -423,7 +484,6 @@ function goToNextChapter(answerIndex) {
 			}
 			
 			chapter_step = data.step;
-			chapter_image = data.image;
 			chapter_choices = {"choices": data.choices};
 			active_choice = data.choice || '';
 			total_steps = data.total_steps;
@@ -462,7 +522,7 @@ window.addEventListener('resize', function () {
 
 function showStory(autoPlayAudio) {
 	let ajaxPromises = [];
-
+	
 	
 	var chapterImageDiv = document.getElementById('question-image-div');
 	var answersDiv = document.getElementById('answers-div');
@@ -510,11 +570,11 @@ function updateButtonStates(chapter_step) {
 	pageCounterDiv.textContent = pageInfo;
 	// Disable or enable buttons depending on chapter_step
 	$('#prev').prop('disabled', chapter_step === 1);
-	$('#next').prop('disabled', chapter_step === total_steps );
+	$('#next').prop('disabled', chapter_step === total_steps);
 	
 	// Optionally, add a class for styling disabled buttons
 	$('#prev').toggleClass('disabled', chapter_step === 1);
-	$('#next').toggleClass('disabled', chapter_step === total_steps );
+	$('#next').toggleClass('disabled', chapter_step === total_steps);
 }
 
 function resizeDivToWindowSize() {
@@ -576,35 +636,34 @@ function resizeDivToWindowSize() {
 	
 	
 	// Set the initial image source
-	if (chapter_image === null || chapter_image === '') {
-		// Use first answer image if chapter_image is not available
-		const answerImage = chapter_choices.choices[0].image;
-		if (answerImage !== null && answerImage !== '') {
-			$('#current-question-img').attr('src', answerImage);
-		}
+	if (active_choice === '') {
+		$('#next-question-img').attr('src', chapter_choices.choices[0].image);
+		$('#current-question-img').attr('src', chapter_choices.choices[0].image);
 	} else {
-		$('#current-question-img').attr('src', chapter_image);
+		$('#next-question-img').attr('src', chapter_choices.choices.find(choice => choice.text === active_choice).image);
+		$('#current-question-img').attr('src', chapter_choices.choices.find(choice => choice.text === active_choice).image);
 	}
 	
-	chapterImageDiv.style.width = ((bottomDivsWidth * imageWidthMultiplier) - chapterImageDivPadding) + 'px';
-	chapterImageDiv.style.height = (chapterImageDivHeight - chapterImageDivPadding) + 'px';
+	let imageContainerWidth = (bottomDivsWidth * imageWidthMultiplier) - chapterImageDivPadding;
+	let imageContainerHeight = chapterImageDivHeight - chapterImageDivPadding;
+	chapterImageDiv.style.width = imageContainerWidth + 'px';
+	chapterImageDiv.style.height = imageContainerHeight + 'px';
 	chapterImageDiv.style.top = '10px';
 	chapterImageDiv.style.left = '0px';
 	
-	if ( ((bottomDivsWidth * imageWidthMultiplier) - chapterImageDivPadding) > (chapterImageDivHeight - chapterImageDivPadding) ){
+	if (imageContainerWidth > imageContainerHeight) {
 		for (var i = 0; i < questionImgs.length; i++) {
 			var questionImg = questionImgs[i];
 			questionImg.style.height = '100%';
 			questionImg.style.width = 'auto';
-			questionImg.style.left = ((((bottomDivsWidth * imageWidthMultiplier) - chapterImageDivPadding) / 2) - ((chapterImageDivHeight - chapterImageDivPadding) / 2)) + 'px';
+			questionImg.style.left = ((imageContainerWidth / 2) - (imageContainerHeight / 2)) + 'px';
 		}
-	} else
-	{
+	} else {
 		for (var i = 0; i < questionImgs.length; i++) {
 			var questionImg = questionImgs[i];
-			questionImg.style.height = '100%';
-			questionImg.style.width = 'auto';
-			questionImg.style.left = ((chapterImageDiv.style.width / 2) - (questionImg.style.width / 2)) + 'px';
+			questionImg.style.width = '100%';
+			questionImg.style.height = 'auto';
+			// questionImg.style.left = ((chapterImageDiv.style.width / 2) - (questionImg.style.width / 2)) + 'px';
 		}
 	}
 	

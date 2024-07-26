@@ -2,7 +2,7 @@
   "type": "function",
   "function": {
     "name": "create_story_chapter_and_choices",
-    "description": "The first chapter to the story that consists of one chapter and multiple choices of how the story will continue. The chapter should be in the given topic.",
+    "description": "The first chapter to the interview that consists of one text or question and multiple choices of how to respond to this. The text/question should be in the given topic.",
     "parameters": {
       "type": "object",
       "properties": {
@@ -12,7 +12,7 @@
         },
         "chapterText": {
           "type": "string",
-          "description": "1-2 Paragraphs of the text for the first chapter for the given topic."
+          "description": "1-2 Paragraphs of the text or question for the first chapter for the given topic."
         },
         "chapterImagePrompt": {
           "type": "string",
@@ -25,7 +25,7 @@
             "properties": {
               "choiceText": {
                 "type": "string",
-                "description": "A choice of 2-3 sentences of how the story should continue in the next chapter."
+                "description": "A choice of 2-3 sentences of how the interview should continue in the next chapter."
               }
             }
           },

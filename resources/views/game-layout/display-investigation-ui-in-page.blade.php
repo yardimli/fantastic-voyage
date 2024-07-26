@@ -12,7 +12,7 @@
 	<link rel="preload" as="image" href="{{ asset('assets/phaser/images/wrong.png') }}"/>
 	<link href="{{ asset('assets/css/quiz-game.css') }}" rel="stylesheet">
 	<script src="{{ asset('assets/js/play-investigation.js') }}"></script>
-	<div class="container" style="margin-top: 60px;">
+	<div class="container" style="margin-top: 60px; margin-bottom: 60px;">
 		
 		<div id="breadcrumbs" class="pt-2 pb-2">
 			<span class="breadcrumb-separator fas fa-chevron-right"></span>
@@ -80,25 +80,36 @@
 				     data-theme="{{ $theme }}">
 			@endforeach
 		</div>
-		
-		
-		@endsection
-		
-		@push('scripts')
-			<script>
-				let total_steps = {{ $total_steps }};
-				let chapter_step = {{ $step }};
-				let story_title = '{!! $title !!}';
-				let type_description = '{!! $type_description !!}';
-				let chapter_image = '{!! $image !!}';
-				let chapter_voice = '{!! $chapter_voice !!}';
-				let chapter_text = '{!! $chapter_text !!}';
-				let chapter_choices = {"choices": {!! $choices !!}};
-				let active_choice = '{!! $choice !!}';
-				let current_theme = '{!! $current_theme !!}';
-				window.translations = {
-					'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
-				};
-			</script>
+	</div>
+	
+	</main>
+	
+	<!-- **************** MAIN CONTENT END **************** -->
+	
+	@include('layouts.footer')
+
+@endsection
+
+@push('scripts')
+	
+	
+	@endsection
+	
+	@push('scripts')
+		<script>
+			let total_steps = {{ $total_steps }};
+			let chapter_step = {{ $step }};
+			let story_title = '{!! $title !!}';
+			let type_description = '{!! $type_description !!}';
+			let chapter_image = '{!! $image !!}';
+			let chapter_voice = '{!! $chapter_voice !!}';
+			let chapter_text = '{!! $chapter_text !!}';
+			let chapter_choices = {"choices": {!! $choices !!}};
+			let active_choice = '{!! $choice !!}';
+			let current_theme = '{!! $current_theme !!}';
+			window.translations = {
+				'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
+			};
+		</script>
 	@endpush
 

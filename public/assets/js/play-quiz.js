@@ -113,6 +113,7 @@ $(document).ready(function () {
 	}
 	
 	$('.start-btn').click(function () {
+		$("#themes_div").hide();
 		
 		if (isOnMobile && displayInPage) {
 			var activity_id = $('#activity_id').val();

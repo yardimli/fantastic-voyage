@@ -421,6 +421,7 @@
 .question-img {
 	width: 100%; /* Adjust as needed */
 	height: auto; /* Adjust as needed */
+	border-radius: 10px;
 	/*position: absolute;*/
 	/*top: 0;*/
 	/*left: 0;*/

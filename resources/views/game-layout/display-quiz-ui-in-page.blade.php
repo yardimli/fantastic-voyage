@@ -12,7 +12,7 @@
       }
 	</style>
 	<script src="{{ asset('assets/js/play-quiz.js') }}"></script>
-	<div class="container" style="margin-top: 60px;">
+	<div class="container" style="margin-top: 60px; margin-bottom: 60px;">
 		
 		<div id="breadcrumbs" class="pt-2 pb-2">
 			<span class="breadcrumb-separator fas fa-chevron-right"></span>
@@ -35,7 +35,8 @@
 			<div id="loading-page" class="hidden-layer">
 				<div style="margin: auto;">
 					<div style="font-size: 44px; font-weight: bold;">Getting Next Question...</div>
-					<div id="progress-bar-container" style="width: 90%; height: 30px; background-color: #ddd; margin-top: 20px; margin-left:auto; margin-right:auto;">
+					<div id="progress-bar-container"
+					     style="width: 90%; height: 30px; background-color: #ddd; margin-top: 20px; margin-left:auto; margin-right:auto;">
 						<div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
 					</div>
 				</div>
@@ -89,20 +90,31 @@
 				     data-theme="{{ $theme }}">
 			@endforeach
 		</div>
-		
-		
-		@endsection
-		
-		@push('scripts')
-			<script>
-				let json_data = {!! $json_data; !!};
-				let game_title = '{!! str_replace("'","\'", $title); !!}';
-				let type_description = '{!! str_replace("'","\'", $type_description); !!}';
-				let current_theme = '{!! str_replace("'","\'", $current_theme); !!}';
-				var previewQid = null;
-				window.translations = {
-					'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
-				};
-			</script>
+	</div>
+	
+	</main>
+	
+	<!-- **************** MAIN CONTENT END **************** -->
+	
+	@include('layouts.footer')
+
+@endsection
+
+@push('scripts')
+	
+	
+	@endsection
+	
+	@push('scripts')
+		<script>
+			let json_data = {!! $json_data; !!};
+			let game_title = '{!! str_replace("'","\'", $title); !!}';
+			let type_description = '{!! str_replace("'","\'", $type_description); !!}';
+			let current_theme = '{!! str_replace("'","\'", $current_theme); !!}';
+			var previewQid = null;
+			window.translations = {
+				'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
+			};
+		</script>
 	@endpush
 
