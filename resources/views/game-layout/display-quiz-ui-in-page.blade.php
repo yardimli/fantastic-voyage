@@ -99,11 +99,6 @@
 	@include('layouts.footer')
 
 @endsection
-
-@push('scripts')
-	
-	
-	@endsection
 	
 	@push('scripts')
 		<script>
