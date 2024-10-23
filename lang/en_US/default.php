@@ -80,7 +80,7 @@
 		"Getting Set Up" => "Getting Set Up",
 		"Legal" => "Legal",
 
-		"My Activities" => "My Voyages & Quizzes",
+		"My Activities" => "My Quizzes",
 		"Enter Content" => "Enter Content",
 		"Play" => "Play",
 		"Quiz" => "Quiz",

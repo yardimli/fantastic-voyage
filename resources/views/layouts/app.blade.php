@@ -170,35 +170,16 @@ Header START -->
 				<!-- Nav Search END -->
 				
 				<ul class="navbar-nav navbar-nav-scroll ms-auto">
-					<!-- Nav item 3 Post -->
-					{{--					<li class="nav-item dropdown">--}}
-					{{--						<a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account </a>--}}
-					{{--						<ul class="dropdown-menu" aria-labelledby="postMenu">--}}
-					{{--							<li> <a class="dropdown-item" href="help.blade.php">Help center</a> </li>--}}
-					{{--							<li> <a class="dropdown-item" href="privacy_and_terms.blade.php">Privacy & terms</a> </li>--}}
-					{{--						</ul>--}}
-					{{--					</li>--}}
-					
-					<!-- Nav item 4 Mega menu -->
 						<li class="nav-item">
-							<a class="nav-link active" href="{{route('activities.page', ['type' => 'quiz'])}}">Quizzes</a>
+							<a class="nav-link active" href="{{route('example-quiz')}}">Examples</a>
 						</li>
-					
-					<li class="nav-item">
-						<a class="nav-link active" href="{{route('activities.page', ['type' => 'two-path-adventure'])}}">Two Path Adventure</a>
-					</li>
-					
-					<li class="nav-item">
-						<a class="nav-link active" href="{{route('activities.page', ['type' => 'investigation'])}}">Investigations</a>
-					</li>
-					
 					
 					<li class="nav-item">
 							<a class="nav-link active" href="{{route('index')}}">Create</a>
 						</li>
 					
 					<li class="nav-item">
-						<a class="nav-link" href="{{route('activities.page')}}">{{__('default.My Activities')}}</a>
+						<a class="nav-link" href="{{route('quiz-activities')}}">{{__('default.My Activities')}}</a>
 					</li>
 				</ul>
 			</div>
@@ -206,11 +187,6 @@ Header START -->
 			
 			<!-- Nav right START -->
 			<ul class="nav flex-nowrap align-items-center ms-sm-3 list-unstyled">
-				{{--				<li class="nav-item ms-2">--}}
-				{{--					<a class="nav-link icon-md btn btn-light p-0" href="{{route('create.story.header')}}">--}}
-				{{--						<i class="bi bi-chat-left-text-fill fs-6"> </i>--}}
-				{{--					</a>--}}
-				{{--				</li>--}}
 				
 				<li class="nav-item ms-2">
 					<a class="nav-link icon-md btn btn-light p-0" href="{{route('help.page')}}" title="Help">
@@ -268,7 +244,7 @@ Header START -->
 										class="bi bi-unlock fa-fw me-2"></i>Sign In</a></li>
 							<li><a class="dropdown-item bg-primary-soft-hover" href="{{ route('register') }}"><i
 										class="bi bi-person-circle fa-fw me-2"></i>Sign Up</a></li>
-							<li><a class="dropdown-item" href="{{route('activities.page')}}"><i
+							<li><a class="dropdown-item" href="{{route('quiz-activities')}}"><i
 										class="bi bi-shop fa-fw me-2"></i>Buy Tokens</a></li>
 						
 						@endif
@@ -556,12 +532,8 @@ JS libraries, plugins and custom scripts -->
 <!-- Theme Functions -->
 <script src="/assets/js/functions.js"></script>
 
-{{--<script type="text/javascript">window.$sleek=[];window.SLEEK_PRODUCT_ID=532629982;(function(){d=document;s=d.createElement("script");s.src="https://client.sleekplan.com/sdk/e.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>--}}
-
-@php($title = View::getSection('title', 'Home'))
-<script src="https://everperfectassistant.com/chat/chat.js?id=Gy4nA4OB5o"></script>
-
 @stack('scripts')
+
 
 </body>
 </html>

@@ -41,18 +41,7 @@
 											</div>
 										</button>
 									</div>
-									<div class="col-md-3">
-										<div class="input-group">
-											<select class="form-select me-1 pe-5" id="content_type"
-											        aria-label="Default select example">
-												<option value="" selected>Type</option>
-												<option value="quiz">Quiz</option>
-												<option value="investigation">Investigation</option>
-												<option value="two-path-adventure">Two Path Adventure</option>
-											</select>
-										</div>
-									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class="input-group">
 											<select class="form-select me-1 pe-5" aria-label="Default select example"
 											        id="content_language">
@@ -63,7 +52,7 @@
 											</select>
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class="input-group">
 											@foreach($voices['voices'] as $voice)
 													<?php
@@ -88,12 +77,12 @@
 											</select>
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class="input-group">
 											<select class="form-select me-1 pe-5" aria-label="Default select example"
 											        id="content_length">
 												<option value="" selected>Length</option>
-												@for ($i = 1; $i <= 10; $i++)
+												@for ($i = 1; $i <= 25; $i++)
 													<option value="{{ $i }}">{{ $i }}</option>
 												@endfor
 											</select>
@@ -349,7 +338,6 @@
 				$("#build_voyage_spinner").css('display', 'inline-flex');
 				
 				
-				var content_type = $('#content_type').val() || 'quiz';
 				var next_num = 0;
 				var next_id = 0;
 				var activity_id = 0;
@@ -364,7 +352,6 @@
 					type: "POST",
 					url: "/quiz-content-builder-json",
 					data: {
-						content_type: content_type,
 						activity_id: activity_id,
 						user_content: user_content,
 						language: language,
@@ -389,13 +376,8 @@
 						if (data == '') {
 							showMessage('Something went wrong with the AI. Please try again.');
 						} else {
-							if (content_type === 'quiz') {
-								window.location.href = '/load-quiz-in-page/' + data.activity_id;
-							} else if (content_type === 'two-path-adventure') {
-								window.location.href = '/load-two-path-adventure-in-page/' + data.activity_id;
-							} else if (content_type === 'investigation') {
-								window.location.href = '/load-investigation-in-page/' + data.activity_id;
-							}
+							window.location.href = '/load-quiz-in-page/' + data.activity_id;
+							
 						}
 					},
 					complete: function () {

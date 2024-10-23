@@ -429,17 +429,16 @@
 
 		}
 
-		public function quizActivities(Request $request, $type = 'quiz')
+		public function quizActivities(Request $request)
 		{
-//			if (!Auth::user()) {
-//				return redirect()->route('login');
-//			}
+			if (!Auth::user()) {
+				return redirect()->route('login');
+			}
 
 			$user = $request->user();
 			$user_id = $user->id ?? 0;
 			$activities = Activity::where('user_id', $user_id)
 				->where('is_deleted', 0)
-				->where('type', $type)
 				->get();
 
 			//loop all $activity['cover_image'] and check if they exist
@@ -461,24 +460,39 @@
 				}
 			}
 
-			if ($type === 'quiz') {
-				$type_string = 'Quizzes';
-			} else if ($type === 'investigation') {
-				$type_string = 'Investigations';
-			} elseif ($type === 'two-path-adventure') {
-				$type_string = 'Two Path Adventures';
-			} elseif ($type === 'story') {
-				$type_string = 'Stories';
-			} elseif ($type === 'game') {
-				$type_string = 'Games';
-			} elseif ($type === 'activity') {
-				$type_string = 'Activities';
-			} else {
-				$type_string = 'Activities';
+			return view('quiz.quiz-activities', compact('user_id', 'activities'));
+		}
+
+
+		public function exampleQuizzes(Request $request)
+		{
+			$user_id = 0;
+			$activities = Activity::where('user_id', $user_id)
+				->where('is_deleted', 0)
+				->get();
+
+			//loop all $activity['cover_image'] and check if they exist
+			foreach ($activities as $activity) {
+				if (!empty($activity['cover_image'])) {
+					$cover_image = base_path(str_replace('/storage/quiz_images/', 'storage/app/public/quiz_images/', $activity['cover_image']));
+
+					$cover_image_jpg = str_replace('.png', '.jpg', $cover_image);
+					if (!file_exists($cover_image_jpg) && file_exists($cover_image)) {
+
+						//save the image as a jpg
+						$image = imagecreatefrompng($cover_image);
+						imagejpeg($image, str_replace('.png', '.jpg', $cover_image));
+
+						$image = imagecreatefrompng($cover_image);
+						$image = imagescale($image, 512);
+						imagejpeg($image, str_replace('.png', '-512.jpg', $cover_image));
+					}
+				}
 			}
 
-			return view('quiz.quiz-activities', compact('user_id', 'activities', 'type', 'type_string'));
+			return view('quiz.quiz-activities', compact('user_id', 'activities'));
 		}
+
 
 		public function quizActivitiesAction(Request $request, $action, $id)
 		{

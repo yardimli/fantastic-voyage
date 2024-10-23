@@ -24,6 +24,15 @@
 			$user_id = $user->id ?? 0;
 			$activity_id = $activity_id ?? -1;
 
+			$quiz = ActivityData::where('user_id', $user_id)
+				->where('activity_id', $activity_id)
+				->orderBy('id', 'desc')
+				->first();
+
+			if (!$quiz) {
+				$user_id = 0;
+			}
+
 			$rst = $this->buildGameUI($user_id, $activity_id, 'game-layout.display-quiz-ui', $question);
 			return $rst;
 		}
@@ -34,6 +43,15 @@
 			$user = $request->user();
 			$user_id = $user->id ?? 0;
 			$activity_id = $activity_id ?? -1;
+
+			$quiz = ActivityData::where('user_id', $user_id)
+				->where('activity_id', $activity_id)
+				->orderBy('id', 'desc')
+				->first();
+
+			if (!$quiz) {
+				$user_id = 0;
+				}
 
 			$rst = $this->buildGameUI($user_id, $activity_id, 'game-layout.display-quiz-ui-in-page');
 			return $rst;
@@ -60,207 +78,12 @@
 
 			$json_data = $quiz->json_data;
 			$title = $activity->title;
-			$quiz_type = $activity->type;
 			$current_theme = $activity->theme ?? 'beach';
 
 			$themes = ['beach', 'jungle', 'mid-autumn', 'moon', 'rabbit', 'space', 'taipei'];
 
 			$type_description = 'A series of multiple choice questions. Tap the correct answer to proceed.';
 
-			return view($view, compact('json_data', 'title', 'type_description', 'current_theme', 'themes', 'activity_id', 'question'));
-		}
-
-		//-------------------------------------------------------------------------
-
-
-		public function investigationIndex(Request $request, $activity_id, $step = null)
-		{
-			$user = $request->user();
-			$user_id = $user->id ?? 0;
-			$activity_id = $activity_id ?? -1;
-
-			$rst = $this->buildInvestigationUI($user_id, $activity_id, 'game-layout.display-investigation-ui', $step ?? 1);
-			return $rst;
-		}
-
-		public function investigationInPage(Request $request, $activity_id)
-		{
-
-			$user = $request->user();
-			$user_id = $user->id ?? 0;
-			$activity_id = $activity_id ?? -1;
-
-			$rst = $this->buildInvestigationUI($user_id, $activity_id, 'game-layout.display-investigation-ui-in-page');
-			return $rst;
-		}
-
-		public function buildInvestigationUI($user_id, $activity_id, $view = 'game-layout.display-investigation-ui', $step = 1)
-		{
-
-			$story = StoryData::where('user_id', $user_id)
-				->where('activity_id', $activity_id)
-				->where('step', $step)
-				->orderBy('id', 'desc')
-				->first();
-
-			if (!$story) {
-				return json_encode(['error' => 'No story found']);
-			}
-
-			$total_steps = StoryData::where('user_id', $user_id)
-				->where('activity_id', $activity_id)
-				->count();
-
-			$activity = Activity::where('user_id', $user_id)
-				->where('id', $activity_id)
-				->first();
-
-			$title = $activity->title;
-			$title = str_replace("'", "\'", $title);
-			$title = str_replace("\n", "\\n", $title);
-
-			$image = $story->image;
-
-			$chapter_text = $story->chapter_text;
-			$chapter_text = str_replace("\n", "\\n", $chapter_text);
-			$chapter_text = str_replace("'", "\'", $chapter_text);
-
-			$chapter_voice = $story->chapter_voice;
-
-			$choices = $story->choices;
-			$choices = str_replace("'", "\'", $choices);
-			$choices = str_replace("\n", "<br>", $choices);
-
-			$choice = $story->choice ?? '';
-
-			$current_theme = $activity->theme ?? 'beach';
-
-			$themes = ['beach', 'jungle', 'mid-autumn', 'moon', 'rabbit', 'space', 'taipei'];
-
-			$type_description = 'A series of multiple choice Investigations. Tap the choice to proceed.';
-
-			return view($view, compact('title', 'image', 'chapter_text', 'chapter_voice', 'type_description', 'current_theme', 'themes', 'activity_id', 'choices', 'step', 'total_steps', 'choice'));
-		}
-
-		public function investigationGetStep(Request $request)
-		{
-			$activity_id = $request->input('activity_id');
-			$step = $request->input('step') ?? 1;
-
-			$user = $request->user();
-			$user_id = $user->id ?? 0;
-
-			$story = StoryData::where('user_id', $user_id)
-				->where('activity_id', $activity_id)
-				->where('step', $step)
-				->orderBy('id', 'desc')
-				->first();
-
-			$activity = Activity::where('user_id', $user_id)
-				->where('id', $activity_id)
-				->first();
-
-			if (!$story || !$activity) {
-				return response()->json(['result' => false, 'message' => 'No story found']);
-			} else
-			{
-				$story['choices'] = json_decode($story['choices']);
-				return response()->json(['result' => true, 'message' => 'Story found', 'story' => $story, 'activity' => $activity]);
-			}
-		}
-
-
-		//-------------------------------------------------------------------------
-		public function twoPathAdventureIndex(Request $request, $activity_id, $step = null)
-		{
-			$user = $request->user();
-			$user_id = $user->id ?? 0;
-			$activity_id = $activity_id ?? -1;
-
-			$rst = $this->buildTwoPathAdventureUI($user_id, $activity_id, 'game-layout.display-two-path-adventure-ui', $step ?? 1);
-			return $rst;
-		}
-
-		public function twoPathAdventureInPage(Request $request, $activity_id, $step = null)
-		{
-			$user = $request->user();
-			$user_id = $user->id ?? 0;
-			$activity_id = $activity_id ?? -1;
-
-			$rst = $this->buildTwoPathAdventureUI($user_id, $activity_id, 'game-layout.display-two-path-adventure-ui-in-page', $step ?? 1);
-			return $rst;
-		}
-
-		public function twoPathAdventureGetStep(Request $request)
-		{
-			$activity_id = $request->input('activity_id');
-			$step = $request->input('step') ?? 1;
-
-			$user = $request->user();
-			$user_id = $user->id ?? 0;
-
-			$story = StoryData::where('user_id', $user_id)
-				->where('activity_id', $activity_id)
-				->where('step', $step)
-				->orderBy('id', 'desc')
-				->first();
-
-			$activity = Activity::where('user_id', $user_id)
-				->where('id', $activity_id)
-				->first();
-
-			if (!$story || !$activity) {
-				return response()->json(['result' => false, 'message' => 'No story found']);
-			} else
-			{
-				$story['choices'] = json_decode($story['choices']);
-				return response()->json(['result' => true, 'message' => 'Story found', 'story' => $story, 'activity' => $activity]);
-			}
-		}
-
-		public function buildTwoPathAdventureUI($user_id, $activity_id, $view = 'game-layout.display-two-path-adventure-ui', $step = 1)
-		{
-
-			$story = StoryData::where('user_id', $user_id)
-				->where('activity_id', $activity_id)
-				->where('step', $step)
-				->orderBy('id', 'desc')
-				->first();
-
-			if (!$story) {
-				return json_encode(['error' => 'No story found', 'user_id' => $user_id, 'activity_id' => $activity_id, 'step' => $step]);
-			}
-
-			$total_steps = StoryData::where('user_id', $user_id)
-				->where('activity_id', $activity_id)
-				->count();
-
-			$activity = Activity::where('user_id', $user_id)
-				->where('id', $activity_id)
-				->first();
-
-			if (!$activity) {
-				return json_encode(['error' => 'No activity found', 'user_id' => $user_id, 'activity_id' => $activity_id, 'step' => $step]);
-			}
-
-			$title = $activity->title;
-			$title = str_replace("'", "\'", $title);
-			$title = str_replace("\n", "\\n", $title);
-
-			$image = $story->image;
-
-			$choices = $story->choices;
-			$choices = str_replace("'", "\'", $choices);
-			$choices = str_replace("\n", "<br>", $choices);
-
-			$choice = $story->choice ?? '';
-
-			$current_theme = $activity->theme ?? 'beach';
-
-			$themes = ['beach', 'jungle', 'mid-autumn', 'moon', 'rabbit', 'space', 'taipei'];
-
-			$type_description = 'A series of multiple choice stories. Tap the choice to proceed.';
-
-			return view($view, compact('title', 'image', 'type_description', 'current_theme', 'themes', 'activity_id', 'choices', 'step', 'total_steps', 'choice'));
+			return view($view, compact('json_data', 'title', 'type_description', 'current_theme', 'themes', 'activity_id', 'question', 'user_id'));
 		}
 	}

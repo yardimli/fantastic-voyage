@@ -35,8 +35,9 @@
 	Route::get('quiz-activities', [QuizBuilderController::class, 'quizActivities'])->name('quiz-activities');
 	Route::get('quiz-activities-action/{action}/{id}', [QuizBuilderController::class, 'quizActivitiesAction'])->name('quiz-activities-action');
 
-	Route::get('activities-page', [QuizBuilderController::class, 'quizActivities'])->name('activities.page');
-	Route::get('activities-page/{type?}', [QuizBuilderController::class, 'quizActivities'])->name('activities.page');
+	Route::get('example-quiz', [QuizBuilderController::class, 'exampleQuizzes'])->name('example-quiz');
+
+
 
 
 	Route::get('phaser-summer-zoom', function () {
@@ -98,24 +99,8 @@
 
 	Route::post('/create-question-image', [QuizBuilderController::class, 'createQuestionImage'])->name('create-question-image');
 
-
-	Route::post('/create-next-investigation', [QuizContentBuilderController::class, 'createNextInvestigation'])->name('create-next-investigation');
-
-	Route::post('/create-next-two-path-adventure', [QuizContentBuilderController::class, 'createNextTwoPathAdventure'])->name('create-next-two-path-adventure');
-
-
 	Route::get('/load-quiz/{activity_id}/{question?}', [QuizGameBuilderController::class, 'index'])->name('load-quiz');
 	Route::get('/load-quiz-in-page/{activity_id}/{question?}', [QuizGameBuilderController::class, 'inPage'])->name('load-quiz-in-page');
-
-
-	Route::get('/load-investigation/{activity_id}/{step?}', [QuizGameBuilderController::class, 'investigationIndex'])->name('load-investigation');
-	Route::get('/load-investigation-in-page/{activity_id}/{step?}', [QuizGameBuilderController::class, 'investigationInPage'])->name('load-investigation-in-page');
-	Route::post('/investigation-get-step', [QuizGameBuilderController::class, 'investigationGetStep'])->name('investigation-get-step');
-
-
-	Route::get('/load-two-path-adventure/{activity_id}/{step?}', [QuizGameBuilderController::class, 'twoPathAdventureIndex'])->name('load-two-path-adventure');
-	Route::get('/load-two-path-adventure-in-page/{activity_id}/{step?}', [QuizGameBuilderController::class, 'twoPathAdventureInPage'])->name('load-two-path-adventure-in-page');
-	Route::post('/two-path-adventure-get-step', [QuizGameBuilderController::class, 'twoPathAdventureGetStep'])->name('two-choice-adventure-get-step');
 
 	Route::get('/landing', [StaticPagesController::class, 'landing'])->name('landing.page');
 

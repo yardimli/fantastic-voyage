@@ -16,10 +16,12 @@
 		
 		<div id="breadcrumbs" class="pt-2 pb-2">
 			<span class="breadcrumb-separator fas fa-chevron-right"></span>
-			<a class="clickable-breadcrumb breadcrumb" href="{{route('activities.page', ['type' => 'quiz'])}}">Quizzes</a>
-			<span class="breadcrumb-separator fas fa-chevron-right"></span>
-			<a href="{{ route('quiz-builder',[ $activity_id]) }}"><span
-					class="breadcrumb ">{{__('default.Enter Content')}}</span></a>
+			<a class="clickable-breadcrumb breadcrumb" href="{{route('quiz-activities')}}">Quizzes</a>
+			@if ($user_id !== 0)
+				<span class="breadcrumb-separator fas fa-chevron-right"></span>
+				<a href="{{ route('quiz-builder',[ $activity_id]) }}"><span
+						class="breadcrumb ">{{__('default.Enter Content')}}</span></a>
+			@endif
 			<span class="breadcrumb-separator fas fa-chevron-right"></span>
 			<span class="breadcrumb selected-breadcrumb">{{__('default.Play')}}</span>
 		</div>
@@ -99,17 +101,17 @@
 	@include('layouts.footer')
 
 @endsection
-	
-	@push('scripts')
-		<script>
-			let json_data = {!! $json_data; !!};
-			let game_title = '{!! str_replace("'","\'", $title); !!}';
-			let type_description = '{!! str_replace("'","\'", $type_description); !!}';
-			let current_theme = '{!! str_replace("'","\'", $current_theme); !!}';
-			var previewQid = null;
-			window.translations = {
-				'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
-			};
-		</script>
-	@endpush
+
+@push('scripts')
+	<script>
+		let json_data = {!! $json_data; !!};
+		let game_title = '{!! str_replace("'","\'", $title); !!}';
+		let type_description = '{!! str_replace("'","\'", $type_description); !!}';
+		let current_theme = '{!! str_replace("'","\'", $current_theme); !!}';
+		var previewQid = null;
+		window.translations = {
+			'default.num_of_num': '{{ __("default.num of num", ["index" => ":index", "total" => ":total"]) }}'
+		};
+	</script>
+@endpush
 

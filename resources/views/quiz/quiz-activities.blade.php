@@ -12,7 +12,7 @@
 						<div id="breadcrumbs" class="mt-2">
 							<span class="breadcrumb-separator fas fa-chevron-right"></span>
 							<span
-								class="clickable-breadcrumb breadcrumb selected-breadcrumb">{{$type_string}}</span>
+								class="clickable-breadcrumb breadcrumb selected-breadcrumb">Quizzes</span>
 						</div>
 					</div>
 					<div class="card-body">
@@ -21,14 +21,7 @@
 								@foreach($activities as $activity)
 									<div class="col-6 col-xl-3 mb-3">
 										@php
-											$dataLink = '';
-											if ($activity['type'] === 'quiz') {
-													$dataLink = route('load-quiz-in-page', [$activity['id']]);
-											} elseif ($activity['type'] === 'investigation') {
-													$dataLink = route('load-investigation-in-page', [$activity['id']]);
-											} elseif ($activity['type'] === 'two-path-adventure') {
-													$dataLink = route('load-two-path-adventure-in-page', [$activity['id']]);
-											}
+											$dataLink = route('load-quiz-in-page', [$activity['id']]);
 										@endphp
 										<div class="activity-card"
 										     data-link="{{ $dataLink }}"
@@ -39,27 +32,27 @@
 													<h5
 														style="background-color:rgba(0,0,0,0.7); margin-top:10px; width: 90%; padding:5px; border-radius: 5px; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">{{ $activity['title'] }}</h5>
 												</div>
-												<div class="w-100 d-flex align-items-end">
-													<div class="w-100 d-flex justify-content-center align-items-end">
-														@if ($activity['type'] === 'quiz')
+												@if ($activity['user_id'] !== 0)
+													<div class="w-100 d-flex align-items-end">
+														<div class="w-100 d-flex justify-content-center align-items-end">
 															<a href="{{ route('quiz-builder',[ $activity['id']]) }}"
 															   class="no_decoration btn btn-info me-2"><i class="fas fa-edit"></i></a>
 															<a href="{{ route('quiz-activities-action',['clone',$activity['id']]) }}"
 															   class="no_decoration btn btn-info me-2"><i class="fas fa-copy"></i></a>
-														@endif
-														<span class="no_decoration btn btn-info delete_activity" data-id="{{ $activity['id'] }}"
-														      style="cursor: pointer;"><i class="fas fa-trash"></i></span>
+															<span class="no_decoration btn btn-info delete_activity" data-id="{{ $activity['id'] }}"
+															      style="cursor: pointer;"><i class="fas fa-trash"></i></span>
+														</div>
 													</div>
-												</div>
+												@endif
 											</div>
 										</div>
 										</a>
 									</div>
 								@endforeach
 							</div>
-{{--							<div class="mt-4">--}}
-{{--								<a href="{{ route('quiz-builder') }}" class="btn btn-info">{{__('default.Create New Quiz')}}</a>--}}
-{{--							</div>--}}
+							{{--							<div class="mt-4">--}}
+							{{--								<a href="{{ route('quiz-builder') }}" class="btn btn-info">{{__('default.Create New Quiz')}}</a>--}}
+							{{--							</div>--}}
 						</div>
 					</div>
 				</div>
@@ -102,6 +95,7 @@
 			});
 			
 			$(".activity-card").on('click', function () {
+				console.log($(this).data('link'));
 				window.location.href = $(this).data('link');
 			});
 			

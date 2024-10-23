@@ -4,7 +4,6 @@ var currentAudioInEditorSourceID = null;
 
 var QuestionIdCounter = 0;
 var xhr; // Variable to hold the XMLHttpRequest object
-var quiz_type = 'quiz';
 
 
 $(document).ready(function () {
@@ -804,9 +803,6 @@ $(document).ready(function () {
 
 	$(document).on('click', '.create-content', function () {
 		console.log('create content with AI.');
-		var quiz_type = $(this).data('type');
-		$('#generate-content').data('type', quiz_type);
-
 		$('.user-content').val(quiz_prompt);
 		$('#generate_example1').html(translations.forExample+' : Birds');
 
@@ -821,7 +817,6 @@ $(document).ready(function () {
 		isEdit = true;
 		console.log('isEdit generate content');
 		console.log('Generate content with AI.');
-		var quiz_type = $(this).data('type');
 		var activity_id = $('#activity_id').val();
 		var user_content = $('.user-content').val();
 		var language = $('#generate_language').val();
@@ -854,7 +849,6 @@ $(document).ready(function () {
 			type: "POST",
 			url: "/quiz-content-builder-json",
 			data: {
-				quiz_type: quiz_type,
 				activity_id: activity_id,
 				user_content: user_content,
 				language: language,
