@@ -76,7 +76,7 @@
 		//-------------------------------------------------------------------------------------------
 		public function buildQuizContent($user_content, $language, $voice_id, $next_num, $next_id, $quantity)
 		{
-			$prompt = "Create a quiz with questions and answers set about the following topic: " . $user_content . " , only one answer is correct. Written in " . $language . ". Number of Questions:" . $quantity . "";
+			$prompt = "Create a quiz with questions and answers set about the following topic: " . $user_content . " , only one answer is correct. Written in " . $language . ". Number of Questions with answers to return in the JSON:" . $quantity . "";
 
 			$schema_str = file_get_contents(public_path('texts/quiz.json'));
 
