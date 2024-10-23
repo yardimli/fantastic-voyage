@@ -83,6 +83,7 @@
 			<img id="mute-audio" src="{{ asset('assets/phaser/images/sound.png') }}">
 		</div>
 		
+		
 		<div id="themes_div">
 			@foreach ($themes as $theme)
 				<img src="{{ asset('assets/phaser/images/' . $theme . '.png') }}"
