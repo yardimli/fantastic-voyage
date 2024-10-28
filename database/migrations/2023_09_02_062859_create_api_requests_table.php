@@ -13,8 +13,8 @@
 			Schema::create('api_requests', function (Blueprint $table) {
 				$table->id();
 				$table->string('url')->nullable();
-				$table->text('post_data')->nullable();
-				$table->text('results')->nullable();
+				$table->longText('post_data')->nullable();
+				$table->longText('results')->nullable();
 				$table->integer('auth_user_id')->unsigned()->default(0);
 				$table->integer('auth_student_id')->unsigned()->default(0);
 				$table->timestamps();

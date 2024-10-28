@@ -660,9 +660,11 @@
 					'similarity_boost' => 0.5
 				]
 			]);
-//			Log::info('eleven_labs_text_to_speech url: ' . $url);
-//			Log::info('eleven_labs_text_to_speech postFields: ' . $postFields);
+			Log::info('eleven_labs_text_to_speech url: ' . $url);
+			Log::info('eleven_labs_text_to_speech postFields: ' . $postFields);
 			$response = ApiRequest::where('url', $url)->where('post_data', $postFields)->get();
+
+			Log::info('eleven_labs_text_to_speech response: ' . $response);
 
 			if ($response->count() === 0) {
 				$headers = [
@@ -684,6 +686,12 @@
 					echo 'Error:' . curl_error($ch);
 				}
 				curl_close($ch);
+
+				//check if question_audio folder exists
+				$question_audio_folder = public_path('storage/question_audio');
+				if (!file_exists($question_audio_folder)) {
+					mkdir($question_audio_folder, 0777, true);
+				}
 
 				// Save the file into local storage. Replace 'file.mp3' with your desired file name
 				$filename = Str::random(10) . '-' . $voice_id . '.mp3';

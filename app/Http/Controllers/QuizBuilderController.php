@@ -99,6 +99,12 @@
 
 			Log::info('convertTextToSpeech: ' . $voice_id . ' -- ' . $text . ' -- ' . $question_id . ' -- ' . $answer_id . ' -- ' . $activity_id . ' -- ' . $update_field);
 
+			//check if question_audio folder exists
+			$question_audio_folder = public_path('storage/question_audio');
+			if (!file_exists($question_audio_folder)) {
+				mkdir($question_audio_folder, 0777, true);
+			}
+
 			if (!empty($voice_id)) {
 				$tts_results = MyHelper::eleven_labs_text_to_speech($voice_id, $text);
 			} else {
@@ -399,6 +405,18 @@
 				return response()->json([
 					'error' => 'You must be logged in to access this resource.'
 				]);
+			}
+
+			//check if question_audio folder exists
+			$question_audio_folder = public_path('storage/question_audio');
+			if (!file_exists($question_audio_folder)) {
+				mkdir($question_audio_folder, 0777, true);
+			}
+
+			//check if quiz_images folder exists
+			$quiz_images_folder = public_path('storage/quiz_images');
+			if (!file_exists($quiz_images_folder)) {
+				mkdir($quiz_images_folder, 0777, true);
 			}
 
 			if ($file_type == 'image') {
