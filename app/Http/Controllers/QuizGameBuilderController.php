@@ -80,7 +80,7 @@
 			$title = $activity->title;
 			$current_theme = $activity->theme ?? 'beach';
 
-			$themes = ['beach', 'jungle', 'mid-autumn', 'moon', 'rabbit', 'space', 'taipei'];
+			$themes = ['beach', 'jungle', 'mid-autumn', 'moon', 'rabbit', 'space', 'taipei', 'halloween'];
 
 			$type_description = 'A series of multiple choice questions. Tap the correct answer to proceed.';
 
