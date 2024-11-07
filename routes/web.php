@@ -76,6 +76,10 @@
 		return view('game-layout.phaser-jungle-zoom');
 	})->name('phaser-jungle-zoom');
 
+    Route::get('phaser-city-zoom', function () {
+        return view('game-layout.phaser-city-zoom');
+    })->name('phaser-city-zoom');
+
 
 	Route::get('phaser-responsive', function () {
 		return view('game-layout.phaser-responsive');
