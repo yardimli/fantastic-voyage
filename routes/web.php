@@ -85,9 +85,13 @@
 		return view('game-layout.phaser-rabbit-zoom');
 	})->name('phaser-rabbit-zoom');
 
-Route::get('phaser-halloween-zoom', function () {
-    return view('game-layout.phaser-halloween-zoom');
-})->name('phaser-halloween-zoom');
+    Route::get('phaser-halloween-zoom', function () {
+        return view('game-layout.phaser-halloween-zoom');
+    })->name('phaser-halloween-zoom');
+
+    Route::get('phaser-xmas-zoom', function () {
+        return view('game-layout.phaser-xmas-zoom');
+    })->name('phaser-xmas-zoom');
 
 
 	Route::post('/quiz-image-search', [QuizBuilderController::class, 'quizImageSearch'])->name('quiz-image-search');
