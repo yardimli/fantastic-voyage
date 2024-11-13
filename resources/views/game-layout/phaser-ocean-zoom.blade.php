@@ -80,7 +80,7 @@
             this.upDownMotion(seahorse, 25, 3000, this);
             this.leftRightMotion(crab, 20, 2000, this);
             this.swimFish(fish2, 20000, 'right', this);
-            this.swimFish(fish5, 20000, 'left', this);
+            this.swimFish(fish5, 30000, 'left', this);
 
 
 			// Center camera on the background image
