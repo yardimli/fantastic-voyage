@@ -84,6 +84,10 @@
         return view('game-layout.phaser-ocean-zoom');
     })->name('phaser-ocean-zoom');
 
+    Route::get('phaser-farm-zoom', function () {
+        return view('game-layout.phaser-farm-zoom');
+    })->name('phaser-farm-zoom');
+
 	Route::get('phaser-responsive', function () {
 		return view('game-layout.phaser-responsive');
 	})->name('phaser-responsive');
