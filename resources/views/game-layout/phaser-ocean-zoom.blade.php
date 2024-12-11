@@ -4,10 +4,10 @@
 	let startTime;
 	let ocean_bg, fish1, fish2, fish3, fish4, fish5, turtle, seahorse, stingray, crab;
 
-	let answer_button_square_img = '/assets/phaser/buttons/natural/square_3.webp';
-	let answer_button_portrait_img = '/assets/phaser/buttons/natural/portrait_3.webp';
-	let answer_button_landscape_img = '/assets/phaser/buttons/natural/landscape_3.webp';
-	let answer_button_letterbox_img = '/assets/phaser/buttons/natural/letterbox_3.webp';
+	let answer_button_square_img = '/assets/phaser/buttons/natural/square_2.webp';
+	let answer_button_portrait_img = '/assets/phaser/buttons/natural/portrait_2.webp';
+	let answer_button_landscape_img = '/assets/phaser/buttons/natural/landscape_2.webp';
+	let answer_button_letterbox_img = '/assets/phaser/buttons/natural/letterbox_2.webp';
 
 	//set properties of css id #question-div
 	var style = document.createElement('style');

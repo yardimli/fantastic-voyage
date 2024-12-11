@@ -4,10 +4,10 @@
 	let startTime;
 	let xmas_bg, candy_bar1, candy_bar2, hand1, hand2, hand3;
 
-	let answer_button_square_img = '/assets/phaser/buttons/natural/square_3.webp';
-	let answer_button_portrait_img = '/assets/phaser/buttons/natural/portrait_3.webp';
-	let answer_button_landscape_img = '/assets/phaser/buttons/natural/landscape_3.webp';
-	let answer_button_letterbox_img = '/assets/phaser/buttons/natural/letterbox_3.webp';
+	let answer_button_square_img = '/assets/phaser/buttons/paper/square1.webp';
+	let answer_button_portrait_img = '/assets/phaser/buttons/paper/portrait1.webp';
+	let answer_button_landscape_img = '/assets/phaser/buttons/paper/landscape1.webp';
+	let answer_button_letterbox_img = '/assets/phaser/buttons/paper/letterbox1.webp';
 
 	//set properties of css id #question-div
 	var style = document.createElement('style');

@@ -4,10 +4,10 @@
 	let startTime;
 	let farm_bg, bird1, bird2, chickens, cloud1, cloud2, cloud3, cloud4, cow1, cow2, fan1, fan2;
 
-	let answer_button_square_img = '/assets/phaser/buttons/natural/square_3.webp';
-	let answer_button_portrait_img = '/assets/phaser/buttons/natural/portrait_3.webp';
-	let answer_button_landscape_img = '/assets/phaser/buttons/natural/landscape_3.webp';
-	let answer_button_letterbox_img = '/assets/phaser/buttons/natural/letterbox_3.webp';
+	let answer_button_square_img = '/assets/phaser/buttons/natural/square_6.webp';
+	let answer_button_portrait_img = '/assets/phaser/buttons/natural/portrait_6.webp';
+	let answer_button_landscape_img = '/assets/phaser/buttons/natural/landscape_6.webp';
+	let answer_button_letterbox_img = '/assets/phaser/buttons/natural/letterbox_6.webp';
 
 	//set properties of css id #question-div
 	var style = document.createElement('style');
